@@ -5,9 +5,9 @@
 ![Many animals on white background, royalty free from dreamstime](https://thumbs.dreamstime.com/b/dogs-cats-isolated-different-against-white-background-96932856.jpg)
 - - - -
 ## Table of Contents
-* [General Information] (#general_info)
-* [Layout] (#layout)
-* [Technologies] (#technologies)
+* [General Information](#general_info)
+* [Layout](#layout)
+* [Technologies](#technologies)
 
 ## General Info
 Pawssier is _the all-in-one tool_ for pet parents. Our pet profiles can store vet records, vaccine due dates, visual descriptions, photos, and microchip numbers. These profiles help you stay up to date on vet visits and locate your pets if they get lost.
