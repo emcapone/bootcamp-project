@@ -14,85 +14,90 @@
         <input formControlName="description" id="description" type="text" placeholder="Description..." />
         <label for="microchip">Microchip Number:</label>
         <input formControlName="microchip" id="microchip" type="text" placeholder="Microchip..." />
-        <div class="inline-group">
-          <label for="radio">Sex:</label>
-          <input formControlName="male" id="male" name="male" type="radio" value="Male" />
-          <label for="male">Male</label>
-          <input formControlName="female" id="female" name="female" type="radio" value="Female" />
-          <label for="female">Female</label>
-          <br>
-          <label for="fixed">Spayed/Neutered?</label>
-          <input formControlName="fixed" id="fixed" type="checkbox" />
-          <br>
-          <label for="weight">Weight:</label>
-          <input formControlName="weight" id="weight" type="number" step="0.1" value="0.0" placeholder="0.0" />
-          <br>
-          <label for="birthday">Birthday:</label>
-          <input formControlName="birthday" id="birthday" type="date" />
-          <br>
-          <label for="adoptionDay">Adoption Day:</label>
-          <input formControlName="adoptionDay" id="adoptionDay" type="date" />
-          <br>
-          <label for="vetRecords">Vet Records:</label>
-          <input formControlName="vetRecords" id="vetRecords" type="file" multiple="multiple" accept=".pdf, image/*" />
-          <br>
-          <label for="petPhoto">Photo:</label>
-          <input formControlName="petPhoto" id="petPhoto" type="file" accept="image/*" />
-        </div>
-      </div>
-      <hr>
-
-
-      <h3 class="inline" formArrayName="prescriptions">Prescriptions</h3>
-      <button class="inline" (click)="addPrescription()" type="button">Add Prescription</button>
-      <section *ngFor="let prescription of prescriptions().controls; let i = index;" formArrayName="prescriptions">
-        <div formGroupName="{{i}}">
-          <label for="prescriptionName-{{i}}">Name: {{i}}</label>
-          <input formControlName="prescriptionName" id="prescriptionName-{{i}}" type="text" placeholder="Drug Name..." />
-          <label for="prescriptionDoctor-{{i}}">Prescribing Doctor:</label>
-          <input formControlName="prescriptionDoctor" id="prescriptionDoctor-{{i}}" type="text" placeholder="Prescribing Doctor..." />
-          <div class="inline-group">
-            <label for="prescriptionDue-{{i}}">Refill Due:</label>
-            <input formControlName="prescriptionDue" id="prescriptionDue-{{i}}" type="date" />
-            <br>
-            <label for="prescriptionRefills-{{i}}">Refills Remaining:</label>
-            <input formControlName="prescriptionRefills" id="prescriptionRefills-{{i}}" type="number" step="1" value="0"
-              placeholder="0" />
-          </div>
-          <button (click)="removePrescription(i)" type="button">Remove</button>
-        </div>
-      </section>
-      <hr>
-
-
-      <!--
-      <div class="inline-group">
-        <h3>Vaccinations</h3>
-        <button form="newPetForm" formControlName="vaccine_add_button" type="button">Add</button>
-                <button form="newPetForm" formControlName="vaccine_save_button" type="button">Save</button>
-                <button form="newPetForm" formControlName="vaccine_cancel_button" type="button">Cancel</button>
-      </div>
-      <label for="vaccineName">Name:</label>
-      <input formControlName="vaccineName" id="vaccineName" type="text" placeholder="Name..." />
-      <div class="inline-group">
-        <label for="vaccineAdministered">Date Administered:</label>
-        <input formControlName="vaccineAdministered" id="vaccineAdministered" type="date" />
+        <label class="inline" for="radio">Sex:</label>
+        <input class="inline" formControlName="male" id="male" name="male" type="radio" value="Male" />
+        <label class="inline" for="male">Male</label>
+        <input class="inline" formControlName="female" id="female" name="female" type="radio" value="Female" />
+        <label class="inline" for="female">Female</label>
         <br>
-        <label for="vaccineDue">Due Date:</label>
-        <input formControlName="vaccineDue" id="vaccineDue" type="date" />
+        <label class="inline" for="fixed">Spayed/Neutered?</label>
+        <input class="inline" formControlName="fixed" id="fixed" type="checkbox" />
+        <br>
+        <label class="inline" for="weight">Weight:</label>
+        <input class="inline" formControlName="weight" id="weight" type="number" step="0.1" value="0.0"
+          placeholder="0.0" />
+        <br>
+        <label class="inline" for="birthday">Birthday:</label>
+        <input class="inline" formControlName="birthday" id="birthday" type="date" />
+        <br>
+        <label class="inline" for="adoptionDay">Adoption Day:</label>
+        <input class="inline" formControlName="adoptionDay" id="adoptionDay" type="date" />
+        <br>
+        <label class="inline" for="vetRecords">Vet Records:</label>
+        <input class="inline" formControlName="vetRecords" id="vetRecords" type="file" multiple="multiple"
+          accept=".pdf, image/*" />
+        <br>
+        <label class="inline" for="petPhoto">Photo:</label>
+        <input class="inline" formControlName="petPhoto" id="petPhoto" type="file" accept="image/*" />
       </div>
       <hr>
-      <div class="inline-group">
-        <h3>Health Conditions</h3>
-        <button form="newPetForm" formControlName="health_add_button" type="button">Add</button>
-                <button form="newPetForm" formControlName="health_save_button" type="button">Save</button>
-                <button form="newPetForm" formControlName="health_cancel_button" type="button">Cancel</button>
+      <h3 class="inline">Prescriptions</h3>
+      <button class="inline" (click)="addPrescription()" type="button">Add Prescription</button>
+      <div formArrayName="prescriptions">
+        <div *ngFor="let prescription of prescriptions().controls; let i = index;">
+          <div [formGroupName]="i" class="bordered">
+            <label for="prescriptionName">Name:</label>
+            <input formControlName="prescriptionName" id="prescriptionName-{{i}}" type="text"
+              placeholder="Drug Name..." />
+            <label for="prescriptionDoctor">Prescribing Doctor:</label>
+            <input formControlName="prescriptionDoctor" id="prescriptionDoctor-{{i}}" type="text"
+              placeholder="Prescribing Doctor..." />
+            <label class="inline" for="prescriptionDue">Refill Due:</label>
+            <input class="inline" formControlName="prescriptionDue" id="prescriptionDue-{{i}}" type="date" />
+            <br>
+            <label class="inline" for="prescriptionRefills">Refills Remaining:</label>
+            <input class="inline" formControlName="prescriptionRefills" id="prescriptionRefills-{{i}}" type="number"
+              step="1" value="0" placeholder="0" />
+            <br>
+            <button (click)="removePrescription(i)" type="button">Remove</button>
+          </div>
+        </div>
       </div>
-      <label for="conditionName">Name:</label>
-      <input formControlName="conditionName" id="conditionName" type="text" placeholder="Condition..." />
-      <label for="conditionNotes">Notes:</label>
-      <textarea formControlName="conditionNotes" id="conditionNotes" placeholder="Notes..." rows="2"></textarea>
---> <button id="save_button" type="submit" onclick="return false;">Save Profile</button>
+      <hr>
+      <h3 class="inline">Vaccinations</h3>
+      <button class="inline" (click)="addVaccine()" type="button">Add Vaccination</button>
+      <div formArrayName="vaccines">
+        <div *ngFor="let vaccination of vaccines().controls; let i = index;">
+          <div [formGroupName]="i" class="bordered">
+            <label for="vaccineName">Name:</label>
+            <input formControlName="vaccineName" id="vaccineName" type="text" placeholder="Name..." />
+            <label class="inline" for="vaccineAdministered">Date Administered:</label>
+            <input class="inline" formControlName="vaccineAdministered" id="vaccineAdministered" type="date" />
+            <br>
+            <label class="inline" for="vaccineDue">Due Date:</label>
+            <input class="inline" formControlName="vaccineDue" id="vaccineDue" type="date" />
+            <br>
+            <button (click)="removeVaccine(i)" type="button">Remove</button>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <h3 class="inline">Health Conditions</h3>
+      <button class="inline" (click)="addCondition()" type="button">Add Condition</button>
+      <div formArrayName="conditions">
+        <div *ngFor="let condition of conditions().controls; let i = index;">
+          <div [formGroupName]="i" class="bordered">
+            <label for="conditionName">Name:</label>
+            <input formControlName="conditionName" id="conditionName" type="text" placeholder="Condition..." />
+            <label for="conditionNotes">Notes:</label>
+            <textarea formControlName="conditionNotes" id="conditionNotes" placeholder="Notes..." rows="2"></textarea>
+            <br>
+            <button (click)="removeCondition(i)" type="button">Remove</button>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <button id="save_button" type="submit">Save Profile</button>
       <button routerLink="/account-profile" type="button">Cancel</button>
     </form>
   </div>

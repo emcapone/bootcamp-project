@@ -75,7 +75,7 @@ input[type="file"] {
         columns: 1;
     }
 }
-section {
+.bordered {
   margin: 5px;
   padding: 3px;
   border-style: solid;

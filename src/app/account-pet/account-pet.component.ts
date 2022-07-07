@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 @Component({
   selector: 'app-account-pet',
   templateUrl: './account-pet.component.html',
@@ -24,7 +24,7 @@ export class AccountPetComponent implements OnInit {
       adoptionDay: [''],
       vetRecords: [''],
       petPhoto: [''],
-      prescriptions: this.fb.array([this.newPrescription]),
+      prescriptions: this.fb.array([]),
       vaccines: this.fb.array([]),
       conditions: this.fb.array([])
     });
@@ -38,10 +38,10 @@ export class AccountPetComponent implements OnInit {
   }
   newPrescription(): FormGroup {
     return this.fb.group({
-      prescriptionName: '',
-      prescriptionDoctor: '',
-      prescriptionDue: '',
-      prescriptionRefills: ''
+      prescriptionName: [''],
+      prescriptionDoctor: [''],
+      prescriptionDue: [''],
+      prescriptionRefills: ['']
     })
   }
   addPrescription() {
@@ -51,18 +51,37 @@ export class AccountPetComponent implements OnInit {
     this.prescriptions().removeAt(i);
   }
 
-  createVaccine(): FormGroup {
+  vaccines(): FormArray {
+    return this.newPetForm.get('vaccines') as FormArray;
+  }
+  newVaccine(): FormGroup {
     return this.fb.group({
       vaccineName: [''],
       vaccineAdministered: [''],
       vaccineDue: ['']
     })
   }
-  createCondition(): FormGroup {
+  addVaccine() {
+    this.vaccines().push(this.newVaccine());
+  }
+  removeVaccine(i:number) {
+    this.vaccines().removeAt(i);
+  }
+
+  conditions(): FormArray {
+    return this.newPetForm.get('conditions') as FormArray;
+  }
+  newCondition(): FormGroup {
     return this.fb.group({
       conditionName: [''],
       conditionNotes: ['']
     })
+  }
+  addCondition() {
+    this.conditions().push(this.newCondition());
+  }
+  removeCondition(i:number) {
+    this.conditions().removeAt(i);
   }
 
   onSubmit() {
