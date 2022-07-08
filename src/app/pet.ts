@@ -5,8 +5,7 @@ export interface Pet {
   color: string;
   description: string;
   microchip: string;
-  male: boolean;
-  female: boolean;
+  sex: string;
   fixed: boolean;
   weight: number;
   birthday?: Date;
