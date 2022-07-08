@@ -7,11 +7,11 @@
 </div>
 <div id="cards">
   <div class="preview-card" *ngFor="let pet of pets">
-    <img [src]="[pet.imageUrl]" />
+    <img [src]="[pet.petPhoto]" />
     <h2>{{pet.name}}</h2>
-    <p>{{pet.sex}} {{pet.breed}}</p>
-    <p>Birthday: {{pet.birthday | date:'mediumDate'}}</p>
+    <p>{{pet.male ? 'Male' : 'Female'}} {{pet.breed}}</p>
+    <p *ngIf="pet.birthday">Birthday: {{pet.birthday | date:'mediumDate'}}</p>
+    <p *ngIf="pet.adoptionDay">Adoption Day: {{pet.adoptionDay | date:'mediumDate'}}</p>
     <p>Microchip: {{pet.microchip}}</p>
-    <p>Upcoming: {{pet.upcoming}}</p>
   </div>
 </div>

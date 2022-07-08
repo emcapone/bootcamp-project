@@ -2,18 +2,38 @@ export interface Pet {
   id: number;
   name: string;
   breed: string;
-  sex: string;
-  birthday: Date;
+  color: string;
+  description: string;
   microchip: string;
-  upcoming: string;
-  vaccines: Vaccination[]
-  imageUrl: string;
+  male: boolean;
+  female: boolean;
+  fixed: boolean;
+  weight: number;
+  birthday?: Date;
+  adoptionDay?: Date;
+  vetRecords?: File;
+  petPhoto: string;
+  prescriptions: Prescription[];
+  vaccines: Vaccine[];
+  conditions: Condition[];
 }
-
-export interface Vaccination {
+export interface Prescription {
   id: number;
   name: string;
-  date: Date;
-  dose?: number;
-  due?: Date;
+  doctor: string;
+  due: Date;
+  refills: number;
+}
+
+export interface Vaccine {
+  id: number;
+  name: string;
+  dateAdministered: Date;
+  dueDate: Date;
+}
+
+export interface Condition {
+  id: number;
+  name: string;
+  notes?: string;
 }
