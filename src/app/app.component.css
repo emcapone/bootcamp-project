@@ -1,0 +1,24 @@
+nav a {
+    float: left;
+    text-decoration: none;
+    font-size: 25px;
+    color: #729B79;
+    width: 16.66%;
+    text-align: center;
+}
+nav a:hover {
+    color: white;
+}
+
+#header {
+    margin-top: -2%;
+    width: 100%;
+    position: fixed;
+    background-color: #2E2C2F;
+    margin: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    left: 0;
+    top: 0;
+    display: inline-block;
+}
