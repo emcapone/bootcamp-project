@@ -1,3 +1,4 @@
+<app-navigation-bar></app-navigation-bar>
 <div>
   <h1>Create a New Pet Profile</h1>
   <hr>
@@ -122,7 +123,7 @@
       <hr>
       <p><em class="no-float" *ngIf="this.submitted && this.newPetForm.invalid">Please complete required fields before saving.</em></p>
       <button id="save_button" type="submit">Save Profile</button>
-      <button routerLink="/account-profile" type="button">Cancel</button>
+      <button routerLink="/profile" type="button">Cancel</button>
     </form>
   </div>
 </div>
