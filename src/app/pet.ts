@@ -4,7 +4,7 @@ export interface Pet {
   breed: string;
   color: string;
   description: string;
-  microchip: string;
+  microchip?: string;
   sex: string;
   fixed: boolean;
   weight: number;
@@ -12,9 +12,9 @@ export interface Pet {
   adoptionDay?: Date;
   vetRecords?: File;
   petPhoto: string;
-  prescriptions: Prescription[];
-  vaccines: Vaccine[];
-  conditions: Condition[];
+  prescriptions?: Prescription[];
+  vaccines?: Vaccine[];
+  conditions?: Condition[];
 }
 export interface Prescription {
   id: number;

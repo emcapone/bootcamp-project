@@ -49,10 +49,7 @@ input[type="number"] {
     width: 100px;
 }
 
-.inline,
-.inline-group label,
-.inline-group button,
-.inline-group h3 {
+.inline {
     display: inline-block;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -81,4 +78,35 @@ input[type="file"] {
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
+}
+
+em {
+  font-size: 18px;
+  float: right;
+  color: #6E2594;
+  padding-left: 10px;
+}
+.no-float {
+  float: none;
+}
+
+button {
+  font-size: 15px;
+  width: auto;
+  color: black;
+  text-decoration: none;
+  background-color: #BACDB0;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+}
+
+button:hover {
+  background-color: #729B79;
+}
+
+button:active {
+  background-color: #386940;
 }
