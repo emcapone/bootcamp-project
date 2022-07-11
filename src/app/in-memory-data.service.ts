@@ -103,6 +103,11 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 1,
         name: 'URI',
         notes: 'Baytril is to treat this infection. Should clear up this week.'
+      },
+      {
+        id: 2,
+        name: 'Tripawd',
+        notes: 'Leg Amputated'
       }]
   },
   {
@@ -112,8 +117,8 @@ export class InMemoryDataService implements InMemoryDbService {
     color: 'Brown',
     description: 'Hates kids',
     microchip: '7245565187654',
-    sex: 'Female',
-    fixed: false,
+    sex: 'Male',
+    fixed: true,
     weight: 4.3,
     birthday: new Date('11/12/2019'),
     adoptionDay: new Date('02/14/2020'),

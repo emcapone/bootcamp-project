@@ -14,6 +14,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './in-memory-data.service';
+import { NewPetComponent } from './new-pet/new-pet.component';
+import { EditPetComponent } from './edit-pet/edit-pet.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { InMemoryDataService } from './in-memory-data.service';
     PetFormComponent,
     NavigationBarComponent,
     PageNotFoundComponent,
+    NewPetComponent,
+    EditPetComponent,
   ],
   imports: [
     BrowserModule,
