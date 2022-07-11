@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PETS } from '../mock-pets';
+
+import { Pet } from '../pet';
+import { PetService } from '../pet.service';
 
 @Component({
   selector: 'app-account-profile',
@@ -8,11 +10,16 @@ import { PETS } from '../mock-pets';
 })
 export class AccountProfileComponent implements OnInit {
 
-  pets = PETS; 
-  
-  constructor() { }
+  pets: Pet[] = [];
+
+  constructor(private petService: PetService) { }
 
   ngOnInit(): void {
+    this.getPets();
+  }
+
+  getPets(): void {
+    this.petService.getPets().subscribe(pets => this.pets = pets);
   }
 
 }
