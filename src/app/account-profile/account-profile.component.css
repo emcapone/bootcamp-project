@@ -10,8 +10,8 @@ h1 {
 .header-buttons {
     text-align: center;
     margin-bottom: 5px;
-    padding: 1px;    
-    float: right;    
+    padding: 1px;
+    float: right;
 }
 
 button {
@@ -31,6 +31,11 @@ button:hover {
     background-color: #729B79;
 }
 
+button:active {
+  background-color: #386940;
+}
+
+
 .preview-card {
     float: left;
     padding: 5px;
@@ -38,7 +43,7 @@ button:hover {
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
-    max-height: 210px;
+    height: 210px;
     width: 100%;
     background-color: #F3E8EE;
     columns: 2;
@@ -53,6 +58,7 @@ button:hover {
 }
 .preview-card img {
     height: 200px;
+    max-width: 300px;
 }
 
 #cards {

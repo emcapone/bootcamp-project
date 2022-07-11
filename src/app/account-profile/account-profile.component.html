@@ -1,16 +1,17 @@
 <div class="page-header">
   <h1>My Pets</h1>
   <div class="header-buttons">
-    <button>New Pet</button>
-    <button type="button">Add Event</button>
+    <button type="button" routerLink='/account-pet'>New Pet</button>
+    <button type="button" >Add Event</button>
   </div>
 </div>
 <div id="cards">
-  <div class="preview-card" *ngFor="let pet of pets" [routerLink]="['/pets/', pet.id]">
-    <img src="/assets/cat.jpg" />
+  <div class="preview-card" *ngFor="let pet of pets">
+    <img [src]="[pet.petPhoto]" />
     <h2>{{pet.name}}</h2>
-    <p>Birthday: {{pet.birthday}}</p>
-    <p>Upcoming: {{pet.upcoming}}</p>
+    <p>{{pet.sex}} {{pet.breed}}</p>
+    <p *ngIf="pet.birthday">Birthday: {{pet.birthday | date:'mediumDate'}}</p>
+    <p *ngIf="pet.adoptionDay">Adoption Day: {{pet.adoptionDay | date:'mediumDate'}}</p>
     <p>Microchip: {{pet.microchip}}</p>
   </div>
 </div>

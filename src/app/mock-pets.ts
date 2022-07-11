@@ -4,29 +4,129 @@ export const PETS: Pet[] = [
     {
         id: 1,
         name: 'Cassidy',
-        birthday: '11-12-2019',
+        breed: 'Domestic Shorthair',
+        color: 'Brown',
+        description: 'Hates kids',
         microchip: '7245565187654',
-        upcoming: 'Vet Visit (7/14/22)'
+        sex: 'Male',
+        fixed: false,
+        weight: 4.3,
+        birthday: new Date('11/12/2019'),
+        adoptionDay: new Date('02/14/2020'),
+        petPhoto: '/assets/cat.jpg',
+        prescriptions: [{
+          id: 1,
+          name: 'Baytril',
+          doctor: 'Dr. Young',
+          due:  new Date('04/17/2020'),
+          refills: 3
+        }],
+        vaccines: [{
+            id: 1,
+            name: 'Rabies',
+            dateAdministered: new Date('12/16/2020'),
+            dueDate: new Date('12/16/2021')
+        }],
+        conditions: [{
+          id: 1,
+          name: 'URI',
+          notes: 'Baytril is to treat this infection. Should clear up this week.'
+        }]
     },
     {
-        id: 2,
-        name: 'Hallie',
-        birthday: '3-28-2021',
-        microchip: '1456123456321',
-        upcoming: 'None (Add Event?)'
-    },
-    {
-        id: 3,
-        name: 'Megan',
-        birthday: '12-02-2017',
-        microchip: '984531548632',
-        upcoming: 'Rabies Vaccine Due (1/20/23)'
-    },
-    {
-        id: 4,
-        name: 'Ezra',
-        birthday: '6-17-2010',
-        microchip: 'None (Add Microchip?)',
-        upcoming: 'Vet Visit (8/10/22)'
-    }
+      id: 2,
+      name: 'Hallie',
+      breed: 'Domestic Shorthair',
+      color: 'Brown',
+      description: 'Hates kids',
+      microchip: '7245565187654',
+      sex: 'Female',
+      fixed: false,
+      weight: 4.3,
+      birthday: new Date('11/12/2019'),
+      adoptionDay: new Date('02/14/2020'),
+      petPhoto: '/assets/cat.jpg',
+      prescriptions: [{
+        id: 1,
+        name: 'Baytril',
+        doctor: 'Dr. Young',
+        due:  new Date('04/17/2020'),
+        refills: 3
+      }],
+      vaccines: [{
+          id: 1,
+          name: 'Rabies',
+          dateAdministered: new Date('12/16/2020'),
+          dueDate: new Date('12/16/2021')
+      }],
+      conditions: [{
+        id: 1,
+        name: 'URI',
+        notes: 'Baytril is to treat this infection. Should clear up this week.'
+      }]
+  },
+  {
+    id: 3,
+    name: 'Megan',
+    breed: 'Domestic Shorthair',
+    color: 'Brown',
+    description: 'Hates kids',
+    microchip: '7245565187654',
+    sex: 'Female',
+    fixed: false,
+    weight: 4.3,
+    birthday: new Date('11/12/2019'),
+    adoptionDay: new Date('02/14/2020'),
+    petPhoto: '/assets/cat.jpg',
+    prescriptions: [{
+      id: 1,
+      name: 'Baytril',
+      doctor: 'Dr. Young',
+      due:  new Date('04/17/2020'),
+      refills: 3
+    }],
+    vaccines: [{
+        id: 1,
+        name: 'Rabies',
+        dateAdministered: new Date('12/16/2020'),
+        dueDate: new Date('12/16/2021')
+    }],
+    conditions: [{
+      id: 1,
+      name: 'URI',
+      notes: 'Baytril is to treat this infection. Should clear up this week.'
+    }]
+},
+{
+  id: 4,
+  name: 'Ezra',
+  breed: 'Domestic Shorthair',
+  color: 'Brown',
+  description: 'Hates kids',
+  microchip: '7245565187654',
+  sex: 'Female',
+  fixed: false,
+  weight: 4.3,
+  birthday: new Date('11/12/2019'),
+  adoptionDay: new Date('02/14/2020'),
+  petPhoto: '/assets/cat.jpg',
+  prescriptions: [{
+    id: 1,
+    name: 'Baytril',
+    doctor: 'Dr. Young',
+    due:  new Date('04/17/2020'),
+    refills: 3
+  }],
+  vaccines: [{
+      id: 1,
+      name: 'Rabies',
+      dateAdministered: new Date('12/16/2020'),
+      dueDate: new Date('12/16/2021')
+  }],
+  conditions: [{
+    id: 1,
+    name: 'URI',
+    notes: 'Baytril is to treat this infection. Should clear up this week.'
+  }]
+}
 ]

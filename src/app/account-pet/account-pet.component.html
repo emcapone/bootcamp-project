@@ -1,0 +1,128 @@
+<div>
+  <h1>Create a New Pet Profile</h1>
+  <hr>
+  <div>
+    <form [formGroup]="newPetForm" autocomplete="off" (ngSubmit)="onSubmit()" novalidate>
+      <div class="col-container">
+        <label for="name">Name:
+          <em *ngIf="this.newPetForm.get('name')?.errors?.['required'] && this.submitted">Required</em>
+        </label>
+        <input formControlName="name" id="name" type="text" placeholder="Name..." required/>
+        <label for="breed">Breed:
+          <em *ngIf="this.newPetForm.get('breed')?.errors?.['required'] && this.submitted">Required</em>
+        </label>
+        <input formControlName="breed" id="breed" type="text" placeholder="Breed..." required/>
+        <label for="color">Color(s):
+          <em *ngIf="this.newPetForm.get('color')?.errors?.['required'] && this.submitted">Required</em>
+        </label>
+        <input formControlName="color" id="color" type="text" placeholder="Color(s)..." required/>
+        <label for="description">Description:
+          <em *ngIf="this.newPetForm.get('description')?.errors?.['required'] && this.submitted">Required</em>
+        </label>
+        <input formControlName="description" id="description" type="text" placeholder="Description..." required/>
+        <label for="microchip">Microchip Number:</label>
+        <input formControlName="microchip" id="microchip" type="text" placeholder="Microchip..." />
+        <label class="inline" for="radio">Sex:</label>
+        <input class="inline" formControlName="sex" id="male" name="sex" type="radio" value="Male" required/>
+        <label class="inline" for="male">Male</label>
+        <input class="inline" formControlName="sex" id="female" name="sex" type="radio" value="Female" required/>
+        <label class="inline" for="female">Female</label>
+        <em class="no-float" *ngIf="this.newPetForm.get('sex')?.errors?.['required'] && this.submitted">Required</em>
+        <br>
+        <label class="inline" for="fixed">Spayed/Neutered?</label>
+        <input class="inline" formControlName="fixed" id="fixed" type="checkbox" />
+        <br>
+        <label class="inline" for="weight">Weight:</label>
+        <input class="inline" formControlName="weight" id="weight" type="number" step="0.1" value="0.0"
+          placeholder="0.0" required/>
+        <em class="no-float" *ngIf="this.newPetForm.get('weight')?.errors?.['required'] && this.submitted">Required</em>
+        <br>
+        <label class="inline" for="birthday">Birthday:</label>
+        <input class="inline" formControlName="birthday" id="birthday" type="date" />
+        <br>
+        <label class="inline" for="adoptionDay">Adoption Day:</label>
+        <input class="inline" formControlName="adoptionDay" id="adoptionDay" type="date" />
+        <br>
+        <label class="inline" for="vetRecords">Vet Records:</label>
+        <input class="inline" formControlName="vetRecords" id="vetRecords" type="file" multiple="multiple"
+          accept=".pdf, image/*" />
+        <br>
+        <label class="inline" for="petPhoto">Photo:</label>
+        <input class="inline" formControlName="petPhoto" id="petPhoto" type="file" accept="image/*" required/>
+        <em class="no-float" *ngIf="this.newPetForm.get('petPhoto')?.errors?.['required'] && this.submitted">Required</em>
+      </div>
+      <hr>
+      <h3 class="inline">Prescriptions</h3>
+      <button class="inline" (click)="addPrescription()" type="button">Add Prescription</button>
+      <div formArrayName="prescriptions">
+        <div *ngFor="let prescription of prescriptions().controls; let i = index;">
+          <div [formGroupName]="i" class="bordered">
+            <label for="prescriptionName">Name:
+              <em *ngIf="this.getPrescriptions.at(i).get('prescriptionName')?.errors?.['required'] && this.submitted">Required</em>
+            </label>
+            <input formControlName="prescriptionName" id="prescriptionName-{{i}}" type="text"
+              placeholder="Drug Name..." />
+            <label for="prescriptionDoctor">Prescribing Doctor:
+              <em *ngIf="this.getPrescriptions.at(i).get('prescriptionDoctor')?.errors?.['required'] && this.submitted">Required</em>
+            </label>
+            <input formControlName="prescriptionDoctor" id="prescriptionDoctor-{{i}}" type="text"
+              placeholder="Prescribing Doctor..." />
+            <label class="inline" for="prescriptionDue">Refill Due:</label>
+            <input class="inline" formControlName="prescriptionDue" id="prescriptionDue-{{i}}" type="date" />
+            <em class="no-float" *ngIf="this.getPrescriptions.at(i).get('prescriptionDue')?.errors?.['required'] && this.submitted">Required</em>
+            <br>
+            <label class="inline" for="prescriptionRefills">Refills Remaining:</label>
+            <input class="inline" formControlName="prescriptionRefills" id="prescriptionRefills-{{i}}" type="number"
+              step="1" value="0" />
+            <em class="no-float" *ngIf="this.getPrescriptions.at(i).get('prescriptionRefills')?.errors?.['required'] && this.submitted">Required</em>
+            <br>
+            <button (click)="removePrescription(i)" type="button">Remove</button>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <h3 class="inline">Vaccinations</h3>
+      <button class="inline" (click)="addVaccine()" type="button">Add Vaccination</button>
+      <div formArrayName="vaccines">
+        <div *ngFor="let vaccination of vaccines().controls; let i = index;">
+          <div [formGroupName]="i" class="bordered">
+            <label for="vaccineName">Name:
+              <em *ngIf="this.getVaccines.at(i).get('vaccineName')?.errors?.['required'] && this.submitted">Required</em>
+            </label>
+            <input formControlName="vaccineName" id="vaccineName" type="text" placeholder="Name..." required/>
+            <label class="inline" for="vaccineAdministered">Date Administered:</label>
+            <input class="inline" formControlName="vaccineAdministered" id="vaccineAdministered" type="date" required/>
+            <em class="no-float" *ngIf="this.getVaccines.at(i).get('vaccineAdministered')?.errors?.['required'] && this.submitted">Required</em>
+            <br>
+            <label class="inline" for="vaccineDue" required>Due Date:</label>
+            <input class="inline" formControlName="vaccineDue" id="vaccineDue" type="date" required/>
+            <em class="no-float" *ngIf="this.getVaccines.at(i).get('vaccineDue')?.errors?.['required'] && this.submitted">Required</em>
+            <br>
+            <button (click)="removeVaccine(i)" type="button">Remove</button>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <h3 class="inline">Health Conditions</h3>
+      <button class="inline" (click)="addCondition()" type="button">Add Condition</button>
+      <div formArrayName="conditions">
+        <div *ngFor="let condition of conditions().controls; let i = index;">
+          <div [formGroupName]="i" class="bordered">
+            <label for="conditionName">Name:
+              <em *ngIf="this.getConditions.at(i).get('conditionName')?.errors?.['required'] && this.submitted">Required</em>
+            </label>
+            <input formControlName="conditionName" id="conditionName" type="text" placeholder="Condition..." />
+            <label for="conditionNotes">Notes:</label>
+            <textarea formControlName="conditionNotes" id="conditionNotes" placeholder="Notes..." rows="2"></textarea>
+            <br>
+            <button (click)="removeCondition(i)" type="button">Remove</button>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <p><em class="no-float" *ngIf="this.submitted && this.newPetForm.invalid">Please complete required fields before saving.</em></p>
+      <button id="save_button" type="submit">Save Profile</button>
+      <button routerLink="/account-profile" type="button">Cancel</button>
+    </form>
+  </div>
+</div>
