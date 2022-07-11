@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 @Component({
-  selector: 'app-account-pet',
-  templateUrl: './account-pet.component.html',
-  styleUrls: ['./account-pet.component.css']
+  selector: 'app-pet-form',
+  templateUrl: './pet-form.component.html',
+  styleUrls: ['./pet-form.component.css']
 })
-export class AccountPetComponent implements OnInit {
+export class PetFormComponent implements OnInit {
 
   newPetForm: FormGroup;
   submitted: boolean;
