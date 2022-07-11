@@ -7,7 +7,7 @@ import { NewPetComponent } from './new-pet/new-pet.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
-  { path: 'profile', component: AccountProfileComponent },
+  { path: 'pets', component: AccountProfileComponent },
   { path: 'new-pet', component: NewPetComponent },
   { path: 'edit-pet/:id', component: EditPetComponent },
   { path: '404', component: PageNotFoundComponent },
