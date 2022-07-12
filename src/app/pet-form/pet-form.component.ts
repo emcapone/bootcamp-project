@@ -45,6 +45,18 @@ export class PetFormComponent implements OnInit {
     if (id) { this.getPet(id) };
   }
 
+  getErrorMessage(s: string, s2?: string, num?: number) {
+    if (s2 != undefined && num != undefined) {
+      let subForm = this.newPetForm.get(s2) as FormArray;
+      if (subForm.at(num).get(s)?.errors?.['required']) {
+        return 'You must enter a value';
+      }
+    } else if (this.newPetForm.get(s)?.hasError('required')) {
+      return 'You must enter a value';
+    }
+    return '';
+  }
+
   async getPet(id: number) {
     this.petService.getPet(id).subscribe(pet => this.pet = pet);
     await lastValueFrom(this.petService.getPet(id));
@@ -91,7 +103,7 @@ export class PetFormComponent implements OnInit {
       (this.newPetForm.get('vaccines') as FormArray)
         .push(this.fb.group({
           vaccineName: [x.name, Validators.required],
-          vaccineAdministered: [formatDate(x.dateAdministered , 'yyyy-MM-dd', 'en-US'), Validators.required],
+          vaccineAdministered: [formatDate(x.dateAdministered, 'yyyy-MM-dd', 'en-US'), Validators.required],
           vaccineDue: [formatDate(x.dueDate, 'yyyy-MM-dd', 'en-US'), Validators.required],
         }))
     });
@@ -157,7 +169,7 @@ export class PetFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.pet.name);
+    /* TO-DO: Check/fix shape for post
     let formValues = this.newPetForm.value;
     let vaccines: Vaccine = {
       id: formValues.index,
@@ -182,9 +194,9 @@ export class PetFormComponent implements OnInit {
       prescriptions: [formValues.prescriptions],
       vaccines: [vaccines],
       conditions: [formValues.conditions]
-    };
+    }; */
     this.submitted = true;
-    console.log(pet);
+    console.log(this.newPetForm.value);
   }
 
 }
