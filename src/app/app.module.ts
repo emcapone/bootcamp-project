@@ -15,6 +15,7 @@ import { EditPetComponent } from './edit-pet/edit-pet.component';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from './shared/material.module';
+import { AccountPetsComponent } from './account-pets/account-pets.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { MaterialModule } from './shared/material.module';
     NewPetComponent,
     EditPetComponent,
     MainNavComponent,
+    AccountPetsComponent
   ],
   imports: [
     BrowserModule,
