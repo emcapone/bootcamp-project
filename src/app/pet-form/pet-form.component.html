@@ -186,5 +186,5 @@
   <p class="validate" *ngIf="this.submitted && this.newPetForm.invalid">Please complete required fields before
       saving.</p>
   <button mat-raised-button color="primary" id="save_button" type="submit">Save Profile</button>
-  <button mat-raised-button color="warn" routerLink="/pets" type="button">Cancel</button>
+  <button mat-raised-button color="warn" (click)="this.goBack()" type="button">Cancel</button>
 </form>

@@ -1,11 +1,11 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-
+import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 
-import { Pet, Vaccine } from '../pet';
+import { Pet, Vaccine, Prescription, Condition } from '../pet';
 import { PetService } from '../pet.service';
 
 @Component({
@@ -18,8 +18,12 @@ export class PetFormComponent implements OnInit {
   newPetForm!: FormGroup;
   submitted: boolean;
   pet!: Pet;
+  update: boolean;
+  private id: number;
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private petService: PetService) {
+  constructor(private fb: FormBuilder, private route: ActivatedRoute, private petService: PetService, private location: Location) {
+    this.id = -1;
+    this.update = false;
     this.submitted = false;
     this.newPetForm = this.fb.group({
       name: ['', Validators.required],
@@ -41,8 +45,11 @@ export class PetFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) { this.getPet(id) };
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.id) {
+      this.getPet(this.id);
+      this.update = true;
+    }
   }
 
   getErrorMessage(s: string, s2?: string, num?: number) {
@@ -169,16 +176,43 @@ export class PetFormComponent implements OnInit {
   }
 
   onSubmit() {
-    /* TO-DO: Check/fix shape for post
+    this.submitted = true;
+    console.log(this.newPetForm.value);
+    if (this.newPetForm.invalid) { return false; }
+
     let formValues = this.newPetForm.value;
-    let vaccines: Vaccine = {
-      id: formValues.index,
-      name: formValues.vaccineName,
-      dateAdministered: formValues.dateAdministered,
-      dueDate: formValues.dueDate
-    }
+    let prescriptions: Prescription[] = [];
+    let index = 0;
+    formValues.prescriptions?.forEach((x: { name: string; prescribingDoctor: string; dueDate: Date; refills: number; }) => {
+      prescriptions.push({
+        id: index++,
+        name: x.name,
+        doctor: x.prescribingDoctor,
+        due: x.dueDate,
+        refills: x.refills
+      })
+    });
+    let vaccines: Vaccine[] = [];
+    index = 0;
+    formValues.vaccines?.forEach((x: { name: string; dateAdministered: Date; dueDate: Date; }) => {
+      vaccines.push({
+        id: index++,
+        name: x.name,
+        dateAdministered: x.dateAdministered,
+        dueDate: x.dueDate
+      })
+    });
+    let conditions: Condition[] = [];
+    index = 0;
+    formValues.conditions.forEach((x: { conditionName: string; conditionNotes: string; }) => {
+      conditions.push({
+        id: index++,
+        name: x.conditionName,
+        notes: x.conditionNotes
+      })
+    });
     let pet: Pet = {
-      id: 0,
+      id: this.id,
       name: formValues.name,
       breed: formValues.breed,
       color: formValues.color,
@@ -191,12 +225,23 @@ export class PetFormComponent implements OnInit {
       adoptionDay: formValues.adoptionDay,
       vetRecords: formValues.vetRecords,
       petPhoto: formValues.petPhoto,
-      prescriptions: [formValues.prescriptions],
-      vaccines: [vaccines],
-      conditions: [formValues.conditions]
-    }; */
-    this.submitted = true;
-    console.log(this.newPetForm.value);
+      prescriptions: prescriptions,
+      vaccines: vaccines,
+      conditions: conditions
+    };
+    if (this.newPetForm.valid) {
+      if (this.update){
+        this.petService.updatePet(pet)
+          .subscribe(() => this.goBack());
+      } else {
+        this.petService.addPet(pet)
+          .subscribe(() => this.goBack());
+      }
+    };
+    return false;
   }
 
+  goBack(): void {
+    this.location.back();
+  }
 }

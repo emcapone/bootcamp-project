@@ -13,6 +13,9 @@ import { PETS } from './mock-pets';
 export class PetService {
 
   private petsUrl = 'api/pets';
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
   constructor(private http: HttpClient) { }
 
@@ -51,4 +54,21 @@ export class PetService {
       return of(result as T);
     };
   }
+
+  /** PUT */
+  updatePet(pet: Pet): Observable<any> {
+    return this.http.put(this.petsUrl, pet, this.httpOptions).pipe(
+      tap(_ => console.log(`updated pet id=${pet.id}`)),
+      catchError(this.handleError<any>('updatePet'))
+    );
+  }
+
+  /** POST */
+  addPet(pet: Pet): Observable<Pet> {
+    return this.http.post<Pet>(this.petsUrl, pet, this.httpOptions).pipe(
+      tap((newPet: Pet) => console.log(`added pet w/ id=${newPet.id}`)),
+      catchError(this.handleError<Pet>('addPet'))
+    );
+  }
+
 }
