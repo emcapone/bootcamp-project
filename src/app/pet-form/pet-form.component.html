@@ -1,0 +1,190 @@
+<form [formGroup]="newPetForm" autocomplete="off" (ngSubmit)="onSubmit()" novalidate>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name..." formControlName="name" required>
+      <mat-error>{{this.getErrorMessage('name')}}</mat-error>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Breed</mat-label>
+      <input matInput placeholder="Breed..." formControlName="breed" required>
+      <mat-error>{{this.getErrorMessage('name')}}</mat-error>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Color</mat-label>
+      <input matInput placeholder="Color..." formControlName="color" required>
+      <mat-error>{{this.getErrorMessage('color')}}</mat-error>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <input matInput placeholder="Description..." formControlName="description" required>
+      <mat-error>{{this.getErrorMessage('description')}}</mat-error>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Weight</mat-label>
+      <input matInput type="number" placeholder="0.0" step="0.1" formControlName="weight" required>
+      <mat-error>{{this.getErrorMessage('weight')}}</mat-error>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Microchip Number</mat-label>
+      <input matInput placeholder="Microchip Number..." formControlName="microchip">
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Birthday</mat-label>
+      <input matInput type="date" formControlName="birthday">
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Adoption Day</mat-label>
+      <input matInput type="date" formControlName="adoptionDay">
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-radio-group aria-label="Select your pet's sex" formControlName="sex" required>
+      <mat-label [ngClass]="{validate: this.newPetForm.get('sex')?.invalid && this.submitted}">Sex*</mat-label>
+      <mat-radio-button id="male" name="sex" value="male">Male</mat-radio-button>
+      <mat-radio-button id="female" name="sex" value="female">Female</mat-radio-button>
+      <mat-icon class="center-icon" *ngIf="this.newPetForm.get('sex')?.invalid && this.submitted" color="warn">cancel</mat-icon>
+    </mat-radio-group>
+  </p>
+  <br>
+  <!-- TO DO: <em class="no-float" *ngIf="this.newPetForm.get('sex')?.errors?.['required'] && this.submitted">Required</em>-->
+  <p>
+    <mat-checkbox formControlName="fixed" id="fixed">Spayed/Neutered?</mat-checkbox>
+  </p>
+  <br>
+  <p>
+    <mat-label>Vet Records </mat-label>
+    <button type="button" mat-raised-button color="primary" (click)="vetRecords.click()">Choose File</button>
+    <input hidden formControlName="vetRecords" #vetRecords type="file" multiple="multiple" accept=".pdf, image/*">
+    <mat-icon class="center-icon" *ngIf="this.newPetForm.get('vetRecords')?.value">check_circle</mat-icon>
+  </p>
+  <br>
+  <p>
+    <mat-label [ngClass]="{validate: this.newPetForm.get('petPhoto')?.invalid && this.submitted}">Pet Photo* </mat-label>
+    <button type="button" mat-raised-button color="primary" (click)="petPhoto.click()">Choose File</button>
+    <input hidden formControlName="petPhoto" #petPhoto type="file" accept="image/*" required>
+    <mat-icon class="center-icon" *ngIf="this.newPetForm.get('petPhoto')?.valid">check_circle</mat-icon>
+    <mat-icon class="center-icon" *ngIf="this.newPetForm.get('petPhoto')?.invalid && this.submitted" color="warn">cancel</mat-icon>
+  </p>
+  <hr>
+  <h3 class="inline">Prescriptions</h3>
+  <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new prescription" class="inline"
+    (click)="addPrescription()" type="button">
+    <mat-icon>add_icon</mat-icon>
+  </button>
+  <div formArrayName="prescriptions">
+    <div *ngFor="let prescription of prescriptions().controls; let i = index;">
+      <div [formGroupName]="i" class="bordered">
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Prescription Name..." formControlName="prescriptionName" required>
+            <mat-error>{{this.getErrorMessage('prescriptionName', 'prescriptions', i)}}</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Prescribing Doctor</mat-label>
+            <input matInput placeholder="Prescribing Doctor..." formControlName="prescriptionDoctor" required>
+            <mat-error>{{this.getErrorMessage('prescriptionDoctor', 'prescriptions', i)}}</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Refill Due</mat-label>
+            <input matInput type="date" formControlName="prescriptionDue" required>
+            <mat-error>{{this.getErrorMessage('prescriptionDue', 'prescriptions', i)}}</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Refills Remaining</mat-label>
+            <input matInput type="number" placeholder="0" formControlName="prescriptionRefills" required>
+            <mat-error>{{this.getErrorMessage('prescriptionRefills', 'prescriptions', i)}}</mat-error>
+          </mat-form-field>
+        </p>
+        <button mat-raised-button color="warn" (click)="removePrescription(i)" type="button">Remove</button>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <h3 class="inline">Vaccinations</h3>
+  <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new vaccine" class="inline"
+    (click)="addVaccine()" type="button">
+    <mat-icon>add_icon</mat-icon>
+  </button>
+  <div formArrayName="vaccines">
+    <div *ngFor="let vaccination of vaccines().controls; let i = index;">
+      <div [formGroupName]="i" class="bordered">
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Vaccine Name..." formControlName="vaccineName" required>
+            <mat-error>{{this.getErrorMessage('vaccineName', 'vaccines', i)}}</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Date Administered</mat-label>
+            <input matInput type="date" formControlName="vaccineAdministered" required>
+            <mat-error>{{this.getErrorMessage('vaccineAdministered', 'vaccines', i)}}</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Due Date</mat-label>
+            <input matInput type="date" formControlName="vaccineDue" required>
+            <mat-error>{{this.getErrorMessage('vaccineDue', 'vaccines', i)}}</mat-error>
+          </mat-form-field>
+        </p>
+        <button mat-raised-button color="warn" (click)="removeVaccine(i)" type="button">Remove</button>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <h3 class="inline">Health Conditions</h3>
+  <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new health condition"
+    class="inline" (click)="addCondition()" type="button">
+    <mat-icon>add_icon</mat-icon>
+  </button>
+  <div formArrayName="conditions">
+    <div *ngFor="let condition of conditions().controls; let i = index;">
+      <div [formGroupName]="i" class="bordered">
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Condition Name..." formControlName="conditionName" required>
+            <mat-error>{{this.getErrorMessage('conditionName', 'conditions', i)}}</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Notes</mat-label>
+            <textarea matInput placeholder="Condition Notes..." formControlName="conditionNotes"></textarea>
+          </mat-form-field>
+        </p>
+        <button mat-raised-button color="warn" (click)="removeCondition(i)" type="button">Remove</button>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <p class="validate" *ngIf="this.submitted && this.newPetForm.invalid">Please complete required fields before
+      saving.</p>
+  <button mat-raised-button color="primary" id="save_button" type="submit">Save Profile</button>
+  <button mat-raised-button color="warn" routerLink="/pets" type="button">Cancel</button>
+</form>
