@@ -44,21 +44,29 @@
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Birthday</mat-label>
-      <input matInput type="date" formControlName="birthday">
+      <input matInput [matDatepicker]="birthday" formControlName="birthday">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="birthday"></mat-datepicker-toggle>
+      <mat-datepicker #birthday></mat-datepicker>
     </mat-form-field>
   </p>
   <p>
     <mat-form-field appearance="outline">
       <mat-label>Adoption Day</mat-label>
-      <input matInput type="date" formControlName="adoptionDay">
+      <input matInput [matDatepicker]="adoptionDay" formControlName="adoptionDay">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="adoptionDay"></mat-datepicker-toggle>
+      <mat-datepicker #adoptionDay></mat-datepicker>
+
     </mat-form-field>
   </p>
   <p>
     <mat-radio-group aria-label="Select your pet's sex" formControlName="sex" required>
       <mat-label [ngClass]="{validate: this.newPetForm.get('sex')?.invalid && this.submitted}">Sex*</mat-label>
-      <mat-radio-button id="male" name="sex" value="male">Male</mat-radio-button>
-      <mat-radio-button id="female" name="sex" value="female">Female</mat-radio-button>
-      <mat-icon class="center-icon" *ngIf="this.newPetForm.get('sex')?.invalid && this.submitted" color="warn">cancel</mat-icon>
+      <mat-radio-button id="male" name="sex" value="Male">Male</mat-radio-button>
+      <mat-radio-button id="female" name="sex" value="Female">Female</mat-radio-button>
+      <mat-icon class="center-icon" *ngIf="this.newPetForm.get('sex')?.invalid && this.submitted" color="warn">cancel
+      </mat-icon>
     </mat-radio-group>
   </p>
   <br>
@@ -75,11 +83,13 @@
   </p>
   <br>
   <p>
-    <mat-label [ngClass]="{validate: this.newPetForm.get('petPhoto')?.invalid && this.submitted}">Pet Photo* </mat-label>
+    <mat-label [ngClass]="{validate: this.newPetForm.get('petPhoto')?.invalid && this.submitted}">Pet Photo*
+    </mat-label>
     <button type="button" mat-raised-button color="primary" (click)="petPhoto.click()">Choose File</button>
     <input hidden formControlName="petPhoto" #petPhoto type="file" accept="image/*" required>
     <mat-icon class="center-icon" *ngIf="this.newPetForm.get('petPhoto')?.valid">check_circle</mat-icon>
-    <mat-icon class="center-icon" *ngIf="this.newPetForm.get('petPhoto')?.invalid && this.submitted" color="warn">cancel</mat-icon>
+    <mat-icon class="center-icon" *ngIf="this.newPetForm.get('petPhoto')?.invalid && this.submitted" color="warn">cancel
+    </mat-icon>
   </p>
   <hr>
   <h3 class="inline">Prescriptions</h3>
@@ -107,7 +117,10 @@
         <p>
           <mat-form-field appearance="outline">
             <mat-label>Refill Due</mat-label>
-            <input matInput type="date" formControlName="prescriptionDue" required>
+            <input matInput [matDatepicker]="prescriptionDue" formControlName="prescriptionDue" required>
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="prescriptionDue"></mat-datepicker-toggle>
+            <mat-datepicker #prescriptionDue></mat-datepicker>
             <mat-error>{{this.getErrorMessage('prescriptionDue', 'prescriptions', i)}}</mat-error>
           </mat-form-field>
         </p>
@@ -141,14 +154,20 @@
         <p>
           <mat-form-field appearance="outline">
             <mat-label>Date Administered</mat-label>
-            <input matInput type="date" formControlName="vaccineAdministered" required>
+            <input matInput [matDatepicker]="vaccineAdministered" formControlName="vaccineAdministered" required>
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="vaccineAdministered"></mat-datepicker-toggle>
+            <mat-datepicker #vaccineAdministered></mat-datepicker>
             <mat-error>{{this.getErrorMessage('vaccineAdministered', 'vaccines', i)}}</mat-error>
           </mat-form-field>
         </p>
         <p>
           <mat-form-field appearance="outline">
             <mat-label>Due Date</mat-label>
-            <input matInput type="date" formControlName="vaccineDue" required>
+            <input matInput [matDatepicker]="vaccineDue" formControlName="vaccineDue" required>
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="vaccineDue"></mat-datepicker-toggle>
+            <mat-datepicker #vaccineDue></mat-datepicker>
             <mat-error>{{this.getErrorMessage('vaccineDue', 'vaccines', i)}}</mat-error>
           </mat-form-field>
         </p>
@@ -184,7 +203,7 @@
   </div>
   <hr>
   <p class="validate" *ngIf="this.submitted && this.newPetForm.invalid">Please complete required fields before
-      saving.</p>
+    saving.</p>
   <button mat-raised-button color="primary" id="save_button" type="submit">Save Profile</button>
   <button mat-raised-button color="warn" (click)="this.goBack()" type="button">Cancel</button>
 </form>
