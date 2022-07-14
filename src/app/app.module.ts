@@ -16,6 +16,7 @@ import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from './shared/material.module';
 import { AccountPetsComponent } from './account-pets/account-pets.component';
+import { ViewPetComponent } from './view-pet/view-pet.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { AccountPetsComponent } from './account-pets/account-pets.component';
     NewPetComponent,
     EditPetComponent,
     MainNavComponent,
-    AccountPetsComponent
+    AccountPetsComponent,
+    ViewPetComponent
   ],
   imports: [
     BrowserModule,

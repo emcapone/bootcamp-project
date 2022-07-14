@@ -71,4 +71,13 @@ export class PetService {
     );
   }
 
+  /** DELETE */
+  deletePet(id: number): Observable<Pet> {
+    const url = `${this.petsUrl}/${id}`;
+
+    return this.http.delete<Pet>(url, this.httpOptions).pipe(
+      tap(_ => console.log(`deleted pet id=${id}`)),
+      catchError(this.handleError<Pet>('deletePet'))
+    );
+  }
 }
