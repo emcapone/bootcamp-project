@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { catchError, EMPTY } from 'rxjs';
 
-import { Pet } from '../pet';
 import { PetService } from '../pet.service';
 
 @Component({
@@ -8,18 +8,17 @@ import { PetService } from '../pet.service';
   templateUrl: './account-pets.component.html',
   styleUrls: ['./account-pets.component.css']
 })
-export class AccountPetsComponent implements OnInit {
+export class AccountPetsComponent {
 
-  pets: Pet[] = [];
+  //Declarative Pattern
+  pets$ = this.petService.pets$
+    .pipe(
+      catchError(err => {
+        console.log(err);
+        return EMPTY;
+      })
+    );
 
   constructor(private petService: PetService) { }
-
-  ngOnInit(): void {
-    this.getPets();
-  }
-
-  getPets(): void {
-    this.petService.getPets().subscribe(pets => this.pets = pets);
-  }
 
 }
