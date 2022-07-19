@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs';
 
-import { Pet } from '../pet';
 import { PetService } from '../pet.service';
 
 @Component({
@@ -12,30 +11,24 @@ import { PetService } from '../pet.service';
 })
 export class ViewPetComponent implements OnInit {
 
-  private id: number;
-  pet!: Pet;
-  displayVetRecords: boolean=false;
+  pet$ = this.petService.pet$;
+  displayVetRecords: boolean = false;
 
-  constructor(private petService: PetService, private route: ActivatedRoute, private location: Location) {
-    this.id = Number(this.route.snapshot.paramMap.get('id'));
-   }
+  constructor(private router: Router, private petService: PetService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.getPet(this.id);
+    this.petService.selectedPetChanged(Number(this.route.snapshot.paramMap.get('id')));
   }
 
-  getPet(id: number): void {
-    this.petService.getPet(id).subscribe(pet => this.pet = pet);
+  delete() {
+    this.petService.deletePet(Number(this.route.snapshot.paramMap.get('id')))
+      .pipe(
+        take(1)
+      )
+      .subscribe(_ => this.router.navigate(['pets']));
   }
 
-  delete(){
-    this.petService.deletePet(this.id).subscribe();
-    this.goBack();
-  }
-  goBack(): void {
-    this.location.back();
-  }
-  toggle(){
+  toggle() {
     this.displayVetRecords = !this.displayVetRecords
   }
 }

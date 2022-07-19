@@ -74,35 +74,6 @@ export class PetFormComponent implements OnInit {
         this.conditions().push(this.newDataCondition(condition.name, condition.notes));
       }
     }
-    /*     prescriptions: this.fb.array([]),
-        vaccines: this.fb.array([]),
-        conditions: this.fb.array([])
-      });
-      this.pet.prescriptions?.forEach(x => {
-        (this.newPetForm.get('prescriptions') as FormArray)
-          .push(this.fb.group({
-            prescriptionName: [x.name, Validators.required],
-            prescriptionDoctor: [x.doctor, Validators.required],
-            prescriptionDue: [formatDate(x.due, 'yyyy-MM-dd', 'en-US'), Validators.required],
-            prescriptionRefills: [x.refills, Validators.required],
-          }))
-      });
-      this.pet.vaccines?.forEach(x => {
-        (this.newPetForm.get('vaccines') as FormArray)
-          .push(this.fb.group({
-            vaccineName: [x.name, Validators.required],
-            vaccineAdministered: [formatDate(x.dateAdministered, 'yyyy-MM-dd', 'en-US'), Validators.required],
-            vaccineDue: [formatDate(x.dueDate, 'yyyy-MM-dd', 'en-US'), Validators.required],
-          }))
-      });
-      this.pet.conditions?.forEach(x => {
-        (this.newPetForm.get('conditions') as FormArray)
-          .push(this.fb.group({
-            conditionName: [x.name, Validators.required],
-            conditionNotes: [x.notes, Validators.required],
-          }))
-      });
-    } */
   }
 
   onChangeVetRecords(event: Event) {
