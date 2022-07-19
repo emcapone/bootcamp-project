@@ -1,0 +1,24 @@
+<div class="head-container">
+  <h1>My Pets</h1>
+  <span class="spacer"></span>
+  <button class="headerBtns" mat-raised-button color="accent" routerLink='/new-pet'>New Pet</button>
+  <button class="headerBtns" mat-raised-button color="accent" routerLink="">Add Event</button>
+</div>
+<div class="card-container" *ngIf="pets$ | async as pets">
+  <mat-card *ngFor="let pet of pets">
+    <mat-card-title-group>
+      <mat-card-title>{{pet.name}}</mat-card-title>
+      <mat-card-subtitle>{{pet.sex}} {{pet.breed}}</mat-card-subtitle>
+      <img mat-card-lg-image [src]="[pet.petPhoto]">
+    </mat-card-title-group>
+    <mat-card-content>
+      <p *ngIf="pet.birthday">Birthday: {{pet.birthday | date:'mediumDate'}}</p>
+      <p *ngIf="pet.adoptionDay">Adoption Day: {{pet.adoptionDay | date:'mediumDate'}}</p>
+      <p>Microchip: {{pet.microchip}}</p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-stroked-button color="accent" routerLink="/view-pet/{{pet.id}}">VIEW</button>
+      <button mat-stroked-button color="accent" routerLink="/edit-pet/{{pet.id}}">EDIT</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Pet } from '../pet';
-import { PetService } from '../pet.service';
-
 @Component({
   selector: 'app-account-profile',
   templateUrl: './account-profile.component.html',
@@ -10,16 +7,8 @@ import { PetService } from '../pet.service';
 })
 export class AccountProfileComponent implements OnInit {
 
-  pets: Pet[] = [];
+  constructor() { }
 
-  constructor(private petService: PetService) { }
-
-  ngOnInit(): void {
-    this.getPets();
-  }
-
-  getPets(): void {
-    this.petService.getPets().subscribe(pets => this.pets = pets);
-  }
+  ngOnInit(): void { }
 
 }

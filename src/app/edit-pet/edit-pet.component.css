@@ -1,3 +1,13 @@
 h1 {
   margin-left: 10px;
 }
+
+.spinner {
+  padding-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  margin-left: 10px;
+}

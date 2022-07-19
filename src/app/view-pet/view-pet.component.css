@@ -1,0 +1,27 @@
+img {
+  max-width: 200px;
+  max-height: 200px;
+}
+mat-card {
+  width: 400px;
+  margin: 10px;
+}
+.head-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+.spacer {
+  flex: 1 1 auto;
+}
+h4 {
+  text-decoration: underline;
+}
+.spinner {
+  padding-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+mat-tab-group {
+  position: sticky;
+}

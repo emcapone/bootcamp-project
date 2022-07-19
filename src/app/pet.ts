@@ -10,7 +10,7 @@ export interface Pet {
   weight: number;
   birthday?: Date;
   adoptionDay?: Date;
-  vetRecords?: File;
+  vetRecords?: string;
   petPhoto: string;
   prescriptions?: Prescription[];
   vaccines?: Vaccine[];

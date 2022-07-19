@@ -10,11 +10,6 @@ mat-form-field {
   width: 100%;
 }
 
-.margin-bottom {
-  margin-bottom: 10px;
-}
-
-
 mat-radio-group mat-radio-label,
 mat-radio-group mat-radio-button {
   margin: 10px;
@@ -43,7 +38,6 @@ button {
   color: #f44336;
 }
 
-.center-icon {
-  margin-left: 5px;
-  vertical-align: middle;
+.file-label {
+  margin-left: 20px;
 }

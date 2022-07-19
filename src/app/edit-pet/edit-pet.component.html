@@ -1,5 +1,10 @@
 <div>
   <h1>Edit Pet</h1>
   <hr>
+  <div class="spinner" *ngIf="!this.loaded">
+    <mat-spinner></mat-spinner>
+  </div>
   <app-pet-form></app-pet-form>
+  <button mat-raised-button color="primary" id="save_button" type="button" (click)="submit()">Save Edits</button>
+  <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
 </div>
