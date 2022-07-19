@@ -1,12 +1,12 @@
-import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { Location } from '@angular/common';
+import { Location, formatDate } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
+import { take } from 'rxjs';
 
 import { Pet, Vaccine, Prescription, Condition } from '../pet';
 import { PetService } from '../pet.service';
+import { FileUploadService } from '../file-upload.service';
 
 @Component({
   selector: 'app-pet-form',
@@ -17,13 +17,13 @@ export class PetFormComponent implements OnInit {
 
   newPetForm!: FormGroup;
   submitted: boolean;
-  pet!: Pet;
-  update: boolean;
-  private id: number;
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private petService: PetService, private location: Location) {
-    this.id = -1;
-    this.update = false;
+  vetRecordsLink: string = "/assets/vet-records.pdf";
+  vetRecordsFile: File | null | undefined;
+  petPhotoLink: string = "/assets/default.png";
+  petPhotoFile: File | null | undefined;
+
+  constructor(private fileUploadService: FileUploadService, private fb: FormBuilder, private route: ActivatedRoute, private petService: PetService, private location: Location) {
     this.submitted = false;
     this.newPetForm = this.fb.group({
       name: ['', Validators.required],
@@ -37,19 +37,79 @@ export class PetFormComponent implements OnInit {
       birthday: [''],
       adoptionDay: [''],
       vetRecords: [''],
-      petPhoto: ['', Validators.required],
+      petPhoto: [''],
       prescriptions: this.fb.array([]),
       vaccines: this.fb.array([]),
       conditions: this.fb.array([])
     });
   }
 
-  ngOnInit(): void {
-    this.id = Number(this.route.snapshot.paramMap.get('id'));
-    if (this.id) {
-      this.getPet(this.id);
-      this.update = true;
+  ngOnInit(): void { }
+
+  setFormValues(pet: Pet): void {
+    this.newPetForm.controls['name'].setValue(pet.name);
+    this.newPetForm.controls['breed'].setValue(pet.breed);
+    this.newPetForm.controls['color'].setValue(pet.color);
+    this.newPetForm.controls['description'].setValue(pet.description);
+    this.newPetForm.controls['microchip'].setValue(pet.microchip);
+    this.newPetForm.controls['sex'].setValue(pet.sex);
+    this.newPetForm.controls['fixed'].setValue(pet.fixed);
+    this.newPetForm.controls['weight'].setValue(pet.weight);
+    this.newPetForm.controls['birthday'].setValue(pet.birthday ? formatDate(pet.birthday, 'yyyy-MM-dd', 'en-US') : '');
+    this.newPetForm.controls['adoptionDay'].setValue(pet.adoptionDay ? formatDate(pet.adoptionDay, 'yyyy-MM-dd', 'en-US') : '');
+    this.newPetForm.controls['vetRecords'].setValue(''); //TO-DO
+    this.newPetForm.controls['petPhoto'].setValue(''); //TO-DO
+    if (pet.prescriptions) {
+      for (let prescription of pet.prescriptions) {
+        this.prescriptions().push(this.newDataPrescription(prescription.name, prescription.doctor, prescription.due, prescription.refills));
+      }
     }
+    if (pet.vaccines) {
+      for (let vaccine of pet.vaccines) {
+        this.vaccines().push(this.newDataVaccine(vaccine.name, vaccine.dateAdministered, vaccine.dueDate));
+      }
+    }
+    if (pet.conditions) {
+      for (let condition of pet.conditions) {
+        this.conditions().push(this.newDataCondition(condition.name, condition.notes));
+      }
+    }
+    /*     prescriptions: this.fb.array([]),
+        vaccines: this.fb.array([]),
+        conditions: this.fb.array([])
+      });
+      this.pet.prescriptions?.forEach(x => {
+        (this.newPetForm.get('prescriptions') as FormArray)
+          .push(this.fb.group({
+            prescriptionName: [x.name, Validators.required],
+            prescriptionDoctor: [x.doctor, Validators.required],
+            prescriptionDue: [formatDate(x.due, 'yyyy-MM-dd', 'en-US'), Validators.required],
+            prescriptionRefills: [x.refills, Validators.required],
+          }))
+      });
+      this.pet.vaccines?.forEach(x => {
+        (this.newPetForm.get('vaccines') as FormArray)
+          .push(this.fb.group({
+            vaccineName: [x.name, Validators.required],
+            vaccineAdministered: [formatDate(x.dateAdministered, 'yyyy-MM-dd', 'en-US'), Validators.required],
+            vaccineDue: [formatDate(x.dueDate, 'yyyy-MM-dd', 'en-US'), Validators.required],
+          }))
+      });
+      this.pet.conditions?.forEach(x => {
+        (this.newPetForm.get('conditions') as FormArray)
+          .push(this.fb.group({
+            conditionName: [x.name, Validators.required],
+            conditionNotes: [x.notes, Validators.required],
+          }))
+      });
+    } */
+  }
+
+  onChangeVetRecords(event: Event) {
+    this.vetRecordsFile = (event.target as HTMLInputElement).files?.item(0);
+  }
+  onChangePetPhoto(event: Event) {
+    this.petPhotoFile = (event.target as HTMLInputElement).files?.item(0);
   }
 
   getErrorMessage(s: string, s2?: string, num?: number) {
@@ -64,68 +124,17 @@ export class PetFormComponent implements OnInit {
     return '';
   }
 
-  async getPet(id: number) {
-    this.petService.getPet(id).subscribe(pet => this.pet = pet);
-    await lastValueFrom(this.petService.getPet(id));
-    this.fillForm();
-  }
-  get getPrescriptions(): FormArray {
-    return this.newPetForm.get('prescriptions') as FormArray;
-  }
-  get getConditions(): FormArray {
-    return this.newPetForm.get('conditions') as FormArray;
-  }
-  get getVaccines(): FormArray {
-    return this.newPetForm.get('vaccines') as FormArray;
-  }
-
-  fillForm(): void {
-    this.newPetForm = this.fb.group({
-      name: [this.pet.name, Validators.required],
-      breed: [this.pet.breed, Validators.required],
-      color: [this.pet.color, Validators.required],
-      description: [this.pet.description, Validators.required],
-      microchip: [this.pet.microchip],
-      sex: [this.pet.sex, Validators.required],
-      fixed: [this.pet.fixed],
-      weight: [this.pet.weight],
-      birthday: [(this.pet.birthday) ? formatDate(this.pet.birthday, 'yyyy-MM-dd', 'en-US') : ''],
-      adoptionDay: [(this.pet.adoptionDay) ? formatDate(this.pet.adoptionDay, 'yyyy-MM-dd', 'en-US') : ''],
-      vetRecords: [''], // TO-DO
-      petPhoto: [''], // TO-DO
-      prescriptions: this.fb.array([]),
-      vaccines: this.fb.array([]),
-      conditions: this.fb.array([])
-    });
-    this.pet.prescriptions?.forEach(x => {
-      (this.newPetForm.get('prescriptions') as FormArray)
-        .push(this.fb.group({
-          prescriptionName: [x.name, Validators.required],
-          prescriptionDoctor: [x.doctor, Validators.required],
-          prescriptionDue: [formatDate(x.due, 'yyyy-MM-dd', 'en-US'), Validators.required],
-          prescriptionRefills: [x.refills, Validators.required],
-        }))
-    });
-    this.pet.vaccines?.forEach(x => {
-      (this.newPetForm.get('vaccines') as FormArray)
-        .push(this.fb.group({
-          vaccineName: [x.name, Validators.required],
-          vaccineAdministered: [formatDate(x.dateAdministered, 'yyyy-MM-dd', 'en-US'), Validators.required],
-          vaccineDue: [formatDate(x.dueDate, 'yyyy-MM-dd', 'en-US'), Validators.required],
-        }))
-    });
-    this.pet.conditions?.forEach(x => {
-      (this.newPetForm.get('conditions') as FormArray)
-        .push(this.fb.group({
-          conditionName: [x.name, Validators.required],
-          conditionNotes: [x.notes, Validators.required],
-        }))
-    });
-  }
-
   //Prescriptions
   prescriptions(): FormArray {
     return this.newPetForm.get('prescriptions') as FormArray;
+  }
+  newDataPrescription(name: string, doctor: string, due: Date, refills: number): FormGroup {
+    return this.fb.group({
+      prescriptionName: [name, Validators.required],
+      prescriptionDoctor: [doctor, Validators.required],
+      prescriptionDue: [formatDate(due, 'yyyy-MM-dd', 'en-US'), Validators.required],
+      prescriptionRefills: [refills, Validators.required]
+    })
   }
   newPrescription(): FormGroup {
     return this.fb.group({
@@ -145,6 +154,13 @@ export class PetFormComponent implements OnInit {
   vaccines(): FormArray {
     return this.newPetForm.get('vaccines') as FormArray;
   }
+  newDataVaccine(name: string, dateAdministered: Date, dueDate: Date): FormGroup {
+    return this.fb.group({
+      vaccineName: [name, Validators.required],
+      vaccineAdministered: [formatDate(dateAdministered, 'yyyy-MM-dd', 'en-US'), Validators.required],
+      vaccineDue: [formatDate(dueDate, 'yyyy-MM-dd', 'en-US'), Validators.required],
+    })
+  }
   newVaccine(): FormGroup {
     return this.fb.group({
       vaccineName: ['', Validators.required],
@@ -162,6 +178,12 @@ export class PetFormComponent implements OnInit {
   conditions(): FormArray {
     return this.newPetForm.get('conditions') as FormArray;
   }
+  newDataCondition(name: string, notes?: string): FormGroup {
+    return this.fb.group({
+      conditionName: [name, Validators.required],
+      conditionNotes: [notes, Validators.required]
+    })
+  }
   newCondition(): FormGroup {
     return this.fb.group({
       conditionName: ['', Validators.required],
@@ -177,29 +199,44 @@ export class PetFormComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.newPetForm.value);
     if (this.newPetForm.invalid) { return false; }
+
+    if (this.petPhotoFile) {
+      this.fileUploadService.uploadPhoto(this.petPhotoFile)
+        .pipe(
+          take(1)
+        )
+        .subscribe(url => this.petPhotoLink = url);
+    }
+
+    if (this.vetRecordsFile) {
+      this.fileUploadService.uploadPDF(this.vetRecordsFile)
+        .pipe(
+          take(1)
+        )
+        .subscribe(url => this.vetRecordsLink = url);
+    }
 
     let formValues = this.newPetForm.value;
     let prescriptions: Prescription[] = [];
     let index = 0;
-    formValues.prescriptions?.forEach((x: { name: string; prescribingDoctor: string; dueDate: Date; refills: number; }) => {
+    formValues.prescriptions?.forEach((x: { prescriptionName: string; prescriptionDoctor: string; prescriptionDue: Date; prescriptionRefills: number; }) => {
       prescriptions.push({
         id: index++,
-        name: x.name,
-        doctor: x.prescribingDoctor,
-        due: x.dueDate,
-        refills: x.refills
+        name: x.prescriptionName,
+        doctor: x.prescriptionDoctor,
+        due: x.prescriptionDue,
+        refills: x.prescriptionRefills
       })
     });
     let vaccines: Vaccine[] = [];
     index = 0;
-    formValues.vaccines?.forEach((x: { name: string; dateAdministered: Date; dueDate: Date; }) => {
+    formValues.vaccines?.forEach((x: { vaccineName: string; vaccineAdministered: Date; vaccineDue: Date; }) => {
       vaccines.push({
         id: index++,
-        name: x.name,
-        dateAdministered: x.dateAdministered,
-        dueDate: x.dueDate
+        name: x.vaccineName,
+        dateAdministered: x.vaccineAdministered,
+        dueDate: x.vaccineDue
       })
     });
     let conditions: Condition[] = [];
@@ -212,7 +249,7 @@ export class PetFormComponent implements OnInit {
       })
     });
     let pet: Pet = {
-      id: this.id,
+      id: 0,
       name: formValues.name,
       breed: formValues.breed,
       color: formValues.color,
@@ -223,22 +260,13 @@ export class PetFormComponent implements OnInit {
       weight: formValues.weight,
       birthday: formValues.birthday,
       adoptionDay: formValues.adoptionDay,
-      vetRecords: formValues.vetRecords,
-      petPhoto: formValues.petPhoto,
+      vetRecords: this.vetRecordsLink,
+      petPhoto: this.petPhotoLink,
       prescriptions: prescriptions,
       vaccines: vaccines,
       conditions: conditions
     };
-    if (this.newPetForm.valid) {
-      if (this.update){
-        this.petService.updatePet(pet)
-          .subscribe(() => this.goBack());
-      } else {
-        this.petService.addPet(pet)
-          .subscribe(() => this.goBack());
-      }
-    };
-    return false;
+    return pet;
   }
 
   goBack(): void {
