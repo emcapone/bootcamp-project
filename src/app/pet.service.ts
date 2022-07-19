@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -20,18 +20,27 @@ export class PetService {
   pets$ = this.http.get<Pet[]>(this.petsUrl)
     .pipe(
       tap(_ => console.log('fetched pets')),
-      catchError(this.handleError<Pet[]>('getPets', []))
+      catchError(this.handleError<Pet[]>('fetch pets', []))
     );
+
+  private selectedPetSubject = new BehaviorSubject<number>(0);
+  selectedPet$ = this.selectedPetSubject.asObservable();
+
+  pet$ = combineLatest([
+    this.pets$,
+    this.selectedPet$
+  ]).pipe(
+    map(([pets, id]) =>
+      pets.find(pet => pet.id === id)
+    ),
+    tap(pet => console.log('selected pet', pet?.id)),
+    catchError(this.handleError<Pet>('getPet'))
+  );
 
   constructor(private http: HttpClient) { }
 
-
-  getPet(id: number): Observable<Pet> {
-    const url = `${this.petsUrl}/${id}`;
-    return this.http.get<Pet>(url).pipe(
-      tap(_ => console.log(`fetched pet id=${id}`)),
-      catchError(this.handleError<Pet>(`getPet id=${id}`))
-    );
+  selectedPetChanged(id: number): void {
+    this.selectedPetSubject.next(id);
   }
 
   /** PUT */
