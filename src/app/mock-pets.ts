@@ -13,7 +13,8 @@ export const PETS: Pet[] = [
         weight: 4.3,
         birthday: new Date('11/12/2019'),
         adoptionDay: new Date('02/14/2020'),
-        petPhoto: '/assets/cat.jpg',
+        petPhoto: '/assets/default.png',
+        vetRecords: '/assets/vet-records.pdf',
         prescriptions: [{
           id: 1,
           name: 'Baytril',
@@ -45,7 +46,7 @@ export const PETS: Pet[] = [
       weight: 4.3,
       birthday: new Date('11/12/2019'),
       adoptionDay: new Date('02/14/2020'),
-      petPhoto: '/assets/cat.jpg',
+      petPhoto: '/assets/default.png',
       prescriptions: [{
         id: 1,
         name: 'Baytril',
@@ -77,7 +78,7 @@ export const PETS: Pet[] = [
     weight: 4.3,
     birthday: new Date('11/12/2019'),
     adoptionDay: new Date('02/14/2020'),
-    petPhoto: '/assets/cat.jpg',
+    petPhoto: '/assets/default.png',
     prescriptions: [{
       id: 1,
       name: 'Baytril',
@@ -109,7 +110,7 @@ export const PETS: Pet[] = [
   weight: 4.3,
   birthday: new Date('11/12/2019'),
   adoptionDay: new Date('02/14/2020'),
-  petPhoto: '/assets/cat.jpg',
+  petPhoto: '/assets/default.png',
   prescriptions: [{
     id: 1,
     name: 'Baytril',
