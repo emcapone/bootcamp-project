@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Location, formatDate } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +14,7 @@ import { FileUploadService } from '../file-upload.service';
   styleUrls: ['./pet-form.component.css']
 })
 export class PetFormComponent implements OnInit {
+  @Input() pet: Pet | null | undefined;
 
   newPetForm!: FormGroup;
   submitted: boolean;
@@ -44,7 +45,11 @@ export class PetFormComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    if(this.pet){
+      this.setFormValues(this.pet);
+    }
+  }
 
   setFormValues(pet: Pet): void {
     this.newPetForm.controls['name'].setValue(pet.name);

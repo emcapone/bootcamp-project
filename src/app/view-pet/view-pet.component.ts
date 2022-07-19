@@ -25,7 +25,10 @@ export class ViewPetComponent implements OnInit {
       .pipe(
         take(1)
       )
-      .subscribe(_ => this.router.navigate(['pets']));
+      .subscribe(_ => {
+        this.petService.refreshPets();
+        this.router.navigate(['pets'])
+      });
   }
 
   toggle() {
