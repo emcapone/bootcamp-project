@@ -11,3 +11,11 @@ h1 {
 button {
   margin-left: 10px;
 }
+
+.border-bottom {
+  border-bottom: 2px solid white;
+}
+
+.buttons {
+  padding-top: 10px;
+}

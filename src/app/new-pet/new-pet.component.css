@@ -1,7 +1,16 @@
 h1 {
   margin-left: 10px;
+  padding-bottom: 1rem;
 }
 
 button {
   margin-left: 10px;
+}
+
+.border-bottom {
+  border-bottom: 2px solid white;
+}
+
+.buttons {
+  padding-top: 10px;
 }

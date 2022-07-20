@@ -1,108 +1,105 @@
 <div>
   <form [formGroup]="newPetForm" autocomplete="off" (ngSubmit)="onSubmit()" novalidate>
-    <p>
-      <mat-form-field appearance="outline">
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="Name..." formControlName="name" required>
-        <mat-error>{{this.getErrorMessage('name')}}</mat-error>
-      </mat-form-field>
-    </p>
-    <p>
-      <mat-form-field appearance="outline">
-        <mat-label>Breed</mat-label>
-        <input matInput placeholder="Breed..." formControlName="breed" required>
-        <mat-error>{{this.getErrorMessage('name')}}</mat-error>
-      </mat-form-field>
-    </p>
-    <p>
-      <mat-form-field appearance="outline">
-        <mat-label>Color</mat-label>
-        <input matInput placeholder="Color..." formControlName="color" required>
-        <mat-error>{{this.getErrorMessage('color')}}</mat-error>
-      </mat-form-field>
-    </p>
-    <p>
-      <mat-form-field appearance="outline">
-        <mat-label>Description</mat-label>
-        <input matInput placeholder="Description..." formControlName="description" required>
-        <mat-error>{{this.getErrorMessage('description')}}</mat-error>
-      </mat-form-field>
-    </p>
-    <p>
-      <mat-form-field appearance="outline">
-        <mat-label>Weight</mat-label>
-        <input matInput type="number" placeholder="0.0" step="0.1" formControlName="weight" required>
-        <mat-error>{{this.getErrorMessage('weight')}}</mat-error>
-      </mat-form-field>
-    </p>
-    <p>
-      <mat-form-field appearance="outline">
-        <mat-label>Microchip Number</mat-label>
-        <input matInput placeholder="Microchip Number..." formControlName="microchip">
-      </mat-form-field>
-    </p>
-
-    <p>
-      <mat-form-field appearance="outline">
-        <mat-label>Birthday</mat-label>
-        <input matInput [matDatepicker]="birthday" formControlName="birthday">
-        <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matSuffix [for]="birthday"></mat-datepicker-toggle>
-        <mat-datepicker #birthday></mat-datepicker>
-      </mat-form-field>
-    </p>
-    <p>
-      <mat-form-field appearance="outline">
-        <mat-label>Adoption Day</mat-label>
-        <input matInput [matDatepicker]="adoptionDay" formControlName="adoptionDay">
-        <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matSuffix [for]="adoptionDay"></mat-datepicker-toggle>
-        <mat-datepicker #adoptionDay></mat-datepicker>
-
-      </mat-form-field>
-    </p>
-    <p>
-      <mat-radio-group aria-label="Select your pet's sex" formControlName="sex" required>
-        <mat-label [ngClass]="{validate: this.newPetForm.get('sex')?.invalid && this.submitted}">Sex*</mat-label>
-        <mat-radio-button id="male" name="sex" value="Male">Male</mat-radio-button>
-        <mat-radio-button id="female" name="sex" value="Female">Female</mat-radio-button>
-        <mat-icon class="center-icon" *ngIf="this.newPetForm.get('sex')?.invalid && this.submitted" color="warn">cancel
-        </mat-icon>
-      </mat-radio-group>
-    </p>
-    <br>
-    <p>
-      <mat-checkbox formControlName="fixed" id="fixed">Spayed/Neutered?</mat-checkbox>
-    </p>
-    <br>
-    <p>
-      <mat-label>Vet Records </mat-label>
-      <button type="button" mat-mini-fab color="primary" (click)="vetRecords.click()">
-        <mat-icon *ngIf="!this.vetRecordsFile">attach_file</mat-icon>
-        <mat-icon *ngIf="this.vetRecordsFile">check_circle</mat-icon>
-      </button>
-      <mat-label class="file-label" *ngIf="this.vetRecordsFile">{{this.vetRecordsFile.name}}</mat-label>
-      <input (change)="onChangeVetRecords($event)" hidden formControlName="vetRecords" #vetRecords type="file"
-        accept=".pdf">
-    </p>
-    <br>
-    <p>
-      <mat-label>Pet Photo</mat-label>
-      <button type="button" mat-mini-fab color="primary" (click)="petPhoto.click()">
-        <mat-icon *ngIf="!this.petPhotoFile">attach_file</mat-icon>
-        <mat-icon *ngIf="this.petPhotoFile">check_circle</mat-icon>
-      </button>
-      <mat-label class="file-label" *ngIf="this.petPhotoFile">{{this.petPhotoFile.name}}</mat-label>
-      <input (change)="onChangePetPhoto($event)" hidden formControlName="petPhoto" #petPhoto type="file"
-        accept="image/*">
-    </p>
-    <hr>
+    <div class="border-bottom">
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Name..." formControlName="name" required>
+          <mat-error>{{this.getErrorMessage('name')}}</mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Breed</mat-label>
+          <input matInput placeholder="Breed..." formControlName="breed" required>
+          <mat-error>{{this.getErrorMessage('name')}}</mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Color</mat-label>
+          <input matInput placeholder="Color..." formControlName="color" required>
+          <mat-error>{{this.getErrorMessage('color')}}</mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput placeholder="Description..." formControlName="description" required>
+          <mat-error>{{this.getErrorMessage('description')}}</mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Weight</mat-label>
+          <input matInput type="number" placeholder="0.0" step="0.1" formControlName="weight" required>
+          <mat-error>{{this.getErrorMessage('weight')}}</mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Microchip Number</mat-label>
+          <input matInput placeholder="Microchip Number..." formControlName="microchip">
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Birthday</mat-label>
+          <input matInput [matDatepicker]="birthday" formControlName="birthday">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="birthday"></mat-datepicker-toggle>
+          <mat-datepicker #birthday></mat-datepicker>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Adoption Day</mat-label>
+          <input matInput [matDatepicker]="adoptionDay" formControlName="adoptionDay">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="adoptionDay"></mat-datepicker-toggle>
+          <mat-datepicker #adoptionDay></mat-datepicker>
+        </mat-form-field>
+      </p>
+      <p class="bottom-margin">
+        <mat-radio-group aria-label="Select your pet's sex" formControlName="sex" required>
+          <mat-label [ngClass]="{validate: this.newPetForm.get('sex')?.invalid && this.submitted}">Sex*</mat-label>
+          <mat-radio-button id="male" name="sex" value="Male">Male</mat-radio-button>
+          <mat-radio-button id="female" name="sex" value="Female">Female</mat-radio-button>
+          <mat-icon class="center-icon" *ngIf="this.newPetForm.get('sex')?.invalid && this.submitted" color="warn">
+            cancel
+          </mat-icon>
+        </mat-radio-group>
+      </p>
+      <p class="bottom-margin">
+        <mat-checkbox formControlName="fixed" id="fixed">Spayed/Neutered?</mat-checkbox>
+      </p>
+      <p class="bottom-margin">
+        <mat-label>Vet Records </mat-label>
+        <button type="button" mat-mini-fab color="primary" (click)="vetRecords.click()">
+          <mat-icon *ngIf="!this.vetRecordsFile">attach_file</mat-icon>
+          <mat-icon *ngIf="this.vetRecordsFile">check_circle</mat-icon>
+        </button>
+        <mat-label class="file-label" *ngIf="this.vetRecordsFile">{{this.vetRecordsFile.name}}</mat-label>
+        <input (change)="onChangeVetRecords($event)" hidden formControlName="vetRecords" #vetRecords type="file"
+          accept=".pdf">
+      </p>
+      <p>
+        <mat-label>Pet Photo</mat-label>
+        <button type="button" mat-mini-fab color="primary" (click)="petPhoto.click()">
+          <mat-icon *ngIf="!this.petPhotoFile">attach_file</mat-icon>
+          <mat-icon *ngIf="this.petPhotoFile">check_circle</mat-icon>
+        </button>
+        <mat-label class="file-label" *ngIf="this.petPhotoFile">{{this.petPhotoFile.name}}</mat-label>
+        <input (change)="onChangePetPhoto($event)" hidden formControlName="petPhoto" #petPhoto type="file"
+          accept="image/*">
+      </p>
+    </div>
     <h3 class="inline">Prescriptions</h3>
     <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new prescription"
       class="inline" (click)="addPrescription()" type="button">
       <mat-icon>add_icon</mat-icon>
     </button>
-    <div formArrayName="prescriptions">
+    <div formArrayName="prescriptions" class="border-bottom">
       <div *ngFor="let prescription of prescriptions().controls; let i = index;">
         <div [formGroupName]="i" class="bordered">
           <p>
@@ -140,13 +137,12 @@
         </div>
       </div>
     </div>
-    <hr>
     <h3 class="inline">Vaccinations</h3>
     <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new vaccine" class="inline"
       (click)="addVaccine()" type="button">
       <mat-icon>add_icon</mat-icon>
     </button>
-    <div formArrayName="vaccines">
+    <div formArrayName="vaccines" class="border-bottom">
       <div *ngFor="let vaccination of vaccines().controls; let i = index;">
         <div [formGroupName]="i" class="bordered">
           <p>
@@ -180,13 +176,12 @@
         </div>
       </div>
     </div>
-    <hr>
     <h3 class="inline">Health Conditions</h3>
     <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new health condition"
       class="inline" (click)="addCondition()" type="button">
       <mat-icon>add_icon</mat-icon>
     </button>
-    <div formArrayName="conditions">
+    <div formArrayName="conditions" class="border-bottom">
       <div *ngFor="let condition of conditions().controls; let i = index;">
         <div [formGroupName]="i" class="bordered">
           <p>
@@ -206,7 +201,6 @@
         </div>
       </div>
     </div>
-    <hr>
     <p class="validate" *ngIf="this.submitted && this.newPetForm.invalid">Please complete required fields before
       saving.</p>
   </form>
