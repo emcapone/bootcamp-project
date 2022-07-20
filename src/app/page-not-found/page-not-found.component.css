@@ -2,3 +2,31 @@
   display: flex;
   justify-content: center;
 }
+
+.column {
+  max-height: 400px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+button {
+  align-self: center;
+}
+
+h1{
+  font-size: 100px;
+}
+
+h2 {
+  margin-bottom: 50px;
+}
+
+img{
+  max-height: 400px;
+}
+@media (max-width: 600px){
+  img {
+    display: none;
+  }
+}
