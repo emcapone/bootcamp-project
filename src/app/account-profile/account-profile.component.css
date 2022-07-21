@@ -1,19 +1,18 @@
-.head-container {
-  display: flex;
-  align-items: center;
-  padding: 10px;
+mat-form-field, button {
+  margin-left: 10px;
+  margin-right: 10px;
 }
-.headerBtns {
+#saveElements {
+  margin-top: 2rem;
+  border-radius: 10px;
+  width: max-content;
+}
+
+#changePass {
   margin-left: 10px;
 }
-mat-card {
-  width: 100%;
-  margin: 15px;
-}
-.spacer {
-  flex: 1 1 auto;
-}
-.card-container {
+
+#container {
   display: flex;
   justify-content: center;
 }

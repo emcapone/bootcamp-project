@@ -1,1 +1,43 @@
-<p>Placeholder for account profile</p>
+<h1>Account Settings</h1>
+<form>
+  <p>
+    <mat-form-field appearance="standard">
+      <mat-label>First Name</mat-label>
+      <input matInput placeholder="Name..." required>
+      <mat-error></mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>Last Name</mat-label>
+      <input matInput placeholder="Name..." required>
+      <mat-error></mat-error>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field>
+      <mat-label>Birthday</mat-label>
+      <input matInput type="date" required>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="Name..." required>
+      <mat-error>Invalid</mat-error>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-label id="changePass">Change Password: </mat-label>
+    <mat-form-field>
+      <mat-label>New Password</mat-label>
+      <input matInput placeholder="Name...">
+      <mat-error></mat-error>
+    </mat-form-field>
+  </p>
+  <div id="saveElements" class="mat-elevation-z2">
+    <mat-form-field>
+      <mat-label>Current Password</mat-label>
+      <input matInput placeholder="Name..." required>
+      <mat-error></mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="accent" type="button">Save</button>
+    <button mat-raised-button color="warn" type="button">Cancel</button>
+  </div>
+</form>
