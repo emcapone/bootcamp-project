@@ -1,6 +1,6 @@
 <div>
   <form [formGroup]="newPetForm" autocomplete="off" (ngSubmit)="onSubmit()" novalidate>
-    <div class="border-bottom">
+    <div class="form-group">
       <p>
         <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
@@ -60,7 +60,7 @@
           <mat-datepicker #adoptionDay></mat-datepicker>
         </mat-form-field>
       </p>
-      <p class="bottom-margin">
+      <p class="form-field">
         <mat-radio-group aria-label="Select your pet's sex" formControlName="sex" required>
           <mat-label [ngClass]="{validate: this.newPetForm.get('sex')?.invalid && this.submitted}">Sex*</mat-label>
           <mat-radio-button id="male" name="sex" value="Male">Male</mat-radio-button>
@@ -70,10 +70,10 @@
           </mat-icon>
         </mat-radio-group>
       </p>
-      <p class="bottom-margin">
+      <p class="form-field">
         <mat-checkbox formControlName="fixed" id="fixed">Spayed/Neutered?</mat-checkbox>
       </p>
-      <p class="bottom-margin">
+      <p class="form-field">
         <mat-label>Vet Records </mat-label>
         <button type="button" mat-mini-fab color="primary" (click)="vetRecords.click()">
           <mat-icon *ngIf="!this.vetRecordsFile">attach_file</mat-icon>
@@ -94,14 +94,14 @@
           accept="image/*">
       </p>
     </div>
-    <h3 class="inline">Prescriptions</h3>
+    <h3 class="title-group">Prescriptions</h3>
     <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new prescription"
-      class="inline" (click)="addPrescription()" type="button">
+      class="title-group" (click)="addPrescription()" type="button">
       <mat-icon>add_icon</mat-icon>
     </button>
-    <div formArrayName="prescriptions" class="border-bottom">
+    <div formArrayName="prescriptions" class="form-group">
       <div *ngFor="let prescription of prescriptions().controls; let i = index;">
-        <div [formGroupName]="i" class="bordered">
+        <div [formGroupName]="i" class="form-card">
           <p>
             <mat-form-field appearance="outline">
               <mat-label>Name</mat-label>
@@ -137,14 +137,14 @@
         </div>
       </div>
     </div>
-    <h3 class="inline">Vaccinations</h3>
-    <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new vaccine" class="inline"
+    <h3 class="title-group">Vaccinations</h3>
+    <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new vaccine" class="title-group"
       (click)="addVaccine()" type="button">
       <mat-icon>add_icon</mat-icon>
     </button>
-    <div formArrayName="vaccines" class="border-bottom">
+    <div formArrayName="vaccines" class="form-group">
       <div *ngFor="let vaccination of vaccines().controls; let i = index;">
-        <div [formGroupName]="i" class="bordered">
+        <div [formGroupName]="i" class="form-card">
           <p>
             <mat-form-field appearance="outline">
               <mat-label>Name</mat-label>
@@ -176,14 +176,14 @@
         </div>
       </div>
     </div>
-    <h3 class="inline">Health Conditions</h3>
+    <h3 class="title-group">Health Conditions</h3>
     <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new health condition"
-      class="inline" (click)="addCondition()" type="button">
+      class="title-group" (click)="addCondition()" type="button">
       <mat-icon>add_icon</mat-icon>
     </button>
-    <div formArrayName="conditions" class="border-bottom">
+    <div formArrayName="conditions" class="form-group">
       <div *ngFor="let condition of conditions().controls; let i = index;">
-        <div [formGroupName]="i" class="bordered">
+        <div [formGroupName]="i" class="form-card">
           <p>
             <mat-form-field appearance="outline">
               <mat-label>Name</mat-label>

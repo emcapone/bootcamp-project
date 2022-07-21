@@ -2,17 +2,13 @@ mat-form-field, button {
   margin-left: 10px;
   margin-right: 10px;
 }
-#saveElements {
+
+.save-group {
   margin-top: 2rem;
   border-radius: 10px;
   width: max-content;
 }
 
-#changePass {
+.label {
   margin-left: 10px;
-}
-
-#container {
-  display: flex;
-  justify-content: center;
 }

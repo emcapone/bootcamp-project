@@ -17,11 +17,6 @@ mat-card {
 h4 {
   text-decoration: underline;
 }
-.spinner {
-  padding-top: 10px;
-  display: flex;
-  justify-content: center;
-}
 mat-tab-group {
   position: sticky;
   margin-bottom: 1rem;
