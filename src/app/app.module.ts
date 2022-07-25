@@ -14,10 +14,10 @@ import { NewPetComponent } from './new-pet/new-pet.component';
 import { EditPetComponent } from './edit-pet/edit-pet.component';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MaterialModule } from './shared/material.module';
 import { AccountPetsComponent } from './account-pets/account-pets.component';
 import { ViewPetComponent } from './view-pet/view-pet.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -46,7 +46,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
       InMemoryDataService, { dataEncapsulation: false }
     ),
     LayoutModule,
-    MaterialModule
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

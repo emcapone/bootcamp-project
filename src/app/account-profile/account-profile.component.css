@@ -1,14 +1,44 @@
-mat-form-field, button {
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.account-details {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 2px solid white;
+}
+
+button {
   margin-left: 10px;
-  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.account-details mat-form-field {
+  width: 100%;
+  align-self: center;
+  margin-bottom: 10px;
 }
 
 .save-group {
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 80%;
   margin-top: 2rem;
   border-radius: 10px;
-  width: max-content;
+  flex-wrap: wrap;
 }
 
-.label {
-  margin-left: 10px;
+.save-group mat-form-field {
+  width: 60%;
+}
+
+.password-group {
+  border-top: 2px solid white;
 }
