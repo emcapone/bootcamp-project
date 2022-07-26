@@ -21,17 +21,6 @@ export class EditPetComponent implements OnInit {
 
   ngOnInit(): void {
     this.petService.selectedPetChanged(Number(this.route.snapshot.paramMap.get('id')));
-    let data: Pet | undefined;
-    this.pet$
-      .pipe(
-        take(1)
-      )
-      .subscribe(pet => {
-        if (pet) {
-          this.form.setFormValues(pet);
-        }
-        this.loaded = true;
-      });
   }
 
   submit(): void {
@@ -42,7 +31,10 @@ export class EditPetComponent implements OnInit {
         .pipe(
           take(1)
         )
-        .subscribe(_ => this.router.navigate(['view-pet', pet.id]));
+        .subscribe(_ => {
+          this.petService.refreshPets();
+          this.router.navigate(['view-pet', pet.id])
+        });
     }
   }
 

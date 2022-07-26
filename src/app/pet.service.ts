@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, shareReplay, tap } from 'rxjs/operators';
 
 import { Pet } from './pet';
 import { PETS } from './mock-pets';
@@ -17,11 +17,18 @@ export class PetService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  pets$ = this.http.get<Pet[]>(this.petsUrl)
+  private _petsData$ = new BehaviorSubject<void>(undefined);
+  apiRequest$ = this.http.get<Pet[]>(this.petsUrl)
     .pipe(
-      tap(_ => console.log('fetched pets')),
-      catchError(this.handleError<Pet[]>('fetch pets', []))
+      tap(pets => {
+        console.log('fetched ' + pets.length + ' pets');
+      })
     );
+
+  pets$ = this._petsData$.pipe(
+    mergeMap(() => this.apiRequest$),
+    shareReplay(1)
+  );
 
   private selectedPetSubject = new BehaviorSubject<number>(0);
   selectedPet$ = this.selectedPetSubject.asObservable();
@@ -41,6 +48,10 @@ export class PetService {
 
   selectedPetChanged(id: number): void {
     this.selectedPetSubject.next(id);
+  }
+
+  refreshPets(){
+    this._petsData$.next();
   }
 
   /** PUT */

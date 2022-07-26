@@ -20,13 +20,16 @@ export class NewPetComponent implements OnInit {
 
   submit() {
     const pet = this.form.onSubmit();
-    if (pet){
+    if (pet) {
       pet.id = 5;
       this.petService.addPet(pet)
-            .pipe(
-              take(1)
-            )
-            .subscribe(_ => this.router.navigate(['view-pet', pet.id]));
+        .pipe(
+          take(1)
+        )
+        .subscribe(_ => {
+          this.petService.refreshPets();
+          this.router.navigate(['view-pet', pet.id]);
+        });
     }
     return false;
   }
