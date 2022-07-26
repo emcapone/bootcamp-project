@@ -1,11 +1,13 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { tap, take } from 'rxjs';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { BirthdayValidator } from '../shared/directives/birthday-validator.directive';
 import { PasswordMatchValidator } from '../shared/directives/password-match-validator.directive';
+import { PasswordValidator } from '../shared/directives/password-validator.directive';
 import { User } from '../user';
 import { UserService } from '../user.service';
 
@@ -38,12 +40,12 @@ export class AccountProfileComponent implements OnInit {
     this.settingsForm = new FormGroup({
       'firstName': new FormControl('', Validators.required),
       'lastName': new FormControl('', Validators.required),
-      'birthday': new FormControl('', [Validators.required, this.birthdayValidator]),
+      'birthday': new FormControl('', [Validators.required, BirthdayValidator]),
       'email': new FormControl('', [Validators.required, Validators.email]),
       'currentPassword': new FormControl('', [Validators.required])
     });
     this.changePassword = new FormGroup({
-      'newPassword': new FormControl('', [this.passwordValidator]),
+      'newPassword': new FormControl('', [PasswordValidator]),
       'confirmNewPassword': new FormControl()
     }, { validators: PasswordMatchValidator });
   }
@@ -140,51 +142,6 @@ export class AccountProfileComponent implements OnInit {
         });
       }
     }
-  }
-
-  birthdayValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    let currentDate = new Date();
-    let birthday = new Date(control.value);
-    let age = currentDate.getFullYear() - birthday.getFullYear();
-    if (!(currentDate.getMonth() >= birthday.getMonth() && currentDate.getDate() >= birthday.getDate())) {
-      age--;
-    }
-    if ((control.value !== undefined) && (age < 16)) {
-      return { 'birthday': true }
-    }
-    return null;
-  }
-
-  passwordValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    if (control.value === null) {
-      return { 'password': true };
-    }
-    let password = control.value as String;
-    let capitalsValid = false;
-    let numbersValid = false;
-    let capitals = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-      'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-    let numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-    for (let x of capitals) {
-      if (password.includes(x)) {
-        capitalsValid = true;
-      }
-    }
-    if (!capitalsValid) {
-      return { 'password': true };
-    }
-    for (let x of numbers) {
-      if (password.includes(x)) {
-        numbersValid = true;
-      }
-    }
-    if (!numbersValid) {
-      return { 'password': true };
-    }
-    if ((password !== undefined) && (password.length < 8)) {
-      return { 'password': true };
-    }
-    return null;
   }
 
 }
