@@ -1,7 +1,10 @@
 <div>
-  <h1>Create a New Pet Profile</h1>
-  <hr>
+  <div class="title">
+    <h1>Create a New Pet Profile</h1>
+  </div>
   <app-pet-form></app-pet-form>
-  <button mat-raised-button color="primary" id="save_button" type="button" (click)="submit()">Save Profile</button>
-  <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+  <div class="buttons">
+    <button mat-raised-button color="primary" id="save_button" type="button" (click)="submit()">Save Profile</button>
+    <button mat-raised-button color="warn" type="button" (click)="openDialog()">Cancel</button>
+  </div>
 </div>

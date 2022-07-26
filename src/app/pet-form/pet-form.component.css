@@ -15,8 +15,11 @@ mat-radio-group mat-radio-button {
   margin: 10px;
 }
 
+.form-field {
+  margin-bottom: 2rem;
+}
 
-.bordered {
+.form-card {
   margin: 5px;
   padding: 3px;
   border-style: solid;
@@ -24,7 +27,7 @@ mat-radio-group mat-radio-button {
   border-radius: 5px;
 }
 
-.inline {
+.title-group {
   display: inline-block;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -40,4 +43,9 @@ button {
 
 .file-label {
   margin-left: 20px;
+}
+
+.form-group {
+  padding-bottom: 1rem;
+  border-bottom: 2px solid white;
 }

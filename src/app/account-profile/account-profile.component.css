@@ -1,19 +1,14 @@
-.head-container {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-}
-.headerBtns {
+mat-form-field, button {
   margin-left: 10px;
+  margin-right: 10px;
 }
-mat-card {
-  width: 100%;
-  margin: 15px;
+
+.save-group {
+  margin-top: 2rem;
+  border-radius: 10px;
+  width: max-content;
 }
-.spacer {
-  flex: 1 1 auto;
-}
-.card-container {
-  display: flex;
-  justify-content: center;
+
+.label {
+  margin-left: 10px;
 }

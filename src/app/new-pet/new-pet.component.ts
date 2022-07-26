@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { take } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 
 import { PetFormComponent } from '../pet-form/pet-form.component';
 import { PetService } from '../pet.service';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-new-pet',
@@ -13,7 +15,7 @@ import { PetService } from '../pet.service';
 export class NewPetComponent implements OnInit {
   @ViewChild(PetFormComponent) form!: PetFormComponent;
 
-  constructor(private petService: PetService, private router: Router) { }
+  constructor(private dialog: MatDialog, private petService: PetService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -36,5 +38,22 @@ export class NewPetComponent implements OnInit {
 
   cancel() {
     this.router.navigate(['pets']);
+  }
+
+  openDialog() {
+    let dialog = this.dialog.open(ConfirmDialogComponent, {
+      width: '50%',
+      data: {
+        title: 'Cancel New Pet Profile',
+        message: 'Are you sure?'
+      }
+    });
+    dialog.afterClosed().pipe(
+      take(1)
+    ).subscribe(res => {
+      if(res){
+        this.cancel();
+      }
+    });
   }
 }

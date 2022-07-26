@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Pet } from '../pet';
 import { PetFormComponent } from '../pet-form/pet-form.component';
 import { PetService } from '../pet.service';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-edit-pet',
@@ -17,7 +19,7 @@ export class EditPetComponent implements OnInit {
   pet$ = this.petService.pet$;
   loaded : boolean = false;
 
-  constructor(private petService: PetService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private dialog: MatDialog, private petService: PetService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     this.petService.selectedPetChanged(Number(this.route.snapshot.paramMap.get('id')));
@@ -40,5 +42,22 @@ export class EditPetComponent implements OnInit {
 
   cancel() {
     this.router.navigate(['pets']);
+  }
+
+  openDialog() {
+    let dialog = this.dialog.open(ConfirmDialogComponent, {
+      width: '50%',
+      data: {
+        title: 'Cancel Edits',
+        message: 'Are you sure?'
+      }
+    });
+    dialog.afterClosed().pipe(
+      take(1)
+    ).subscribe(res => {
+      if(res){
+        this.cancel();
+      }
+    });
   }
 }

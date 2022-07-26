@@ -17,6 +17,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from './shared/material.module';
 import { AccountPetsComponent } from './account-pets/account-pets.component';
 import { ViewPetComponent } from './view-pet/view-pet.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ViewPetComponent } from './view-pet/view-pet.component';
     EditPetComponent,
     MainNavComponent,
     AccountPetsComponent,
-    ViewPetComponent
+    ViewPetComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
