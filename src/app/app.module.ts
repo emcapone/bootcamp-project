@@ -18,6 +18,9 @@ import { AccountPetsComponent } from './account-pets/account-pets.component';
 import { ViewPetComponent } from './view-pet/view-pet.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { SharedModule } from './shared/shared.module';
+import { HomepageComponent } from './homepage/homepage.component';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { SignupFormComponent } from './signup-form/signup-form.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,10 @@ import { SharedModule } from './shared/shared.module';
     MainNavComponent,
     AccountPetsComponent,
     ViewPetComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    HomepageComponent,
+    LoginFormComponent,
+    SignupFormComponent
   ],
   imports: [
     BrowserModule,
