@@ -30,6 +30,9 @@ export class AccountProfileComponent implements OnInit {
   userData!: User;
   settingsForm! : FormGroup;
   changePassword! : FormGroup;
+  hideCurrent: boolean = true;
+  hideNew: boolean = true;
+  hideConfirm: boolean = true;
 
   constructor(private dialog: MatDialog, private userService: UserService) {
     this.settingsForm = new FormGroup({

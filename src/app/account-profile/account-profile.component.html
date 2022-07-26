@@ -70,11 +70,9 @@
       <h2>Change Password</h2>
       <mat-form-field appearance="fill">
         <mat-label>New Password</mat-label>
-        <input matInput formControlName="newPassword">
+        <input matInput formControlName="newPassword" [type]="hideNew ? 'password' : 'text'" >
 
-        <button mat-icon-button matSuffix *ngIf="newPassword?.value" (click)="newPassword?.reset()">
-          <mat-icon>close</mat-icon>
-        </button>
+        <mat-icon matSuffix (click)="hideNew = !hideNew">{{hideNew ? 'visibility_off' : 'visibility'}}</mat-icon>
 
         <mat-error *ngIf="newPassword?.hasError('password')">
           Must contain 8 characters, an uppercase letter, and a number
@@ -83,11 +81,10 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Confirm Password</mat-label>
-        <input matInput formControlName="confirmNewPassword" [errorStateMatcher]="errorMatcher">
+        <input matInput formControlName="confirmNewPassword" [type]="hideConfirm ? 'password' : 'text'" [errorStateMatcher]="errorMatcher">
 
-        <button mat-icon-button matSuffix *ngIf="confirmNewPassword?.value" (click)="confirmNewPassword?.reset()">
-          <mat-icon>close</mat-icon>
-        </button>
+        <mat-icon matSuffix (click)="hideConfirm = !hideConfirm">{{hideConfirm ? 'visibility_off' : 'visibility'}}</mat-icon>
+
         <mat-error *ngIf="this.changePassword?.hasError('passwordMatch')">
           Passwords must match
         </mat-error>
@@ -99,11 +96,9 @@
   <div class="save-group mat-elevation-z8">
     <mat-form-field appearance="fill">
       <mat-label>Current Password</mat-label>
-      <input matInput formControlName="currentPassword" required>
+      <input matInput formControlName="currentPassword" [type]="hideCurrent ? 'password' : 'text'" required>
 
-      <button mat-icon-button matSuffix *ngIf="currentPassword?.value && !isLoading" (click)="currentPassword?.reset()">
-        <mat-icon>close</mat-icon>
-      </button>
+      <mat-icon matSuffix (click)="hideCurrent = !hideCurrent">{{hideCurrent ? 'visibility_off' : 'visibility'}}</mat-icon>
 
       <mat-error *ngIf="currentPassword?.hasError('required')">
         Provide your current password to save changes.
