@@ -2,9 +2,7 @@
   <div class="title">
     <h1>Edit Pet</h1>
   </div>
-  <div *ngIf="this.pet$">
-    <app-pet-form [pet]="this.pet$ | async"></app-pet-form>
-  </div>
+  <app-pet-form [pet]="this.pet$ | async"></app-pet-form>
   <div class="buttons">
     <button mat-raised-button color="primary" id="save_button" type="button" (click)="submit()">Save Edits</button>
     <button mat-raised-button color="warn" type="button" (click)="openDialog()">Cancel</button>
