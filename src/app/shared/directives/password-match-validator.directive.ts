@@ -12,10 +12,13 @@ export class PasswordMatchValidatorDirective {
 
 export const PasswordMatchValidator: ValidatorFn = (control: AbstractControl):
 
-ValidationErrors | null => {
+  ValidationErrors | null => {
   const password = control.get('newPassword');
   const duplicate = control.get('confirmNewPassword');
-
+  if ((password?.value === "" || password?.value === null) && (duplicate?.value === "" || duplicate?.value === null)) {
+    return null;
+  }
   return password && duplicate && password.value === duplicate.value ? null : {
-    passwordMatch: true };
+    passwordMatch: true
+  };
 };

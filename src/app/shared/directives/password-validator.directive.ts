@@ -12,8 +12,8 @@ export class PasswordValidatorDirective {
 
 export const PasswordValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const password = control.value;
-  if (password === null) {
-    return { 'password': true };
+  if (password === null || password === "") {
+    return null;
   }
   let capitalsValid = false;
   let numbersValid = false;

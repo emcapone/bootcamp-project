@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { tap, take } from 'rxjs';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { BirthdayValidator } from '../shared/directives/birthday-validator.directive';
@@ -30,24 +31,23 @@ export class AccountProfileComponent implements OnInit {
   errorMatcher = new CrossFieldErrorMatcher();
   isLoading: boolean = true;
   userData!: User;
-  settingsForm! : FormGroup;
-  changePassword! : FormGroup;
+  settingsForm!: FormGroup;
   hideCurrent: boolean = true;
   hideNew: boolean = true;
   hideConfirm: boolean = true;
 
-  constructor(private dialog: MatDialog, private userService: UserService) {
+  constructor(private snackbar: MatSnackBar, private dialog: MatDialog, private userService: UserService) {
     this.settingsForm = new FormGroup({
       'firstName': new FormControl('', Validators.required),
       'lastName': new FormControl('', Validators.required),
       'birthday': new FormControl('', [Validators.required, BirthdayValidator]),
       'email': new FormControl('', [Validators.required, Validators.email]),
-      'currentPassword': new FormControl('', [Validators.required])
+      'currentPassword': new FormControl('', [Validators.required]),
+      'changePassword': new FormGroup({
+        'newPassword': new FormControl('', [PasswordValidator]),
+        'confirmNewPassword': new FormControl()
+      }, { validators: PasswordMatchValidator })
     });
-    this.changePassword = new FormGroup({
-      'newPassword': new FormControl('', [PasswordValidator]),
-      'confirmNewPassword': new FormControl()
-    }, { validators: PasswordMatchValidator });
   }
 
   ngOnInit(): void {
@@ -72,7 +72,9 @@ export class AccountProfileComponent implements OnInit {
       this.email?.setValue(this.userData?.email);
     }
   }
-
+  get passwordGroup() {
+    return this.settingsForm.get('changePassword');
+  }
   get firstName() {
     return this.settingsForm.get('firstName');
   }
@@ -86,10 +88,10 @@ export class AccountProfileComponent implements OnInit {
     return this.settingsForm.get('email');
   }
   get newPassword() {
-    return this.changePassword.get('newPassword');
+    return this.settingsForm.get('changePassword')?.get('newPassword');
   }
   get confirmNewPassword() {
-    return this.changePassword.get('confirmNewPassword');
+    return this.settingsForm.get('changePassword')?.get('confirmNewPassword');
   }
   get currentPassword() {
     return this.settingsForm.get('currentPassword');
@@ -114,12 +116,12 @@ export class AccountProfileComponent implements OnInit {
 
   reset(): void {
     this.settingsForm.reset();
-    this.changePassword.reset();
     this.fillData();
+    console.log(this.currentPassword);
   }
 
   onSubmit() {
-    if (this.settingsForm.invalid && this.changePassword.invalid) {
+    if (this.settingsForm.invalid) {
       console.log("invalid");
     } else {
       console.log('valid');
@@ -127,19 +129,26 @@ export class AccountProfileComponent implements OnInit {
         console.log('authenticated');
         let formValues = this.settingsForm.value;
         let user: User = {
-            id: this.userData?.id,
-            firstName: formValues.firstName,
-            lastName: formValues.lastName,
-            email: formValues.email,
-            birthday: formValues.birthday,
-            password: (this.newPassword?.value !== "" ? this.newPassword?.value as string : this.userData.password)
-          }
+          id: this.userData?.id,
+          firstName: formValues.firstName,
+          lastName: formValues.lastName,
+          email: formValues.email,
+          birthday: formValues.birthday,
+          password: ((this.newPassword?.value !== "" && this.newPassword?.value !== null) ? this.newPassword?.value as string : this.userData.password)
+        }
         this.userService.updateUser(user).pipe(
           take(1)
         ).subscribe(_ => {
           this.getData();
           this.reset();
+          this.snackbar.open('Changes Saved', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'start',
+            verticalPosition: 'bottom'
+          });
         });
+      } else {
+        console.log('wrong password');
       }
     }
   }
