@@ -2,12 +2,31 @@ import { Injectable } from '@angular/core';
 import { InMemoryDbService, RequestInfo } from 'angular-in-memory-web-api';
 import { Observable } from 'rxjs';
 import { Pet } from './pet';
+import { User } from './user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
+    const users = [
+      {
+        id: 1,
+        firstName: 'Joseph',
+        lastName: 'Quinn',
+        birthday:  new Date('11/12/2003'),
+        email: 'j.quinn@gmail.com',
+        password: 'Password123'
+      },
+      {
+        id: 1,
+        firstName: 'Millie',
+        lastName: 'Brown',
+        birthday:  new Date('01/23/1991'),
+        email: 'm.brown@gmail.com',
+        password: 'Password123'
+      }
+    ]
     const pets = [
       {
           id: 1,
@@ -144,15 +163,10 @@ export class InMemoryDataService implements InMemoryDbService {
     }]
   }
   ]
-    return {pets};
+    return {users, pets};
   }
 
-  // Overrides the genId method to ensure that a hero always has an id.
-  // If the heroes array is empty,
-  // the method below returns the initial number (11).
-  // if the heroes array is not empty, the method below returns the highest
-  // hero id + 1.
   genId(pets: Pet[]): number {
-    return pets.length > 0 ? Math.max(...pets.map(pet => pet.id)) + 1 : 11;
+    return pets.length > 0 ? Math.max(...pets.map(pet => pet.id)) + 1 : 1;
   }
 }
