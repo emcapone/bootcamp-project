@@ -44,13 +44,11 @@ export class EventFormComponent implements OnDestroy {
       take(1)
     ).subscribe(res => {
       this.date?.setValue(moment(res?.date).format("dddd, MMMM Do YYYY"));
+      this.allDay?.setValue(!res?.allDay);
+      this.toggleAllDay();
       this.allDay?.setValue(res?.allDay);
-      if(res?.allDay){
-        this.toggleAllDay;
-      } else {
-        this.startTime?.setValue(res?.startTime);
-        this.endTime?.setValue(res?.endTime);
-      }
+      this.startTime?.setValue(res?.startTime);
+      this.endTime?.setValue(res?.endTime);
       this.name?.setValue(res?.name);
       this.details?.setValue(res?.details);
     });
