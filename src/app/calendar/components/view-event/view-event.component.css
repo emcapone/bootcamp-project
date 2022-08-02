@@ -1,0 +1,21 @@
+.details-container {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  gap: 10px;
+}
+
+mat-card {
+  text-align: start;
+}
+::ng-deep .mat-card-header-text {
+  margin-left: 0;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+button {
+  margin-right: 5px;
+}

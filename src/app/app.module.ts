@@ -19,6 +19,11 @@ import { AccountPetsComponent } from './account-pets/account-pets.component';
 import { ViewPetComponent } from './view-pet/view-pet.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
+import { CalendarComponent } from './calendar/components/calendar/calendar.component';
+import { CalendarContainerComponent } from './calendar/components/calendar-container/calendar-container.component';
+import { EventFormComponent } from './calendar/components/event-form/event-form.component';
+import { ViewEventComponent } from './calendar/components/view-event/view-event.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +35,11 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     MainNavComponent,
     AccountPetsComponent,
     ViewPetComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    CalendarComponent,
+    CalendarContainerComponent,
+    EventFormComponent,
+    ViewEventComponent
   ],
   imports: [
     BrowserModule,

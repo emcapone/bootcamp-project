@@ -1,0 +1,28 @@
+<div class="details-container" *ngIf="this.events$ | async as events">
+  <mat-card class="mat-elevation-z8" *ngFor="let event of events">
+    <mat-card-header>
+      <mat-card-title>
+        {{event.name}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{this.formatMoment(event.date)}}
+      </mat-card-subtitle>
+      <mat-card-subtitle *ngIf="event.allDay">
+        All-Day
+      </mat-card-subtitle>
+      <mat-card-subtitle *ngIf="!event.allDay">
+        {{event.startTime | timeFormat}} - {{event.endTime | timeFormat}}
+      </mat-card-subtitle>
+      <span class="spacer"></span>
+      <button mat-mini-fab color="primary" matTooltip="Edit Event" (click)="this.editEvent(event)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-mini-fab color="warn" matTooltip="Delete Event" (click)="this.deleteEvent(event.id)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content *ngIf="event.details">
+      {{event.details}}
+    </mat-card-content>
+  </mat-card>
+</div>

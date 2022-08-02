@@ -1,0 +1,20 @@
+<div class="page-container">
+  <button class="add-button" mat-fab color="accent" matTooltip="Add Event" (click)="this.newEvent()">
+    <mat-icon>add</mat-icon>
+  </button>
+  <mat-card class="component-container mat-elevation-z8">
+    <mat-card-content>
+      <app-calendar (dateSelected)="dateSelected($event)"></app-calendar>
+    </mat-card-content>
+  </mat-card>
+  <div class="component-container" *ngIf="this.showForm">
+    <app-event-form [id]="this.eventId" [selectedDate]="this.selectedDate" (complete)="this.cancelForm($event)"></app-event-form>
+  </div>
+  <button class="close-button" mat-fab color="accent" matTooltip="Close Form" (click)="this.cancelForm()" *ngIf="this.showForm">
+    <mat-icon>close</mat-icon>
+  </button>
+  <mat-card class="component-container" *ngIf="this.selectedDate">
+    <mat-card-title>{{this.formatMoment(this.selectedDate)}}</mat-card-title>
+    <app-view-event [selectedDate]="this.selectedDate" (event)="this.editEvent($event)" (hasEvents)="this.hasEvents"></app-view-event>
+  </mat-card>
+</div>
