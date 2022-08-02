@@ -20,9 +20,8 @@ export class PetService {
   private _petsData$ = new BehaviorSubject<void>(undefined);
   apiRequest$ = this.http.get<Pet[]>(this.petsUrl)
     .pipe(
-      tap(pet => {
-        console.log('fetch pets');
-        return pet;
+      tap(pets => {
+        console.log('fetched ' + pets.length + ' pets');
       })
     );
 

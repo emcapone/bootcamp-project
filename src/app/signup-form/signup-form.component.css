@@ -1,0 +1,14 @@
+mat-form-field {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.form-error {
+  margin: 10px;
+}
+
+.password-error {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

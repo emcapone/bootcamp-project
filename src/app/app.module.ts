@@ -14,11 +14,13 @@ import { NewPetComponent } from './new-pet/new-pet.component';
 import { EditPetComponent } from './edit-pet/edit-pet.component';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MaterialModule } from './shared/material.module';
 import { AccountPetsComponent } from './account-pets/account-pets.component';
 import { ViewPetComponent } from './view-pet/view-pet.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-
+import { SharedModule } from './shared/shared.module';
+import { HomepageComponent } from './homepage/homepage.component';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { SignupFormComponent } from './signup-form/signup-form.component';
 import { CalendarComponent } from './calendar/components/calendar/calendar.component';
 import { CalendarContainerComponent } from './calendar/components/calendar-container/calendar-container.component';
 import { EventFormComponent } from './calendar/components/event-form/event-form.component';
@@ -39,7 +41,10 @@ import { ViewEventComponent } from './calendar/components/view-event/view-event.
     CalendarComponent,
     CalendarContainerComponent,
     EventFormComponent,
-    ViewEventComponent
+    ViewEventComponent,
+    HomepageComponent,
+    LoginFormComponent,
+    SignupFormComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +60,7 @@ import { ViewEventComponent } from './calendar/components/view-event/view-event.
       InMemoryDataService, { dataEncapsulation: false }
     ),
     LayoutModule,
-    MaterialModule
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,43 +1,115 @@
 <h1>Account Settings</h1>
-<form>
-  <p>
-    <mat-form-field appearance="standard">
+<form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" autocomplete="off">
+  <div class="account-details">
+    <mat-form-field appearance="fill">
       <mat-label>First Name</mat-label>
-      <input matInput placeholder="Name..." required>
-      <mat-error></mat-error>
+      <input matInput formControlName="firstName" required>
+
+      <mat-spinner matSuffix *ngIf="isLoading" diameter="20" color="accent"></mat-spinner>
+
+      <button mat-icon-button matSuffix *ngIf="firstName?.value && !isLoading" (click)="firstName?.reset()">
+        <mat-icon>close</mat-icon>
+      </button>
+
+      <mat-error *ngIf="firstName?.hasError('required')">
+        Enter your first name
+      </mat-error>
     </mat-form-field>
-    <mat-form-field appearance="standard">
+
+    <mat-form-field appearance="fill">
       <mat-label>Last Name</mat-label>
-      <input matInput placeholder="Name..." required>
-      <mat-error></mat-error>
+      <input matInput formControlName="lastName" required>
+
+      <mat-spinner matSuffix *ngIf="isLoading" diameter="20" color="accent" color="accent"></mat-spinner>
+
+      <button mat-icon-button matSuffix *ngIf="lastName?.value && !isLoading" (click)="lastName?.reset()">
+        <mat-icon>close</mat-icon>
+      </button>
+
+      <mat-error *ngIf="lastName?.hasError('required')">
+        Enter your last name
+      </mat-error>
     </mat-form-field>
-  </p>
-  <p>
-    <mat-form-field>
+
+    <mat-form-field appearance="fill">
       <mat-label>Birthday</mat-label>
-      <input matInput type="date" required>
+      <input matInput [matDatepicker]="date" formControlName="birthday" required>
+      <mat-hint>MM/DD/YYYY</mat-hint>
+
+      <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+      <mat-datepicker #date></mat-datepicker>
+
+      <mat-error *ngIf="birthday?.hasError('required')">
+        Enter your birthday
+      </mat-error>
+
+      <mat-error *ngIf="birthday?.hasError('birthday')">
+        You must be at least 16 years old.
+      </mat-error>
+
     </mat-form-field>
-    <mat-form-field>
+
+    <mat-form-field appearance="fill">
       <mat-label>Email</mat-label>
-      <input matInput placeholder="Name..." required>
-      <mat-error>Invalid</mat-error>
+      <input matInput formControlName="email" required>
+
+      <mat-spinner matSuffix *ngIf="isLoading" diameter="20" color="accent" color="accent"></mat-spinner>
+
+      <button mat-icon-button matSuffix *ngIf="email?.value && !isLoading" (click)="email?.reset()">
+        <mat-icon>close</mat-icon>
+      </button>
+
+      <mat-error *ngIf="email?.hasError('required')">
+        Enter your email address
+      </mat-error>
+      <mat-error *ngIf="email?.hasError('email')">
+        Invalid email address
+      </mat-error>
     </mat-form-field>
-  </p>
-  <p>
-    <mat-label class="label">Change Password: </mat-label>
-    <mat-form-field>
-      <mat-label>New Password</mat-label>
-      <input matInput placeholder="Name...">
-      <mat-error></mat-error>
-    </mat-form-field>
-  </p>
-  <div class="save-group" class="mat-elevation-z2">
-    <mat-form-field>
+    <div class="password-group" formGroupName="changePassword">
+      <h2>Change Password</h2>
+      <mat-form-field appearance="fill">
+        <mat-label>New Password</mat-label>
+        <input matInput formControlName="newPassword" [type]="hideNew ? 'password' : 'text'" >
+
+        <mat-icon matSuffix (click)="hideNew = !hideNew">{{hideNew ? 'visibility_off' : 'visibility'}}</mat-icon>
+
+        <mat-error *ngIf="newPassword?.hasError('password')">
+          Must contain 8 characters, an uppercase letter, and a number
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput formControlName="confirmNewPassword" [type]="hideConfirm ? 'password' : 'text'" [errorStateMatcher]="errorMatcher">
+
+        <mat-icon matSuffix (click)="hideConfirm = !hideConfirm">{{hideConfirm ? 'visibility_off' : 'visibility'}}</mat-icon>
+
+        <mat-error *ngIf="this.passwordGroup?.hasError('passwordMatch')">
+          Passwords must match
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+  </div>
+
+  <div class="save-group mat-elevation-z8">
+    <mat-form-field appearance="fill">
       <mat-label>Current Password</mat-label>
-      <input matInput placeholder="Name..." required>
-      <mat-error></mat-error>
+      <input matInput formControlName="currentPassword" [type]="hideCurrent ? 'password' : 'text'" required>
+
+      <mat-icon matSuffix (click)="hideCurrent = !hideCurrent">{{hideCurrent ? 'visibility_off' : 'visibility'}}</mat-icon>
+
+      <mat-error *ngIf="currentPassword?.hasError('required')">
+        Provide your current password to save changes.
+      </mat-error>
+      <mat-error *ngIf="currentPassword?.hasError('authenticate')">
+        Incorrect password.
+      </mat-error>
     </mat-form-field>
-    <button mat-raised-button color="accent" type="button">Save</button>
-    <button mat-raised-button color="warn" type="button">Cancel</button>
+    <div>
+      <button mat-raised-button color="accent" type="submit">Save</button>
+      <button mat-raised-button color="warn" type="button" (click)="this.openDialog()">Cancel</button>
+    </div>
   </div>
 </form>

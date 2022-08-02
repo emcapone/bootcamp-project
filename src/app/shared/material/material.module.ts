@@ -37,12 +37,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 
-import { TimeFormatPipe } from './pipes/time-format.pipe'; //move to shared module after merge
-
 @NgModule({
-  declarations: [
-    TimeFormatPipe //move
-  ],
+  declarations: [],
   exports: [
     MatAutocompleteModule,
     MatCheckboxModule,
@@ -79,8 +75,7 @@ import { TimeFormatPipe } from './pipes/time-format.pipe'; //move to shared modu
     MatTooltipModule,
     MatPaginatorModule,
     MatSortModule,
-    MatTableModule,
-    TimeFormatPipe //Move
+    MatTableModule
   ]
 })
 export class MaterialModule { }

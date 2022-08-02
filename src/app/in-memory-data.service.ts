@@ -2,12 +2,31 @@ import { Injectable } from '@angular/core';
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 import * as moment from 'moment';
 import { Pet } from './pet';
+import { User } from './user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
+    const users = [
+      {
+        id: 1,
+        firstName: 'Joseph',
+        lastName: 'Quinn',
+        birthday:  new Date('11/12/2003'),
+        email: 'j.quinn@gmail.com',
+        password: 'Password123'
+      },
+      {
+        id: 1,
+        firstName: 'Millie',
+        lastName: 'Brown',
+        birthday:  new Date('01/23/1991'),
+        email: 'm.brown@gmail.com',
+        password: 'Password123'
+      }
+    ]
     const pets = [
       {
         id: 1,
@@ -210,7 +229,7 @@ export class InMemoryDataService implements InMemoryDbService {
         details: 'details example. testing here. some extra text. examples test.'
       }
     ]
-    return { pets, events };
+    return { users, pets, events };
   }
 
   genId(ary: any[]): number {

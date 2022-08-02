@@ -1,0 +1,105 @@
+<form [formGroup]="signupForm" (ngSubmit)="this.signup()" autocomplete="off">
+  <mat-error class="form-error" *ngIf="this.signupForm.invalid && this.submitted">
+    Complete all fields before submitting.
+  </mat-error>
+
+  <mat-error class="form-error" *ngIf="this.emailError">
+    The email address provided is already associated with an account.
+  </mat-error>
+
+  <mat-form-field appearance="standard">
+    <mat-label>First Name</mat-label>
+    <input matInput formControlName="firstName" required>
+
+    <button mat-icon-button matSuffix *ngIf="firstName?.value" (click)="firstName?.reset()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <mat-error *ngIf="firstName?.hasError('required')">
+      Enter your first name.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="standard">
+    <mat-label>Last Name</mat-label>
+    <input matInput formControlName="lastName" required>
+
+    <button mat-icon-button matSuffix *ngIf="lastName?.value" (click)="lastName?.reset()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <mat-error *ngIf="lastName?.hasError('required')">
+      Enter your last name.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="standard">
+    <mat-label>Birthday</mat-label>
+    <input matInput [matDatepicker]="birthDate" formControlName="birthday" required>
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
+    <mat-datepicker #birthDate></mat-datepicker>
+
+    <mat-error *ngIf="birthday?.hasError('required')">
+      Enter your birthday.
+    </mat-error>
+    <mat-error *ngIf="birthday?.hasError('birthday')">
+      You must be at least 16 years old.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="standard">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" required>
+
+    <button mat-icon-button matSuffix *ngIf="email?.value" (click)="email?.reset()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <mat-error *ngIf="email?.hasError('required')">
+      Enter an email address.
+    </mat-error>
+    <mat-error *ngIf="email?.hasError('email')">
+      Enter a valid email address.
+    </mat-error>
+  </mat-form-field>
+
+  <div formGroupName="password">
+
+    <mat-form-field appearance="standard">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="newPassword" [type]="hideNew ? 'password' : 'text'" required>
+
+      <mat-icon matSuffix (click)="hideNew = !hideNew">{{hideNew ? 'visibility_off' : 'visibility'}}
+      </mat-icon>
+
+      <mat-error *ngIf="newPassword?.hasError('required')">
+        Create a password.
+      </mat-error>
+
+      <mat-error *ngIf="newPassword?.hasError('password')">
+        Must contain 8 characters, an uppercase letter, and a number.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput formControlName="confirmNewPassword" [type]="hideConfirm ? 'password' : 'text'" required>
+
+      <mat-icon matSuffix (click)="hideConfirm = !hideConfirm">{{hideConfirm ? 'visibility_off' : 'visibility'}}
+      </mat-icon>
+
+      <mat-error *ngIf="confirmNewPassword?.hasError('required')">
+        Enter your password again.
+      </mat-error>
+    </mat-form-field>
+
+  </div>
+
+  <div class="password-error mat-error"
+    *ngIf="this.passwordGroup?.hasError('passwordMatch') && !confirmNewPassword?.hasError('required')">
+    Passwords must match.
+  </div>
+
+  <button mat-raised-button color="primary" type="submit">Create Account</button>
+</form>
