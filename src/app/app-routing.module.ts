@@ -8,10 +8,12 @@ import { AccountPetsComponent } from './account-pets/account-pets.component';
 import { ViewPetComponent } from './view-pet/view-pet.component';
 import { CalendarContainerComponent } from './calendar/components/calendar-container/calendar-container.component';
 import { HomepageComponent } from './homepage/homepage.component';
+import { PetfinderFormComponent } from './petfinder/components/petfinder-form/petfinder-form.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
   { path: 'homepage', component: HomepageComponent},
+  { path: 'petfinder', component: PetfinderFormComponent },
   { path: 'profile', component: AccountProfileComponent },
   { path: 'new-pet', component: NewPetComponent },
   { path: 'pets', component: AccountPetsComponent },
