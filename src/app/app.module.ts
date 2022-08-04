@@ -25,6 +25,7 @@ import { CalendarComponent } from './calendar/components/calendar/calendar.compo
 import { CalendarContainerComponent } from './calendar/components/calendar-container/calendar-container.component';
 import { EventFormComponent } from './calendar/components/event-form/event-form.component';
 import { ViewEventComponent } from './calendar/components/view-event/view-event.component';
+import { PetfinderFormComponent } from './petfinder/components/petfinder-form/petfinder-form.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { ViewEventComponent } from './calendar/components/view-event/view-event.
     ViewEventComponent,
     HomepageComponent,
     LoginFormComponent,
-    SignupFormComponent
+    SignupFormComponent,
+    PetfinderFormComponent
   ],
   imports: [
     BrowserModule,
@@ -56,9 +58,9 @@ import { ViewEventComponent } from './calendar/components/view-event/view-event.
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // and returns simulated server responses.
     // Remove it when a real server is ready to receive requests.
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
-    ),
+    //HttpClientInMemoryWebApiModule.forRoot(
+    //  InMemoryDataService, { dataEncapsulation: false }
+    //),
     LayoutModule,
     SharedModule
   ],

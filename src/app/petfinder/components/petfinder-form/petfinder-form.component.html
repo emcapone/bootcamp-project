@@ -1,0 +1,128 @@
+<div class="header">
+  <h1>Adoptable Pets</h1>
+</div>
+<mat-spinner *ngIf="!this.types"></mat-spinner>
+<mat-vertical-stepper linear #stepper *ngIf="this.types">
+  <mat-step [stepControl]="mainGroup">
+    <ng-template matStepLabel>Begin Search</ng-template>
+    <form [formGroup]="mainGroup" autocomplete="off">
+
+      <mat-form-field appearance="fill">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type" (selectionChange)="getBreeds()">
+          <mat-option *ngFor="let type of this.types; let i = index" [value]="i">{{type.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Location (ZIP Code)</mat-label>
+        <input matInput formControlName="location">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Distance</mat-label>
+        <mat-select formControlName="distance">
+          <mat-option value="10">10 miles</mat-option>
+          <mat-option value="25">25 miles</mat-option>
+          <mat-option value="50">50 miles</mat-option>
+          <mat-option value="100">100 miles</mat-option>
+          <mat-option value="500">Anywhere</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+    <div>
+      <button mat-stroked-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [stepControl]="options">
+    <ng-template matStepLabel>Preferences</ng-template>
+    <form [formGroup]="options" autocomplete="off" *ngIf="this.mainGroup.valid">
+      <mat-form-field appearance="fill" *ngIf="this.breeds.length > 0">
+        <mat-label>Breed</mat-label>
+        <mat-select formControlName="breed" multiple>
+          <mat-option *ngFor="let breed of this.breeds" [value]="breed">{{breed}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Age</mat-label>
+        <mat-select formControlName="age" multiple>
+          <mat-option value="baby">Baby</mat-option>
+          <mat-option value="young">Young</mat-option>
+          <mat-option value="adult">Adult</mat-option>
+          <mat-option value="senior">Senior</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Size</mat-label>
+        <mat-select formControlName="size" multiple>
+          <mat-option value="small">Small</mat-option>
+          <mat-option value="medium">Medium</mat-option>
+          <mat-option value="large">Large</mat-option>
+          <mat-option value="xlarge">X-Large</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" *ngIf="this.types[this.selectedType].coats.length > 0">
+        <mat-label>Coats</mat-label>
+        <mat-select formControlName="coat" multiple>
+          <mat-option *ngFor="let coat of this.types[this.selectedType].coats" [value]="coat">{{coat}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" *ngIf="this.types[this.selectedType].coats.length > 0">
+        <mat-label>Colors</mat-label>
+        <mat-select formControlName="color" multiple>
+          <mat-option *ngFor="let color of this.types[this.selectedType].colors" [value]="color">{{color}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" *ngIf="this.types[this.selectedType].coats.length > 0">
+        <mat-label>Genders</mat-label>
+        <mat-select formControlName="gender" multiple>
+          <mat-option *ngFor="let gender of this.types[this.selectedType].genders" [value]="gender">{{gender}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="this.types[this.selectedType].name === 'Cat'">
+        <mat-checkbox formControlName="declawed">Declawed</mat-checkbox>
+      </div>
+
+      <div>
+        <mat-checkbox formControlName="specialNeeds">Special Needs</mat-checkbox>
+      </div>
+
+      <div>
+        <mat-checkbox formControlName="houseTrained">House Trained</mat-checkbox>
+      </div>
+
+      <div>
+        <mat-checkbox formControlName="goodWithChildren">Good With Children</mat-checkbox>
+      </div>
+
+      <div>
+        <mat-checkbox formControlName="goodWithDogs">Good With Dogs</mat-checkbox>
+      </div>
+
+      <div>
+        <mat-checkbox formControlName="goodWithDogs">Good With Cats</mat-checkbox>
+      </div>
+
+      <div>
+        <button mat-stroked-button matStepperNext (click)="this.search()">Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Results</ng-template>
+    <div *ngIf="this.pets">
+      <p *ngFor="let x of this.pets.animals">{{x.name}} <a [href]="x.url" target="_blank">Link</a></p>
+    </div>
+    <div class="form-footer">
+      <button mat-stroked-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>

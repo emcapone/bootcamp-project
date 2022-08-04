@@ -1,0 +1,21 @@
+button {
+  margin: 10px;
+}
+
+h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h3 a:hover {
+  text-decoration: underline;
+}
+
+.header {
+  border-bottom: 1px solid white;
+  margin-bottom: 10px;
+}
+
+.form-footer {
+  margin-top: 10px;
+}
