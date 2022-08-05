@@ -1,4 +1,9 @@
-<div class="page-container">
+<div class="error-container" *ngIf="this.showError">
+  <h2>Oops! An error occurred. Please try again later.</h2>
+  <button mat-raised-button color="warn" (click)="this.refresh()">Refresh</button>
+  <button mat-raised-button color="warn" routerLink='/homepage'>Home</button>
+</div>
+<div class="page-container" *ngIf="!this.showError">
   <button class="add-button" mat-fab color="accent" matTooltip="Add Event" (click)="this.newEvent()">
     <mat-icon>add</mat-icon>
   </button>
@@ -15,6 +20,6 @@
   </button>
   <mat-card class="component-container" *ngIf="this.selectedDate">
     <mat-card-title>{{this.formatMoment(this.selectedDate)}}</mat-card-title>
-    <app-view-event [selectedDate]="this.selectedDate" (event)="this.editEvent($event)" (hasEvents)="this.hasEvents"></app-view-event>
+    <app-view-event [selectedDate]="this.selectedDate" (event)="this.editEvent($event)"></app-view-event>
   </mat-card>
 </div>

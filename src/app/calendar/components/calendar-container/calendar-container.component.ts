@@ -11,13 +11,17 @@ import { CalendarEvent } from '../../calendar-event';
 export class CalendarContainerComponent implements OnInit {
 
   selectedDate!: moment.Moment;
-  hasEvents: boolean = false;
   showForm: boolean = false;
   eventId: number = -1;
+  showError: boolean = false;
 
   constructor(private snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
+  }
+
+  refresh(): void {
+    window.location.reload();
   }
 
   formatMoment(date: moment.Moment): string {
@@ -38,12 +42,15 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   cancelForm($event?: boolean) {
+    console.log($event);
     if ($event === true) {
       this.snackbar.open('Saved Event', 'Close', {
         duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'bottom'
       });
+    } else if ($event === false){
+      this.showError = true;
     }
     this.eventId = -1;
     this.showForm = false;
