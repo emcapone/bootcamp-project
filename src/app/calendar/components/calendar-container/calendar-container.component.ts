@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
+import { Subject } from 'rxjs';
 import { CalendarEvent } from '../../calendar-event';
 
 @Component({
@@ -8,20 +9,32 @@ import { CalendarEvent } from '../../calendar-event';
   templateUrl: './calendar-container.component.html',
   styleUrls: ['./calendar-container.component.css']
 })
-export class CalendarContainerComponent implements OnInit {
+export class CalendarContainerComponent implements OnInit, OnDestroy {
 
-  selectedDate!: moment.Moment;
+  selectedDate!: moment.Moment | null;
   showForm: boolean = false;
   eventId: number = -1;
   showError: boolean = false;
 
+  private clear$ = new Subject<void>();
+
   constructor(private snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
+    this.clear$.subscribe(_ => {
+      this.eventId = -1;
+      this.showForm = false;
+      this.selectedDate = null;
+      this.showError = false;
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.clear$.complete();
   }
 
   refresh(): void {
-    window.location.reload();
+    this.clear$.next();
   }
 
   formatMoment(date: moment.Moment): string {
@@ -38,18 +51,19 @@ export class CalendarContainerComponent implements OnInit {
   }
 
   newEvent() {
-    this.showForm = true;
+    if(this.selectedDate !== null){
+      this.showForm = true;
+    }
   }
 
   cancelForm($event?: boolean) {
-    console.log($event);
     if ($event === true) {
       this.snackbar.open('Saved Event', 'Close', {
         duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'bottom'
       });
-    } else if ($event === false){
+    } else if ($event === false) {
       this.showError = true;
     }
     this.eventId = -1;

@@ -1,10 +1,10 @@
 <div class="error-container" *ngIf="this.showError">
-  <h2>Oops! An error occurred. Please try again later.</h2>
-  <button mat-raised-button color="warn" (click)="this.refresh()">Refresh</button>
-  <button mat-raised-button color="warn" routerLink='/homepage'>Home</button>
+  <h2>Whoops! An error occurred.</h2>
+  <button mat-raised-button color="warn" (click)="this.refresh()">Try Again</button>
+  <button mat-raised-button color="warn" routerLink='/homepage'>Go Home</button>
 </div>
 <div class="page-container" *ngIf="!this.showError">
-  <button class="add-button" mat-fab color="accent" matTooltip="Add Event" (click)="this.newEvent()">
+  <button class="add-button" mat-fab color="accent" [matTooltip]="this.selectedDate? 'Add Event' : 'Select a Date'" (click)="this.newEvent()">
     <mat-icon>add</mat-icon>
   </button>
   <mat-card class="component-container mat-elevation-z8">
@@ -12,10 +12,10 @@
       <app-calendar (dateSelected)="dateSelected($event)"></app-calendar>
     </mat-card-content>
   </mat-card>
-  <div class="component-container" *ngIf="this.showForm">
+  <div class="component-container" *ngIf="this.showForm && this.selectedDate">
     <app-event-form [id]="this.eventId" [selectedDate]="this.selectedDate" (complete)="this.cancelForm($event)"></app-event-form>
   </div>
-  <button class="close-button" mat-fab color="accent" matTooltip="Close Form" (click)="this.cancelForm()" *ngIf="this.showForm">
+  <button class="close-button" mat-fab color="accent" matTooltip="Close Form" (click)="this.cancelForm()" *ngIf="this.showForm && this.selectedDate">
     <mat-icon>close</mat-icon>
   </button>
   <mat-card class="component-container" *ngIf="this.selectedDate">
