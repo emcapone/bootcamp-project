@@ -1,0 +1,28 @@
+p a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+p a:hover {
+  color: gray;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+img {
+  border-radius: 5px;
+}
+
+mat-card {
+  width: 600px;
+  background-color: #303030;
+}
+
+mat-card-content {
+  display:flex;
+  flex-flow: column wrap;
+  margin-top: 10px;
+  max-height: 400px;
+}

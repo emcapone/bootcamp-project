@@ -1,9 +1,9 @@
 export interface Pets {
-  animals: Details[];
+  animals: PetDetails[];
   pagination: Pagination;
 }
 
-interface Details {
+export interface PetDetails {
   age: string;
   attributes: Attributes;
   breeds: Breeds;
@@ -99,7 +99,8 @@ interface Pagination {
 }
 
 interface PaginationLink {
-  next: Link
+  next: Link,
+  previous: Link
 }
 
 interface Link {

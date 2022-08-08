@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PetfinderService } from '../../petfinder-service/petfinder.service';
 import { take } from 'rxjs';
 import { Parameters, Pets, Details } from '../../petfinder-service/models';
+import { PostalCodeValidator } from 'src/app/shared/directives/postal-code-validator.directive';
 
 @Component({
   selector: 'app-petfinder-form',
@@ -13,12 +14,18 @@ export class PetfinderFormComponent implements OnInit {
 
   types!: Details[];
   breeds: string[] = [];
-  resultsPage: number = 1;
-  pets!: Pets;
+
+  pets!: Pets | undefined;
+  currentPage: number = 1;
+  totalPages: number = 0;
+  nextPageLink: string = '';
+  previousPageLink: string = '';
+
+  isLoading: boolean = true;
 
   mainGroup = new FormGroup({
-    type: new FormControl(null, Validators.required),
-    location: new FormControl('', Validators.required),
+    type: new FormControl(null, Validators.required), //reset
+    location: new FormControl('', [Validators.required, PostalCodeValidator]), //reset
     distance: new FormControl("100", Validators.required)
   })
   get selectedType(): number {
@@ -67,7 +74,7 @@ export class PetfinderFormComponent implements OnInit {
       return;
     }
     let parameters: Parameters = {
-      type: this.mainGroup.controls.type.value ? this.types[this.mainGroup.controls.type.value].name : '',
+      type: (this.mainGroup.controls.type.value === null) ? '' : this.replaceChars(this.types[this.mainGroup.controls.type.value].name),
       breed: this.options.controls.breed.value || '',
       size: this.options.controls.size.value || '',
       gender: this.options.controls.gender.value || '',
@@ -82,11 +89,73 @@ export class PetfinderFormComponent implements OnInit {
       special_needs: this.options.controls.specialNeeds.value || false,
       location: this.mainGroup.controls.location.value || '',
       distance: this.mainGroup.controls.distance.value || '',
-      page: this.resultsPage
+      page: 1
     }
     this.petfinder.getPets(parameters).pipe(
       take(1)
-    ).subscribe(res => this.pets = res);
+    ).subscribe(res => {
+      this.pets = res;
+      this.totalPages = res.pagination.total_pages;
+      if (res.pagination.total_pages > 1) {
+        this.nextPageLink = res.pagination._links.next.href;
+      }
+      this.isLoading = false;
+    });
+  }
+
+  previousPage(): void {
+    this.isLoading = true;
+    if (this.currentPage === 1) {
+      return;
+    }
+    this.currentPage--;
+    this.petfinder.getPetsLink(this.previousPageLink).pipe(
+      take(1)
+    ).subscribe(res => {
+      this.pets = res;
+      this.totalPages = res.pagination.total_pages;
+      if (this.currentPage !== res.pagination.total_pages) {
+        this.nextPageLink = res.pagination._links.next?.href;
+      }
+      if (this.currentPage !== 1) {
+        this.previousPageLink = res.pagination._links.previous.href;
+      }
+      this.isLoading = false;
+    });
+  }
+
+  nextPage(): void {
+    this.isLoading = true;
+    if (this.currentPage === this.totalPages) {
+      return;
+    }
+    this.currentPage++;
+    this.petfinder.getPetsLink(this.nextPageLink).pipe(
+      take(1)
+    ).subscribe(res => {
+      this.pets = res;
+      this.totalPages = res.pagination.total_pages;
+      if (this.currentPage !== this.totalPages) {
+        this.nextPageLink = res.pagination._links.next.href;
+      }
+      if (this.currentPage !== 1) {
+        this.previousPageLink = res.pagination._links.previous.href;
+      }
+      this.isLoading = false;
+    });
+  }
+
+  replaceChars(str: string | null): string {
+    if (str === null) {
+      return '';
+    }
+    while (str.includes(' & ')) {
+      str = str.replace(' & ', '-');
+    }
+    while (str.includes(', ')) {
+      str = str.replace(', ', '-');
+    }
+    return str;
   }
 
 }

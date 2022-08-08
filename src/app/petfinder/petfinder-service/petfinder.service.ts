@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, take, of } from 'rxjs';
+import { Observable, take, of, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Token, Types, Breeds, Parameters, Pets } from './models';
@@ -8,11 +8,6 @@ import { Token, Types, Breeds, Parameters, Pets } from './models';
   providedIn: 'root'
 })
 export class PetfinderService {
-
-  /*
-  Request Structure:
-  https://api.petfinder.com/v2/{CATEGORY}/{ACTION}?{parameter_1}={value_1}&{parameter_2}={value_2}
-  */
 
   private apiKey = 'BMftsF57yG0s4ZSeDgOqp67N63b5KBZpWSJXOyx6MhTs7l4Ik8';
   private apiSecret = 'ykUUhf6okEPpaIGZBLB4BgsXXfkfQTQxL6iJzu4O';
@@ -92,6 +87,13 @@ export class PetfinderService {
     query += 'page=' + params.page;
 
     return this.http.get<Pets>(this.baseUrl + '/v2/animals' + query, this.httpOptions).pipe(
+      tap(_ => console.log('fetch pets by query')),
+      catchError(this.handleError<Pets>('getPets')));
+  }
+
+  getPetsLink(link: string): Observable<Pets> {
+    return this.http.get<Pets>(this.baseUrl + link, this.httpOptions).pipe(
+      tap(_ => console.log('fetch pets by link')),
       catchError(this.handleError<Pets>('getPets')));
   }
 
@@ -117,25 +119,3 @@ export class PetfinderService {
   }
 
 }
-
-
-/*
-base call: GET https://api.petfinder.com/v2/animals
-parameters:
-type -> GET call
-breed -> GET call
-size ^
-gender ^ !
-age ^ !
-color -> GET call !
-coat ^ !
-good_with_children bool !
-good_with_dogs bool !
-good_with_cats bool !
-house_trained bool !
-declawed bool !
-special_needs bool
-location num zip
-distance max 500
-page num
-*/

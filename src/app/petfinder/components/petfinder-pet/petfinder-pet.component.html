@@ -1,0 +1,127 @@
+<mat-card class="mat-elevation-z8">
+  <mat-card-title-group>
+
+    <mat-card-title>
+      {{pet.name}}
+      <span *ngIf="pet.status === 'adoptable'" matTooltip="Adoptable">
+        <mat-icon color="accent">check_circle_outline</mat-icon>
+      </span>
+      <span *ngIf="pet.status === 'found'" matTooltip="Possible lost pet">
+        <mat-icon color="primary">info</mat-icon>
+      </span>
+      <span *ngIf="pet.status === 'adopted'" matTooltip="Adopted">
+        <mat-icon color="warn">cancel</mat-icon>
+      </span>
+    </mat-card-title>
+
+    <mat-card-subtitle>{{this.round(pet.distance)}} Miles Away</mat-card-subtitle>
+
+    <mat-card-subtitle>{{pet.gender}} {{pet.species}}</mat-card-subtitle>
+
+    <mat-card-subtitle>{{pet.size}} {{pet.age}}</mat-card-subtitle>
+
+    <mat-card-subtitle *ngIf="pet.contact.email || pet.contact.phone"><h4>Contact:</h4></mat-card-subtitle>
+
+    <mat-card-subtitle *ngIf="pet.contact.email">{{pet.contact.email}}</mat-card-subtitle>
+
+    <mat-card-subtitle *ngIf="pet.contact.phone">{{pet.contact.phone}}</mat-card-subtitle>
+
+
+    <img mat-card-xl-image *ngIf="pet.primary_photo_cropped" [src]="pet.primary_photo_cropped.small" />
+    <img mat-card-xl-image *ngIf="!pet.primary_photo_cropped" src="../../../../assets/petfinder-default.jpg" />
+
+
+  </mat-card-title-group>
+
+  <mat-divider inset *ngIf="pet.tags.length > 0"></mat-divider>
+  <mat-chip-list aria-label="Pet tags">
+    <mat-chip color="primary" selected *ngFor="let tag of pet.tags">{{tag}}</mat-chip>
+  </mat-chip-list>
+  <mat-divider inset *ngIf="pet.description"></mat-divider>
+  <p *ngIf="pet.description">{{this.replaceEscapedChars(pet.description)}} <a [href]="pet.url" target="_blank">Read More</a></p>
+  <mat-divider inset></mat-divider>
+
+  <mat-card-content>
+    <div>
+      <h4 *ngIf="pet.colors.primary || pet.colors.secondary || pet.colors.tertiary">Color(s):</h4>
+      <ul>
+        <li *ngIf="pet.colors.primary">
+          {{pet.colors.primary}}
+        </li>
+        <li *ngIf="pet.colors.secondary">
+          {{pet.colors.secondary}}
+        </li>
+        <li *ngIf="pet.colors.tertiary">
+          {{pet.colors.tertiary}}
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h4 *ngIf="pet.coat">Coat:</h4>
+      <ul *ngIf="pet.coat">
+        <li>
+          {{pet.coat}}
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h4 *ngIf="pet.breeds.primary || pet.breeds.secondary || pet.breeds.unknown">Breed<span
+          *ngIf="!pet.breeds.mixed">:</span><span *ngIf="pet.breeds.mixed">s (Mixed):</span></h4>
+      <ul>
+        <li *ngIf="pet.breeds.primary">
+          <span *ngIf="pet.breeds.mixed">Primary: </span>{{pet.breeds.primary}}
+        </li>
+        <li *ngIf="pet.breeds.secondary">
+          <span *ngIf="pet.breeds.mixed">Secondary: </span>{{pet.breeds.secondary}}
+        </li>
+        <li *ngIf="pet.breeds.unknown">
+          Unknown
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h4
+        *ngIf="pet.attributes.declawed || pet.attributes.house_trained || pet.attributes.shots_current || pet.attributes.spayed_neutered || pet.attributes.special_needs">
+        Attributes:
+      </h4>
+      <ul>
+        <li *ngIf="pet.attributes.spayed_neutered">
+          <span *ngIf="pet.gender === 'Female'">Spayed</span>
+          <span *ngIf="pet.gender === 'Male'">Neutered</span>
+        </li>
+        <li *ngIf="pet.attributes.declawed">
+          Declawed
+        </li>
+        <li *ngIf="pet.attributes.house_trained">
+          House Trained
+        </li>
+        <li *ngIf="pet.attributes.shots_current">
+          Shots Current
+        </li>
+        <li *ngIf="pet.attributes.special_needs">
+          Special Needs
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h4 *ngIf="pet.environment.cats || pet.environment.dogs || pet.environment.children">Environment:</h4>
+      <ul>
+        <li *ngIf="pet.environment.cats">
+          Good with cats
+        </li>
+        <li *ngIf="pet.environment.dogs">
+          Good with dogs
+        </li>
+        <li *ngIf="pet.environment.children">
+          Good with children
+        </li>
+      </ul>
+    </div>
+
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-raised-button color="primary" (click)="this.bookmark(pet._links.self.href);">Save to Bookmarks</button>
+    <a mat-raised-button color="accent" [href]="pet.url" target="_blank">Apply</a>
+  </mat-card-actions>
+</mat-card>
