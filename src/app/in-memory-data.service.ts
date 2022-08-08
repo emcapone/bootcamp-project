@@ -14,7 +14,7 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 1,
         firstName: 'Joseph',
         lastName: 'Quinn',
-        birthday:  new Date('11/12/2003'),
+        birthday: new Date('11/12/2003'),
         email: 'j.quinn@gmail.com',
         password: 'Password123'
       },
@@ -22,7 +22,7 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 1,
         firstName: 'Millie',
         lastName: 'Brown',
-        birthday:  new Date('01/23/1991'),
+        birthday: new Date('01/23/1991'),
         email: 'm.brown@gmail.com',
         password: 'Password123'
       }
@@ -229,7 +229,16 @@ export class InMemoryDataService implements InMemoryDbService {
         details: 'details example. testing here. some extra text. examples test.'
       }
     ]
-    return { users, pets, events };
+    const bookmarks = [
+      {
+        id: 0,
+        link: '/v2/animals',
+        title: 'test',
+        note: 'test'
+      }
+
+    ]
+    return { users, pets, events, bookmarks };
   }
 
   genId(ary: any[]): number {
