@@ -10,7 +10,6 @@ import { PetService } from '../pet.service';
 })
 export class AccountPetsComponent {
 
-  //Declarative Pattern
   pets$ = this.petService.pets$
     .pipe(
       catchError(err => {

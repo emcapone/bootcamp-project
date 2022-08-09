@@ -1,4 +1,4 @@
-import { Component, OnInit, Query, Type } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PetfinderService } from '../../petfinder-service/petfinder.service';
 import { take } from 'rxjs';
