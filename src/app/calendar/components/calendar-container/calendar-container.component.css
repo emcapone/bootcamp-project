@@ -45,3 +45,13 @@ mat-card-title {
   border-bottom: 1px solid white;
   padding-bottom: 5px;
 }
+
+.error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  flex-direction: column;
+  gap: 10px;
+}

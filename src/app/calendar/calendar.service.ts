@@ -13,6 +13,7 @@ export class CalendarService {
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
+  private now = moment();
 
   //fetch all user events
   private eventsData$ = new BehaviorSubject<void>(undefined);
@@ -20,7 +21,8 @@ export class CalendarService {
     .pipe(
       tap(_ => {
         console.log('fetch events');
-      })
+      }),
+      catchError(this.handleError<CalendarEvent[]>('fetchEvents'))
     );
   //cache events
   private events$ = this.eventsData$.pipe(
@@ -29,7 +31,7 @@ export class CalendarService {
   );
 
   //get events in month
-  private MonthYearSubject = new BehaviorSubject<[number, number]>([parseInt(moment().format('M')), parseInt(moment().format('YYYY'))]);
+  private MonthYearSubject = new BehaviorSubject<[number, number]>([parseInt(this.now.format('M')), parseInt(this.now.format('YYYY'))]);
   private MonthYear$ = this.MonthYearSubject.asObservable();
   monthEvents$ = combineLatest([
     this.events$,
@@ -39,7 +41,8 @@ export class CalendarService {
     map(([events, date]) => {
       let match: CalendarEvent[] = [];
       for (let x of events) {
-        if (parseInt(moment(x.date).format('M')) === date[0] && parseInt(moment(x.date).format('YYYY')) === date[1]) {
+        let temp = moment(x.date);
+        if (parseInt(temp.format('M')) === date[0] && parseInt(temp.format('YYYY')) === date[1]) {
           match.push(x);
         }
       }
@@ -104,17 +107,23 @@ export class CalendarService {
     );
   }
 
+  /**
+* Errors must be handled by subscriber.
+* @param event - new CalendarEvent to POST
+*/
   addCalendarEvent(event: CalendarEvent): Observable<CalendarEvent> {
     return this.http.post<CalendarEvent>(this.eventsUrl, event, this.httpOptions).pipe(
-      tap((newEvent: CalendarEvent) => console.log('added event', newEvent.id)),
-      catchError(this.handleError<CalendarEvent>('addCalendarEvent'))
+      tap((newEvent: CalendarEvent) => console.log('added event', newEvent.id))
     );
   }
 
+  /**
+* Errors must be handled by subscriber.
+* @param event - edited CalendarEvent to PUT
+*/
   editCalendarEvent(event: CalendarEvent): Observable<any> {
     return this.http.put(this.eventsUrl, event, this.httpOptions).pipe(
-      tap(_ => console.log(`updated event id=${event.id}`)),
-      catchError(this.handleError<any>('updateCalendarEvent'))
+      tap(_ => console.log(`updated event id=${event.id}`))
     );
   }
 

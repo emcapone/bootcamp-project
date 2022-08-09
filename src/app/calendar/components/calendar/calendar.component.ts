@@ -62,8 +62,9 @@ export class CalendarComponent implements AfterViewInit, OnDestroy{
   }
 
   setMonth() {
-    const month = parseInt(moment(this.calendar.activeDate).format('M'));
-    const year = parseInt(moment(this.calendar.activeDate).format('Y'));
+    const temp = moment(this.calendar.activeDate);
+    const month = parseInt(temp.format('M'));
+    const year = parseInt(temp.format('Y'));
     this.calendarService.selectMonth(month, year);
   }
 

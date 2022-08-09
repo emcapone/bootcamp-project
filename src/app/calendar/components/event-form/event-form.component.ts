@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { Observable, take } from 'rxjs';
+import { catchError, Observable, of, take } from 'rxjs';
 import { CalendarEvent } from '../../calendar-event';
 import { CalendarService } from '../../calendar.service';
 
@@ -39,6 +39,8 @@ export class EventFormComponent implements OnDestroy {
     this.fillForm();
   }
 
+  @Output() complete: EventEmitter<any> = new EventEmitter();
+
   fillForm(): void {
     this.event$.pipe(
       take(1)
@@ -54,7 +56,6 @@ export class EventFormComponent implements OnDestroy {
     });
   }
 
-  @Output() complete: EventEmitter<boolean> = new EventEmitter();
 
   eventForm!: FormGroup;
 
@@ -125,25 +126,32 @@ export class EventFormComponent implements OnDestroy {
       if (this.editing) {
         event.id = this.id;
         this.calendarService.editCalendarEvent(event).pipe(
-          take(1)
+          take(1),
+          catchError(err => {
+            console.log(err);
+            this.complete.emit(false);
+            return of();
+          })
         ).subscribe(_ => {
           this.calendarService.refreshEvents();
           this.complete.emit(true);
-          return;
         });
       } else {
         this.calendarService.addCalendarEvent(event).pipe(
-          take(1)
+          take(1),
+          catchError(err => {
+            console.log(err);
+            this.complete.emit(false);
+            return of();
+          })
         ).subscribe(_ => {
           this.calendarService.refreshEvents();
           this.complete.emit(true);
-          return;
         });
       }
     } else if (this.eventForm.invalid) {
       return;
     }
-    this.complete.emit(false);
   }
 
 }
