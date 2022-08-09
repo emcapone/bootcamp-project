@@ -1,0 +1,13 @@
+.form-container {
+  display: block;
+  text-align: start;
+  height: auto;
+}
+
+mat-form-field {
+  display: block;
+}
+
+button {
+  margin-top: 10px;
+}

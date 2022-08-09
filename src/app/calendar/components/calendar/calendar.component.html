@@ -1,0 +1,3 @@
+<mat-calendar #calendar [minDate]="this.minDate" (viewChanged)="viewChanged($event)"
+  (monthSelected)="monthChanged($event)" [(selected)]="selectedDate" (selectedChange)="dateChanged()">
+</mat-calendar>

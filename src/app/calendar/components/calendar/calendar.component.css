@@ -1,0 +1,11 @@
+::ng-deep .booked .mat-calendar-body-cell-content{
+  background-color: rgba(239, 169, 174, 0.5);
+}
+
+::ng-deep .mat-calendar-body-selected {
+  border: 1px solid white;
+}
+
+::ng-deep .mat-calendar-body-today {
+  border: none !important;
+}

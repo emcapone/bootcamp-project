@@ -4,6 +4,7 @@ import { MaterialModule } from './material/material.module';
 import { PasswordMatchValidatorDirective } from './directives/password-match-validator.directive';
 import { PasswordValidatorDirective } from './directives/password-validator.directive';
 import { BirthdayValidatorDirective } from './directives/birthday-validator.directive';
+import { TimeFormatPipe } from './pipes/time-format.pipe'; //move to shared module after merge
 
 
 @NgModule({
@@ -13,11 +14,13 @@ import { BirthdayValidatorDirective } from './directives/birthday-validator.dire
   declarations: [
     PasswordMatchValidatorDirective,
     PasswordValidatorDirective,
-    BirthdayValidatorDirective
+    BirthdayValidatorDirective,
+    TimeFormatPipe
   ],
   exports: [
     CommonModule,
-    MaterialModule
+    MaterialModule,
+    TimeFormatPipe
   ]
 })
 export class SharedModule { }

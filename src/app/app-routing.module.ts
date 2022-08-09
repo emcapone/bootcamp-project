@@ -6,8 +6,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { NewPetComponent } from './new-pet/new-pet.component';
 import { AccountPetsComponent } from './account-pets/account-pets.component';
 import { ViewPetComponent } from './view-pet/view-pet.component';
+import { CalendarContainerComponent } from './calendar/components/calendar-container/calendar-container.component';
 import { HomepageComponent } from './homepage/homepage.component';
-
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
@@ -15,6 +15,7 @@ const routes: Routes = [
   { path: 'profile', component: AccountProfileComponent },
   { path: 'new-pet', component: NewPetComponent },
   { path: 'pets', component: AccountPetsComponent },
+  { path: 'calendar', component: CalendarContainerComponent },
   { path: 'edit-pet/:id', component: EditPetComponent },
   { path: 'view-pet/:id', component: ViewPetComponent },
   { path: '404', component: PageNotFoundComponent },

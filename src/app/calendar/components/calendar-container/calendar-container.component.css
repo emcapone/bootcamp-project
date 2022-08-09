@@ -1,0 +1,57 @@
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: top;
+  gap: 1em;
+}
+
+.component-container {
+  width: 33.33%;
+  height: min-content;
+  display: block;
+  text-align: center;
+}
+
+.add-button {
+  margin-right: -3rem;
+  margin-top: -1rem;
+  z-index: 9;
+}
+
+.close-button {
+  margin-left: -3rem;
+  margin-top: -1rem;
+  z-index: 9;
+}
+
+@media (max-width: 800px){
+  .page-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .component-container {
+    width: 90% !important;
+    margin: 1rem;
+  }
+  .add-button, .close-button {
+    margin-right: 0;
+    margin-top: 0;
+    z-index: auto;
+    align-self: center;
+  }
+}
+
+mat-card-title {
+  border-bottom: 1px solid white;
+  padding-bottom: 5px;
+}
+
+.error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  flex-direction: column;
+  gap: 10px;
+}
