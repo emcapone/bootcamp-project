@@ -62,7 +62,6 @@ export class PetfinderPetComponent implements OnInit {
 
   bookmark(){
     let x: Bookmark = {
-      id: 2,
       link: this.pet._links.self.href,
       title: this.pet.name,
       note: 'Adoptable pet with PetSearch, listed on ' + this.pet.published_at,

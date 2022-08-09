@@ -43,9 +43,13 @@ export class ViewEventComponent implements OnDestroy{
     this.event.emit(event);
   }
 
-  deleteEvent(id: number){
-    this.calendarService.deleteCalendarEvent(id).pipe(
-      take(1)
-    ).subscribe(_ => this.calendarService.refreshEvents());
+  deleteEvent(id: number | undefined){
+    if(id){
+      this.calendarService.deleteCalendarEvent(id).pipe(
+        take(1)
+      ).subscribe(_ => this.calendarService.refreshEvents());
+    } else {
+      throw new Error('Event is missing an ID.')
+    }
   }
 }
