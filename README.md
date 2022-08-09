@@ -22,7 +22,7 @@ Pawssier also has information on various pet breeds and diet requirements, court
 * Create Account
 * Dashboard
 * Husbandry Search
-* Adoption Search
+* Adoption Search :heavy_check_mark:
 * Bookmarks
 * Calendar :heavy_check_mark:
 * Account Profile :heavy_check_mark:
@@ -81,5 +81,7 @@ Pawssier also has information on various pet breeds and diet requirements, court
 
 ## Current Goals
 - Best Practice RxJS implementation
-- Petfinder API
-- 'Bookmark' calls
+- Bookmarks
+- Mock Authentication
+    - Split modules/ route guards
+
