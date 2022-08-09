@@ -1,13 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, take, of, tap } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Observable, take, of, tap, Subject, combineLatest, throwError, BehaviorSubject, mergeMap } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Token, Types, Breeds, Parameters, Pets } from './models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PetfinderService {
+export class PetfinderService implements OnDestroy {
 
   private apiKey = 'BMftsF57yG0s4ZSeDgOqp67N63b5KBZpWSJXOyx6MhTs7l4Ik8';
   private apiSecret = 'ykUUhf6okEPpaIGZBLB4BgsXXfkfQTQxL6iJzu4O';
@@ -16,26 +16,39 @@ export class PetfinderService {
   private tokenHeader = {
     headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
   };
-  private token$ = this.http.post<Token>(this.baseUrl + '/v2/oauth2/token',
-    `grant_type=client_credentials&client_id=${this.apiKey}&client_secret=${this.apiSecret}`, this.tokenHeader).pipe(
-      catchError(this.handleError<Token>('getToken'))
-    );
+
+  private refreshTokenSubject = new BehaviorSubject<void>(undefined);
+  private refreshToken$ = this.refreshTokenSubject.asObservable();
+
+  private getToken$ = this.http.post<Token>(this.baseUrl + '/v2/oauth2/token',
+    `grant_type=client_credentials&client_id=${this.apiKey}&client_secret=${this.apiSecret}`, this.tokenHeader);
+
+  token$ = combineLatest([
+    this.getToken$,
+    this.refreshToken$
+  ]).pipe(
+    mergeMap(() => this.getToken$)
+  );
 
   httpOptions!: Object;
 
   constructor(private http: HttpClient) {
-    this.getToken();
+    this.token$.pipe(
+      catchError(this.handleError<Token>('getToken'))
+    ).subscribe(res => {
+      setTimeout(() => this.refreshToken(), (res.expires_in * 1000));
+      this.httpOptions = {
+        headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `${res?.token_type} ${res?.access_token}` })
+      }
+    });
   }
 
-  getToken() {
-    this.token$.pipe(
-      take(1)
-    ).subscribe(res => {
-      //TO-DO: refresh token
-      this.httpOptions = {
-        headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `${res.token_type} ${res.access_token}` })
-      };
-    });
+  ngOnDestroy(): void {
+    this.refreshTokenSubject.complete();
+  }
+
+  refreshToken(): void {
+    this.refreshTokenSubject.next();
   }
 
   getTypes(): Observable<Types> {
@@ -94,7 +107,7 @@ export class PetfinderService {
   getPetsLink(link: string): Observable<Pets> {
     return this.http.get<Pets>(this.baseUrl + link, this.httpOptions).pipe(
       tap(_ => console.log('fetch pets by link')),
-      catchError(this.handleError<Pets>('getPets')));
+      catchError(this.handleError<Pets>('getPetsLink')));
   }
 
   /**

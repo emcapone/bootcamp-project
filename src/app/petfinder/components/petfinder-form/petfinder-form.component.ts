@@ -24,8 +24,8 @@ export class PetfinderFormComponent implements OnInit {
   isLoading: boolean = true;
 
   mainGroup = new FormGroup({
-    type: new FormControl(null, Validators.required), //reset
-    location: new FormControl('', [Validators.required, PostalCodeValidator]), //reset
+    type: new FormControl(null, Validators.required),
+    location: new FormControl('', [Validators.required, PostalCodeValidator]),
     distance: new FormControl("100", Validators.required)
   })
   get selectedType(): number {
