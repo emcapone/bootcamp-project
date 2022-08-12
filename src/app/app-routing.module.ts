@@ -9,6 +9,7 @@ import { ViewPetComponent } from './view-pet/view-pet.component';
 import { CalendarContainerComponent } from './calendar/components/calendar-container/calendar-container.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { PetfinderFormComponent } from './petfinder/components/petfinder-form/petfinder-form.component';
+import { BookmarksComponent } from './bookmarks/bookmarks.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'new-pet', component: NewPetComponent },
   { path: 'pets', component: AccountPetsComponent },
   { path: 'calendar', component: CalendarContainerComponent },
+  { path: 'bookmarks', component: BookmarksComponent},
   { path: 'edit-pet/:id', component: EditPetComponent },
   { path: 'view-pet/:id', component: ViewPetComponent },
   { path: '404', component: PageNotFoundComponent },

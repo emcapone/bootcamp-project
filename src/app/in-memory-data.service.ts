@@ -229,12 +229,14 @@ export class InMemoryDataService implements InMemoryDbService {
     ]
     const bookmarks = [
       {
-        id: 0,
-        link: '/v2/animals',
-        title: 'test',
-        note: 'test'
+        id: 1,
+        link: '/v2/animals/56626230',
+        petfinder_id: 56626230,
+        title: 'Chico',
+        note: 'Small & Furry, listed on 8/9/22, 12:57 PM',
+        savedAt: new Date(),
+        external_url: 'https://www.petfinder.com/small-furry/chico-56626230/oh/new-philadelphia/tuscarawas-county-humane-society-oh780/?referrer_id=e7b6eea0-abdd-4ce1-bbf1-5aa43e1312f2'
       }
-
     ]
     return { users, pets, events, bookmarks };
   }

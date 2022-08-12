@@ -1,8 +1,9 @@
 export interface Bookmark {
   id?: number;
   link: string;
-  image?: string;
+  petfinder_id: number;
   title: string;
   note: string;
-  external_url?: string;
+  savedAt: Date;
+  external_url: string;
 }

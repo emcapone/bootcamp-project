@@ -1,0 +1,41 @@
+<div class="header">
+  <h1>Bookmarks</h1>
+  <span class="spacer"></span>
+</div>
+<div class="content-container" *ngIf="this.bookmarks && this.bookmarks.length === 0">
+  <h2>No bookmarks saved yet.</h2>
+</div>
+<div class="content-container" *ngIf="this.bookmarks && this.bookmarks.length > 0">
+  <div class="cards-container">
+    <mat-card *ngFor="let bookmark of obs | async">
+      <mat-card-header>
+        <mat-card-title>{{bookmark.title}}</mat-card-title>
+        <mat-card-subtitle>{{bookmark.note}}</mat-card-subtitle>
+        <mat-card-subtitle>Saved on {{formatDate(bookmark.savedAt)}}</mat-card-subtitle>
+        <span class="spacer"></span>
+        <a mat-mini-fab color="primary" matTooltip="Visit on Petfinder" [href]="bookmark.external_url" target="_blank">
+          <mat-icon>link</mat-icon>
+        </a>
+        <button mat-mini-fab color="warn" matTooltip="Delete Bookmark"
+          (click)="this.openDialog(bookmark.id, bookmark.title)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Pet Preview
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="pet-preview">
+            <ng-template matExpansionPanelContent>
+              <app-petfinder-pet [link]="bookmark.link"></app-petfinder-pet>
+            </ng-template>
+          </div>
+        </mat-expansion-panel>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <mat-paginator color="accent" [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+</div>
