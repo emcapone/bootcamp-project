@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, take, of, tap, Subject, combineLatest, throwError, BehaviorSubject, mergeMap } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { Token, Types, Breeds, Parameters, Pets } from './models';
+import { Token, Types, Breeds, Parameters, PetfinderPets, PetfinderPet } from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +61,7 @@ export class PetfinderService implements OnDestroy {
       catchError(this.handleError<Breeds>('getBreeds')));
   }
 
-  getPets(params: Parameters): Observable<Pets> {
+  getPets(params: Parameters): Observable<PetfinderPets> {
     let query = "?";
     query += 'type=' + params.type + '&';
     query += 'location=' + params.location + '&';
@@ -99,15 +99,21 @@ export class PetfinderService implements OnDestroy {
     query += 'special_needs=' + params.special_needs + '&';
     query += 'page=' + params.page;
 
-    return this.http.get<Pets>(this.baseUrl + '/v2/animals' + query, this.httpOptions).pipe(
+    return this.http.get<PetfinderPets>(this.baseUrl + '/v2/animals' + query, this.httpOptions).pipe(
       tap(_ => console.log('fetch pets by query')),
-      catchError(this.handleError<Pets>('getPets')));
+      catchError(this.handleError<PetfinderPets>('getPets')));
   }
 
-  getPetsLink(link: string): Observable<Pets> {
-    return this.http.get<Pets>(this.baseUrl + link, this.httpOptions).pipe(
+  getPetsLink(link: string): Observable<PetfinderPets> {
+    return this.http.get<PetfinderPets>(this.baseUrl + link, this.httpOptions).pipe(
       tap(_ => console.log('fetch pets by link')),
-      catchError(this.handleError<Pets>('getPetsLink')));
+      catchError(this.handleError<PetfinderPets>('getPetsLink')));
+  }
+
+  getPet(link: string): Observable<PetfinderPet>{
+    return this.http.get<PetfinderPet>(this.baseUrl + link, this.httpOptions).pipe(
+      tap(res => console.log('fetch pet by link')),
+      catchError(this.handleError<PetfinderPet>('getPetsLink')));
   }
 
   /**

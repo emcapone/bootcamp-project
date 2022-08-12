@@ -1,8 +1,8 @@
 export interface Types {
-  types: Details[];
+  types: TypesDetails[];
 }
 
-export interface Details {
+export interface TypesDetails {
   name: string;
   coats: string[];
   colors: string[];

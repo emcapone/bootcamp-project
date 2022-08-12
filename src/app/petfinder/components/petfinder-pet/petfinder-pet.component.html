@@ -14,13 +14,15 @@
       </span>
     </mat-card-title>
 
-    <mat-card-subtitle>{{this.round(pet.distance)}} Miles Away</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="pet.distance">{{this.round(pet.distance)}} Miles Away</mat-card-subtitle>
 
     <mat-card-subtitle>{{pet.gender}} {{pet.species}}</mat-card-subtitle>
 
     <mat-card-subtitle>{{pet.size}} {{pet.age}}</mat-card-subtitle>
 
-    <mat-card-subtitle *ngIf="pet.contact.email || pet.contact.phone"><h4>Contact:</h4></mat-card-subtitle>
+    <mat-card-subtitle *ngIf="pet.contact.email || pet.contact.phone">
+      <h4>Contact:</h4>
+    </mat-card-subtitle>
 
     <mat-card-subtitle *ngIf="pet.contact.email">{{pet.contact.email}}</mat-card-subtitle>
 
@@ -38,7 +40,8 @@
     <mat-chip color="primary" selected *ngFor="let tag of pet.tags">{{tag}}</mat-chip>
   </mat-chip-list>
   <mat-divider inset *ngIf="pet.description"></mat-divider>
-  <p *ngIf="pet.description">{{this.replaceEscapedChars(pet.description)}} <a [href]="pet.url" target="_blank">Read More</a></p>
+  <p *ngIf="pet.description">{{this.replaceEscapedChars(pet.description)}} <a [href]="pet.url" target="_blank">Read
+      More</a></p>
   <mat-divider inset></mat-divider>
 
   <mat-card-content>
@@ -121,7 +124,9 @@
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <button mat-raised-button color="primary" (click)="this.bookmark();">Save to Bookmarks</button>
+    <button mat-raised-button disabled *ngIf="this.duplicate">Bookmarked</button>
+    <button mat-raised-button color="primary" (click)="this.bookmark();" *ngIf="!this.duplicate">Save to
+      Bookmarks</button>
     <a mat-raised-button color="accent" [href]="pet.url" target="_blank">Apply</a>
   </mat-card-actions>
 </mat-card>
