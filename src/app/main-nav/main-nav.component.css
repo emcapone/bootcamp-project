@@ -22,4 +22,5 @@
 
 .container {
   padding: 30px;
+  height: max-content;
 }
