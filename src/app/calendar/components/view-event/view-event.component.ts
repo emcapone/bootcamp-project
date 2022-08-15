@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Observable, take } from 'rxjs';
+import { ConfirmDialogComponent } from 'src/app/confirm-dialog/confirm-dialog.component';
 import { CalendarEvent } from '../../calendar-event';
 import { CalendarService } from '../../calendar.service';
 
@@ -25,7 +27,7 @@ export class ViewEventComponent implements OnDestroy{
 
   events$!: Observable<CalendarEvent[]>;
 
-  constructor(private calendarService: CalendarService) { }
+  constructor(private calendarService: CalendarService, private dialog: MatDialog) { }
 
   ngOnDestroy(): void {
     this.event.complete();
@@ -43,9 +45,30 @@ export class ViewEventComponent implements OnDestroy{
     this.event.emit(event);
   }
 
-  deleteEvent(id: number){
-    this.calendarService.deleteCalendarEvent(id).pipe(
+  deleteEvent(id: number | undefined){
+    if(id){
+      this.calendarService.deleteCalendarEvent(id).pipe(
+        take(1)
+      ).subscribe(_ => this.calendarService.refreshEvents());
+    } else {
+      throw new Error('Event is missing an ID.')
+    }
+  }
+
+  openDialog(id: number | undefined, name: string) {
+    let dialog = this.dialog.open(ConfirmDialogComponent, {
+      width: '50%',
+      data: {
+        title: 'Delete Event: ' + name,
+        message: 'This action cannot be undone. Are you sure?'
+      }
+    });
+    dialog.afterClosed().pipe(
       take(1)
-    ).subscribe(_ => this.calendarService.refreshEvents());
+    ).subscribe(res => {
+      if(res){
+        this.deleteEvent(id);
+      }
+    });
   }
 }

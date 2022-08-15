@@ -1,4 +1,4 @@
-import { Component, OnInit, Query, Type } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PetfinderService } from '../../petfinder-service/petfinder.service';
 import { take } from 'rxjs';
@@ -61,11 +61,12 @@ export class PetfinderFormComponent implements OnInit {
   }
 
   getBreeds() {
-    this.petfinder.getBreeds(this.types[this.selectedType]._links.breeds.href)
-      .subscribe(res => {
-        this.breeds = [];
-        res.breeds.forEach(x => this.breeds.push(x.name));
-      });
+    this.petfinder.getBreeds(this.types[this.selectedType]._links.breeds.href).pipe(
+      take(1)
+    ).subscribe(res => {
+      this.breeds = [];
+      res.breeds.forEach(x => this.breeds.push(x.name));
+    });
   }
 
   search() {

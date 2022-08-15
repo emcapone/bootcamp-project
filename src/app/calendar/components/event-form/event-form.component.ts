@@ -115,7 +115,6 @@ export class EventFormComponent implements OnDestroy {
   addEvent() {
     if (this.eventForm.valid) {
       let event: CalendarEvent = {
-        id: 10,
         allDay: (this.allDay?.value ? true : false),
         startTime: (this.allDay?.value ? null : this.startTime?.value),
         endTime: (this.allDay?.value ? null : this.endTime?.value),

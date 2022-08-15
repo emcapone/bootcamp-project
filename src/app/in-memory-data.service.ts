@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 import * as moment from 'moment';
-import { Pet } from './pet';
-import { User } from './user';
 
 @Injectable({
   providedIn: 'root'

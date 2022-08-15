@@ -17,7 +17,7 @@
       <button mat-mini-fab color="primary" matTooltip="Edit Event" (click)="this.editEvent(event)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-mini-fab color="warn" matTooltip="Delete Event" (click)="this.deleteEvent(event.id)">
+      <button mat-mini-fab color="warn" matTooltip="Delete Event" (click)="this.openDialog(event.id, event.name)">
         <mat-icon>close</mat-icon>
       </button>
     </mat-card-header>

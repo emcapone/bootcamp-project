@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Pet } from '../pet';
 import { PetFormComponent } from '../pet-form/pet-form.component';
 import { PetService } from '../pet.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';

@@ -46,8 +46,12 @@ export class CalendarContainerComponent implements OnInit, OnDestroy {
   }
 
   editEvent(value: CalendarEvent) {
-    this.eventId = value.id;
-    this.showForm = true;
+    if(value.id){
+      this.eventId = value.id;
+      this.showForm = true;
+    } else {
+      throw new Error('Event is missing an ID.')
+    }
   }
 
   newEvent() {

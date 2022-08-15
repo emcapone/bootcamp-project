@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,7 +14,7 @@ import { UserService } from '../user.service';
 
 class CrossFieldErrorMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    if (control?.dirty && form?.invalid) {
+    if (control?.dirty && form?.invalid && form?.dirty) {
       return true;
     }
     return false;
@@ -28,10 +28,14 @@ class CrossFieldErrorMatcher implements ErrorStateMatcher {
 })
 export class AccountProfileComponent implements OnInit {
 
+  @ViewChild('settingsFormDirective') settingsFormDirective!: FormGroupDirective;
+  @ViewChild('passwordFormDirective') passwordFormDirective!: FormGroupDirective;
+
   errorMatcher = new CrossFieldErrorMatcher();
   isLoading: boolean = true;
   userData!: User;
   settingsForm!: FormGroup;
+  passwordForm!: FormGroup;
   hideCurrent: boolean = true;
   hideNew: boolean = true;
   hideConfirm: boolean = true;
@@ -43,11 +47,11 @@ export class AccountProfileComponent implements OnInit {
       'birthday': new FormControl('', [Validators.required, BirthdayValidator]),
       'email': new FormControl('', [Validators.required, Validators.email]),
       'currentPassword': new FormControl('', [Validators.required]),
-      'changePassword': new FormGroup({
-        'newPassword': new FormControl('', [PasswordValidator]),
-        'confirmNewPassword': new FormControl()
-      }, { validators: PasswordMatchValidator })
     });
+    this.passwordForm = new FormGroup({
+      'newPassword': new FormControl('', [PasswordValidator]),
+      'confirmNewPassword': new FormControl()
+    }, { validators: PasswordMatchValidator });
   }
 
   ngOnInit(): void {
@@ -60,7 +64,6 @@ export class AccountProfileComponent implements OnInit {
       tap(user => this.userData = user)
     ).subscribe(_ => {
       this.fillData();
-      this.isLoading = false;
     });
   }
 
@@ -70,11 +73,10 @@ export class AccountProfileComponent implements OnInit {
       this.lastName?.setValue(this.userData?.lastName);
       this.birthday?.setValue(formatDate(this.userData?.birthday, 'yyyy-MM-dd', 'en-US'));
       this.email?.setValue(this.userData?.email);
+      this.isLoading = false;
     }
   }
-  get passwordGroup() {
-    return this.settingsForm.get('changePassword');
-  }
+
   get firstName() {
     return this.settingsForm.get('firstName');
   }
@@ -88,10 +90,10 @@ export class AccountProfileComponent implements OnInit {
     return this.settingsForm.get('email');
   }
   get newPassword() {
-    return this.settingsForm.get('changePassword')?.get('newPassword');
+    return this.passwordForm.get('newPassword');
   }
   get confirmNewPassword() {
-    return this.settingsForm.get('changePassword')?.get('confirmNewPassword');
+    return this.passwordForm.get('confirmNewPassword');
   }
   get currentPassword() {
     return this.settingsForm.get('currentPassword');
@@ -110,14 +112,15 @@ export class AccountProfileComponent implements OnInit {
     ).subscribe(res => {
       if (res) {
         this.reset();
+        this.fillData();
       }
     });
   }
 
   reset(): void {
-    this.settingsForm.reset();
-    this.fillData();
-    console.log(this.currentPassword);
+    this.settingsFormDirective.resetForm();
+    this.passwordFormDirective.resetForm();
+    this.isLoading = true;
   }
 
   onSubmit() {
@@ -139,8 +142,8 @@ export class AccountProfileComponent implements OnInit {
         this.userService.updateUser(user).pipe(
           take(1)
         ).subscribe(_ => {
-          this.getData();
           this.reset();
+          this.getData();
           this.snackbar.open('Changes Saved', 'Close', {
             duration: 3000,
             horizontalPosition: 'start',

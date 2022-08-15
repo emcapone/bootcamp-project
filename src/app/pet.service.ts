@@ -5,7 +5,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, mergeMap, shareReplay, tap } from 'rxjs/operators';
 
 import { Pet } from './pet';
-import { PETS } from './mock-pets';
 
 @Injectable({
   providedIn: 'root'

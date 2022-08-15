@@ -41,4 +41,5 @@ button {
 
 .password-group {
   border-top: 2px solid white;
+  align-items: flex-start;
 }

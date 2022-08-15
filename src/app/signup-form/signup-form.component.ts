@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BirthdayValidator } from '../shared/directives/birthday-validator.directive';
 import { PasswordMatchValidator } from '../shared/directives/password-match-validator.directive';
 import { PasswordValidator } from '../shared/directives/password-validator.directive';

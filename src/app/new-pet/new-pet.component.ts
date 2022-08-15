@@ -23,14 +23,14 @@ export class NewPetComponent implements OnInit {
   submit() {
     const pet = this.form.onSubmit();
     if (pet) {
-      pet.id = 5;
+      pet.id = undefined;
       this.petService.addPet(pet)
         .pipe(
           take(1)
         )
-        .subscribe(_ => {
+        .subscribe(res => {
           this.petService.refreshPets();
-          this.router.navigate(['view-pet', pet.id]);
+          this.router.navigate(['view-pet', res.id]);
         });
     }
     return false;

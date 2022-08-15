@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  petfinderApiKey: 'BMftsF57yG0s4ZSeDgOqp67N63b5KBZpWSJXOyx6MhTs7l4Ik8',
+  petfinderApiSecret: 'ykUUhf6okEPpaIGZBLB4BgsXXfkfQTQxL6iJzu4O',
+  petfinderBaseUrl: 'https://api.petfinder.com'
 };
 
 /*

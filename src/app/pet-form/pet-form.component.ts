@@ -175,6 +175,7 @@ export class PetFormComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.newPetForm.markAllAsTouched();
     if (this.newPetForm.invalid) { return false; }
 
     if (this.petPhotoFile) {

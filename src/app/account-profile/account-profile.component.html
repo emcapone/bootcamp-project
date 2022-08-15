@@ -1,5 +1,5 @@
 <h1>Account Settings</h1>
-<form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" autocomplete="off">
+<form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" #settingsFormDirective="ngForm" autocomplete="off">
   <div class="account-details">
     <mat-form-field appearance="fill">
       <mat-label>First Name</mat-label>
@@ -66,11 +66,11 @@
         Invalid email address
       </mat-error>
     </mat-form-field>
-    <div class="password-group" formGroupName="changePassword">
+    <form class="password-group" [formGroup]="passwordForm" #passwordFormDirective="ngForm">
       <h2>Change Password</h2>
       <mat-form-field appearance="fill">
         <mat-label>New Password</mat-label>
-        <input matInput formControlName="newPassword" [type]="hideNew ? 'password' : 'text'" >
+        <input matInput formControlName="newPassword" [type]="hideNew ? 'password' : 'text'" ondrop="return false;" onpaste="return false;">
 
         <mat-icon matSuffix (click)="hideNew = !hideNew">{{hideNew ? 'visibility_off' : 'visibility'}}</mat-icon>
 
@@ -81,22 +81,22 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Confirm Password</mat-label>
-        <input matInput formControlName="confirmNewPassword" [type]="hideConfirm ? 'password' : 'text'" [errorStateMatcher]="errorMatcher">
+        <input matInput formControlName="confirmNewPassword" [type]="hideConfirm ? 'password' : 'text'" [errorStateMatcher]="errorMatcher" ondrop="return false;" onpaste="return false;">
 
         <mat-icon matSuffix (click)="hideConfirm = !hideConfirm">{{hideConfirm ? 'visibility_off' : 'visibility'}}</mat-icon>
 
-        <mat-error *ngIf="this.passwordGroup?.hasError('passwordMatch')">
+        <mat-error *ngIf="this.passwordForm?.hasError('passwordMatch')">
           Passwords must match
         </mat-error>
       </mat-form-field>
-    </div>
+    </form>
 
   </div>
 
   <div class="save-group mat-elevation-z8">
     <mat-form-field appearance="fill">
       <mat-label>Current Password</mat-label>
-      <input matInput formControlName="currentPassword" [type]="hideCurrent ? 'password' : 'text'" required>
+      <input matInput formControlName="currentPassword" [type]="hideCurrent ? 'password' : 'text'" required ondrop="return false;" onpaste="return false;">
 
       <mat-icon matSuffix (click)="hideCurrent = !hideCurrent">{{hideCurrent ? 'visibility_off' : 'visibility'}}</mat-icon>
 
