@@ -1,8 +1,8 @@
 export interface Breeds {
-  breeds: Details[];
+  breeds: BreedDetails[];
 }
 
-interface Details {
+interface BreedDetails {
   name: string;
   _links: BreedLink;
 }

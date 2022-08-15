@@ -1,9 +1,13 @@
-export interface Pets {
-  animals: PetDetails[];
+export interface PetfinderPets {
+  animals: PetfinderPetDetails[];
   pagination: Pagination;
 }
 
-export interface PetDetails {
+export interface PetfinderPet {
+  animal: PetfinderPetDetails;
+}
+
+export interface PetfinderPetDetails {
   age: string;
   attributes: Attributes;
   breeds: Breeds;
@@ -20,11 +24,11 @@ export interface PetDetails {
   organization_id: string;
   photos: Photo[];
   primary_photo_cropped: Photo;
-  published_at: string;
+  published_at: Date;
   size: string;
   species: string;
   status: string;
-  status_changed_at: string;
+  status_changed_at: Date;
   tags: string[];
   type: string;
   url: string;

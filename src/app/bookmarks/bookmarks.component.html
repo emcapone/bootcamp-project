@@ -1,0 +1,22 @@
+<div class="header">
+  <h1>Bookmarks</h1>
+  <span class="spacer"></span>
+  <button *ngIf="!this.isLoading && this.pet" mat-raised-button color="warn" (click)="this.openDialog(this.pet.name)">Delete</button>
+</div>
+<div class="content-container" *ngIf="this.bookmarks && this.bookmarks.length === 0">
+  <h2>No bookmarks saved yet.</h2>
+</div>
+<div class="content-container" *ngIf="this.bookmarks && this.bookmarks.length > 0">
+  <div class="cards-container">
+    <mat-card [id]="bookmark.petfinder_id" *ngFor="let bookmark of obs | async" (click)="this.select(bookmark.id, bookmark.link)">
+      <mat-card-title>{{bookmark.title}}</mat-card-title>
+      <mat-card-subtitle>{{bookmark.note}}</mat-card-subtitle>
+      <mat-card-subtitle>Saved on {{formatDate(bookmark.savedAt)}}</mat-card-subtitle>
+    </mat-card>
+    <mat-paginator color="accent" [pageSize]="5"></mat-paginator>
+  </div>
+  <span class="spacer"></span>
+  <div *ngIf="!this.isLoading && this.pet">
+    <app-petfinder-pet [pet]="this.pet"></app-petfinder-pet>
+  </div>
+</div>

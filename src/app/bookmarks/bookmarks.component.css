@@ -1,0 +1,54 @@
+.content-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.cards-container {
+  min-width: 350px;
+  max-width: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.header {
+  display: flex;
+  direction: row;
+  align-items: center;
+  text-align: center;
+}
+
+mat-paginator {
+  width: 100%;
+}
+
+mat-card {
+  width: 100%;
+  text-align: start;
+  align-self: flex-start;
+}
+
+mat-card:hover {
+  background-color: #3D3D3D;
+}
+
+mat-card:active {
+  background-color: #333333;
+}
+
+.active {
+  border: 1px solid white;
+}
+
+mat-card-title {
+  margin-bottom: 10px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PetfinderService } from '../../petfinder-service/petfinder.service';
 import { take } from 'rxjs';
-import { Parameters, Pets, Details } from '../../petfinder-service/models';
+import { Parameters, PetfinderPets, TypesDetails } from '../../petfinder-service/models';
 import { PostalCodeValidator } from 'src/app/shared/directives/postal-code-validator.directive';
 
 @Component({
@@ -12,10 +12,10 @@ import { PostalCodeValidator } from 'src/app/shared/directives/postal-code-valid
 })
 export class PetfinderFormComponent implements OnInit {
 
-  types!: Details[];
+  types!: TypesDetails[];
   breeds: string[] = [];
 
-  pets!: Pets | undefined;
+  pets!: PetfinderPets | undefined;
   currentPage: number = 1;
   totalPages: number = 0;
   nextPageLink: string = '';

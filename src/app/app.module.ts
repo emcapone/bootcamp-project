@@ -27,6 +27,7 @@ import { EventFormComponent } from './calendar/components/event-form/event-form.
 import { ViewEventComponent } from './calendar/components/view-event/view-event.component';
 import { PetfinderFormComponent } from './petfinder/components/petfinder-form/petfinder-form.component';
 import { PetfinderPetComponent } from './petfinder/components/petfinder-pet/petfinder-pet.component';
+import { BookmarksComponent } from './bookmarks/bookmarks.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { PetfinderPetComponent } from './petfinder/components/petfinder-pet/petf
     LoginFormComponent,
     SignupFormComponent,
     PetfinderFormComponent,
-    PetfinderPetComponent
+    PetfinderPetComponent,
+    BookmarksComponent
   ],
   imports: [
     BrowserModule,

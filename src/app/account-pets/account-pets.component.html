@@ -2,7 +2,6 @@
   <h1>My Pets</h1>
   <span class="spacer"></span>
   <button class="header-button" mat-raised-button color="accent" routerLink='/new-pet'>New Pet</button>
-  <button class="header-button" mat-raised-button color="accent" routerLink="">Add Event</button>
 </div>
 <div class="card-container" *ngIf="pets$ | async as pets">
   <mat-card *ngFor="let pet of pets">
