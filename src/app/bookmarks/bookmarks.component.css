@@ -1,13 +1,14 @@
 .content-container {
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: center;
   gap: 10px;
+  align-items: flex-start;
 }
 
 .cards-container {
+  width: 400px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -18,28 +19,33 @@
   display: flex;
   direction: row;
   align-items: center;
+  text-align: center;
 }
 
-mat-card {
-  text-align: start;
+mat-paginator {
   width: 100%;
 }
 
-::ng-deep .mat-card-header-text {
-  margin-left: 0;
+mat-card {
+  width: 100%;
+  text-align: start;
+  align-self: flex-start;
+}
+
+mat-card:hover {
+  background-color: #3D3D3D;
+}
+
+mat-card:active {
+  background-color: #333333;
+}
+
+.active {
+  border: 1px solid white;
 }
 
 mat-card-title {
-  margin-bottom: 20px;
-}
-
-.pet-preview {
-  display: flex;
-  justify-content: center;
-}
-
-button, a {
-  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .spacer {

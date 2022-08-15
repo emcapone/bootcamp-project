@@ -40,13 +40,13 @@ export class BookmarkService {
 
   constructor(private http: HttpClient) { }
 
+/**
+* Errors must be handled by subscriber.
+* @param bookmark - new Bookmark to POST
+*/
   addBookmark(bookmark: Bookmark) {
     return this.http.post<Bookmark>(this.url, bookmark, this.httpOptions).pipe(
-      tap((res: Bookmark) => console.log(`added bookmark w/ id=${res.id}`)),
-      catchError(err => {
-        console.log(err);
-        return of();
-      })
+      tap((res: Bookmark) => console.log(`added bookmark w/ id=${res.id}`))
     );
   }
 

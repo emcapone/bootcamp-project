@@ -4,7 +4,6 @@ import { BookmarkService } from 'src/app/bookmark.service';
 import { PetfinderPetDetails } from '../../petfinder-service/models';
 import { catchError, EMPTY, take } from 'rxjs';
 import { formatDate } from '@angular/common';
-import { PetfinderService } from '../../petfinder-service/petfinder.service';
 
 @Component({
   selector: 'app-petfinder-pet',
@@ -14,25 +13,11 @@ import { PetfinderService } from '../../petfinder-service/petfinder.service';
 export class PetfinderPetComponent implements OnInit {
 
   @Input() pet!: PetfinderPetDetails;
-  @Input() link!: string;
   duplicate = false;
 
-  constructor(private save: BookmarkService, private petfinder: PetfinderService) { }
+  constructor(private save: BookmarkService) { }
 
   ngOnInit(): void {
-    if(this.link){
-      this.petfinder.getPet(this.link).pipe(
-        take(1)
-      ).subscribe(res => {
-        this.pet = res.animal;
-        this.checkDuplicate();
-      })
-    } else {
-      this.checkDuplicate();
-    }
-  }
-
-  checkDuplicate() {
     this.save.checkDuplicate(this.pet.id);
     this.save.duplicate$.pipe(
       take(1)
@@ -82,6 +67,7 @@ export class PetfinderPetComponent implements OnInit {
   }
 
   bookmark() {
+    this.duplicate = true;
     let x: Bookmark = {
       link: this.pet._links.self.href,
       petfinder_id: this.pet.id,
@@ -91,11 +77,14 @@ export class PetfinderPetComponent implements OnInit {
       external_url: this.pet.url
     };
     this.save.addBookmark(x).pipe(
-      take(1)
-    ).subscribe(res => {
-      console.log(res);
+      take(1),
+      catchError(err => {
+        console.log(err);
+        this.duplicate = false;
+        return EMPTY;
+      })
+    ).subscribe(_ => {
       this.save.refreshBookmarks();
-      this.duplicate = true;
     });
   }
 }

@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@ang
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { map, Observable, Subscription, take } from 'rxjs';
+import { catchError, map, Observable, of, Subscription, take } from 'rxjs';
 import { Bookmark } from '../bookmark';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { PetfinderPetDetails } from '../petfinder/petfinder-service/models';
@@ -19,7 +19,9 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 
   bookmarkSubscription!: Subscription;
   bookmarks!: Bookmark[];
-  pet$!: Observable<PetfinderPetDetails>;
+  pet!: PetfinderPetDetails;
+  selectedBookmark!: number | null;
+  isLoading: boolean = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   obs!: Observable<any>;
@@ -28,7 +30,13 @@ export class BookmarksComponent implements OnInit, OnDestroy {
   constructor(private bookmark: BookmarkService, private petfinder: PetfinderService, private changeDetectorRef: ChangeDetectorRef, private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.getBookmarks();
+    this.bookmarkSubscription = this.bookmark.bookmarks$.subscribe(res => {
+      this.bookmarks = res;
+      this.dataSource = new MatTableDataSource<Bookmark>(this.bookmarks);
+      this.changeDetectorRef.detectChanges();
+      this.dataSource.paginator = this.paginator;
+      this.obs = this.dataSource.connect();
+    });
   }
 
   ngOnDestroy() {
@@ -42,34 +50,21 @@ export class BookmarksComponent implements OnInit, OnDestroy {
     return formatDate(date, 'M/d/yy, h:mm a', 'en-US');
   }
 
-  getBookmarks() {
-    this.bookmarkSubscription = this.bookmark.bookmarks$.subscribe(res => {
-      this.bookmarks = res;
-      this.dataSource = new MatTableDataSource<Bookmark>(this.bookmarks);
-      this.changeDetectorRef.detectChanges();
-      this.dataSource.paginator = this.paginator;
-      this.obs = this.dataSource.connect();
-    });
-  }
-
-  getPet(link: string): Observable<PetfinderPetDetails> {
-    return this.petfinder.getPet(link).pipe(
-      map(res => res.animal),
-      take(1)
-    )
-  }
-
-  deleteBookmark(id: number | undefined) {
-    if (id) {
-      this.bookmark.deleteBookmark(id).pipe(
+  deleteBookmark() {
+    if (this.selectedBookmark) {
+      this.bookmark.deleteBookmark(this.selectedBookmark).pipe(
         take(1)
-      ).subscribe(_ => this.bookmark.refreshBookmarks());
+      ).subscribe(_ => {
+        this.isLoading = true;
+        this.selectedBookmark = null;
+        this.bookmark.refreshBookmarks();
+      });
     } else {
       throw new Error('Bookmark is missing an ID.');
     }
   }
 
-  openDialog(id: number | undefined, name: string) {
+  openDialog(name: string) {
     let dialog = this.dialog.open(ConfirmDialogComponent, {
       width: '50%',
       data: {
@@ -81,9 +76,23 @@ export class BookmarksComponent implements OnInit, OnDestroy {
       take(1)
     ).subscribe(res => {
       if (res) {
-        this.deleteBookmark(id);
+        this.deleteBookmark();
       }
     });
   }
 
+  select(id: number, link: string) {
+    this.selectedBookmark = id;
+    this.petfinder.getPet(link).pipe(
+      take(1),
+      catchError(err => {
+        console.log(err);
+        return of();
+      })
+    ).subscribe(res => {
+      this.pet = res.animal;
+      document.getElementById(res.animal.id.toString())?.classList.add('active');
+      this.isLoading = false;
+    });
+  }
 }
