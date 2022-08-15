@@ -15,6 +15,7 @@
     </mat-card>
     <mat-paginator color="accent" [pageSize]="5"></mat-paginator>
   </div>
+  <span class="spacer"></span>
   <div *ngIf="!this.isLoading && this.pet">
     <app-petfinder-pet [pet]="this.pet"></app-petfinder-pet>
   </div>
