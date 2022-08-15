@@ -3,15 +3,16 @@ import { Observable, take, of, tap, Subject, combineLatest, throwError, Behavior
 import { catchError, map } from 'rxjs/operators';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Token, Types, Breeds, Parameters, PetfinderPets, PetfinderPet } from './models';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PetfinderService implements OnDestroy {
 
-  private apiKey = 'BMftsF57yG0s4ZSeDgOqp67N63b5KBZpWSJXOyx6MhTs7l4Ik8';
-  private apiSecret = 'ykUUhf6okEPpaIGZBLB4BgsXXfkfQTQxL6iJzu4O';
-  private baseUrl = 'https://api.petfinder.com'
+  private baseUrl = environment.petfinderBaseUrl;
+  private apiKey = environment.petfinderApiKey;
+  private apiSecret = environment.petfinderApiSecret;
 
   private tokenHeader = {
     headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
