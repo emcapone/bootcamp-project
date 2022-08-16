@@ -1,4 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { SignupFormComponent } from './signup-form.component';
 
@@ -8,9 +14,17 @@ describe('SignupFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SignupFormComponent ]
+      imports: [
+        MatFormFieldModule,
+        MatInputModule,
+        NoopAnimationsModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        ReactiveFormsModule
+      ],
+      declarations: [SignupFormComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(SignupFormComponent);
     component = fixture.componentInstance;
