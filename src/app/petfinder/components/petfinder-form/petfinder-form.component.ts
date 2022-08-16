@@ -147,8 +147,8 @@ export class PetfinderFormComponent implements OnInit {
   }
 
   replaceChars(str: string | null): string {
-    if (str === null) {
-      return '';
+    if (!str) {
+      return "";
     }
     while (str.includes(' & ')) {
       str = str.replace(' & ', '-');
