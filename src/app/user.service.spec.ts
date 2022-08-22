@@ -1,5 +1,5 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed } from '@angular/core/testing';
 import { catchError, Observable, of, throwError } from 'rxjs';
 import { User } from './user';
 import { UserService } from './user.service';
@@ -39,12 +39,11 @@ describe('AccountService', () => {
 
     expect(req.request.method).toBe('GET');
     httpTestingController.verify();
+  });
 
-  })
-
-  it('should call put with the correct User', () => {
+  it('should call put with the correct User', fakeAsync(() => {
     service.updateUser(exampleUser).subscribe(res => {
-      expect(res.id).toEqual(exampleUser.id);
+      expect(res).toEqual(exampleUser);
     });
 
     const req = httpTestingController.expectOne('api/users');
@@ -52,6 +51,17 @@ describe('AccountService', () => {
     req.flush(exampleUser);
 
     httpTestingController.verify();
-  })
+  }));
+
+  it('should enter private handleError function on error', fakeAsync(() => {
+    spyOn(console, 'error');
+    service.getUser(2).subscribe();
+
+    const req = httpTestingController.expectOne('api/users/2');
+    req.flush('404 error', { status: 404, statusText: 'Not Found' });
+
+    httpTestingController.verify();
+    expect(console.error).toHaveBeenCalled();
+  }));
 
 });

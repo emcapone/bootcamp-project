@@ -17,26 +17,9 @@ describe('TimeFormatPipe', () => {
 
   });
 
-  it('should throw an error if time has only letters for hours and/or minutes', () => {
+  it('should throw an error if input is not in 24-hour format', () => {
 
-    expect(() => { pipe.transform('as:fg') }).toThrow(new Error('Hours and minutes must not be letters.'));
-
-  });
-
-  it('should throw an error if the string is not in time format (00:00)', () => {
-
-    expect(() => { pipe.transform('1245') }).toThrow(new Error('Time must be in 24-hr format: 00:00'));
-
-  });
-
-  it('should throw an error if minutes is not 0-59', () => {
-
-    expect(() => { pipe.transform('12:78') }).toThrow(new Error('Minutes must be 0-59.'));
-
-  });
-  it('should throw an error if hours is not 0-23', () => {
-
-    expect(() => { pipe.transform('25:30') }).toThrow(new Error('Hours must be 0-23.'));
+    expect(() => { pipe.transform('a1:25') }).toThrow(new Error('Time must be in 24-hr format: 00:00 - 23:59'));
 
   });
 
