@@ -24,7 +24,7 @@ export class PetFormComponent implements OnInit {
   petPhotoLink: string = "/assets/default.png";
   petPhotoFile: File | null | undefined;
 
-  constructor(private fileUploadService: FileUploadService, private fb: FormBuilder, private route: ActivatedRoute, private petService: PetService, private location: Location) {
+  constructor(private fileUploadService: FileUploadService, private fb: FormBuilder, private location: Location) {
     this.submitted = false;
     this.newPetForm = this.fb.group({
       name: ['', Validators.required],

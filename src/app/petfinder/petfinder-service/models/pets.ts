@@ -32,7 +32,7 @@ export interface PetfinderPetDetails {
   tags: string[];
   type: string;
   url: string;
-  video: Video;
+  videos: Video[];
   _links: DetailsLink;
 }
 
@@ -42,6 +42,7 @@ interface Address {
   city: string;
   postcode: string;
   state: string;
+  country: string;
 }
 
 interface Attributes {
