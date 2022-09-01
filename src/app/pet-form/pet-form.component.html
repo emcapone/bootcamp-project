@@ -74,24 +74,10 @@
         <mat-checkbox formControlName="fixed" id="fixed">Spayed/Neutered?</mat-checkbox>
       </p>
       <p class="form-field">
-        <mat-label>Vet Records </mat-label>
-        <button type="button" mat-mini-fab color="primary" (click)="vetRecords.click()">
-          <mat-icon *ngIf="!this.vetRecordsFile">attach_file</mat-icon>
-          <mat-icon *ngIf="this.vetRecordsFile">check_circle</mat-icon>
-        </button>
-        <mat-label class="file-label" *ngIf="this.vetRecordsFile">{{this.vetRecordsFile.name}}</mat-label>
-        <input (change)="onChangeVetRecords($event)" hidden formControlName="vetRecords" #vetRecords type="file"
-          accept=".pdf">
+        <app-file-upload label="Vet Records" [currentFile]="this.vetRecordsLink?.dbPath" (onUploadFinished)="this.setVetRecords($event)"></app-file-upload>
       </p>
-      <p>
-        <mat-label>Pet Photo</mat-label>
-        <button type="button" mat-mini-fab color="primary" (click)="petPhoto.click()">
-          <mat-icon *ngIf="!this.petPhotoFile">attach_file</mat-icon>
-          <mat-icon *ngIf="this.petPhotoFile">check_circle</mat-icon>
-        </button>
-        <mat-label class="file-label" *ngIf="this.petPhotoFile">{{this.petPhotoFile.name}}</mat-label>
-        <input (change)="onChangePetPhoto($event)" hidden formControlName="petPhoto" #petPhoto type="file"
-          accept="image/*">
+      <p class="form-field">
+        <app-file-upload label="Pet Photo" [currentFile]="this.petPhotoLink?.dbPath" (onUploadFinished)="this.setPetPhoto($event)"></app-file-upload>
       </p>
     </div>
     <h3 class="title-group">Prescriptions</h3>
