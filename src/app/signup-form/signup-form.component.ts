@@ -9,7 +9,7 @@ import { PasswordValidator } from '../shared/directives/password-validator.direc
   templateUrl: './signup-form.component.html',
   styleUrls: ['./signup-form.component.css']
 })
-export class SignupFormComponent implements OnInit {
+export class SignupFormComponent {
 
   signupForm!: FormGroup;
   password!: FormGroup;
@@ -31,8 +31,6 @@ export class SignupFormComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
   get passwordGroup() {
     return this.signupForm.get('password') as FormGroup;
   }

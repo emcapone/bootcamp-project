@@ -39,7 +39,7 @@ export class EventFormComponent implements OnDestroy {
     this.fillForm();
   }
 
-  @Output() complete: EventEmitter<any> = new EventEmitter();
+  @Output() saved: EventEmitter<any> = new EventEmitter();
 
   fillForm(): void {
     this.event$.pipe(
@@ -71,7 +71,7 @@ export class EventFormComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.complete.complete();
+    this.saved.complete();
   }
 
   get date() {
@@ -128,24 +128,24 @@ export class EventFormComponent implements OnDestroy {
           take(1),
           catchError(err => {
             console.log(err);
-            this.complete.emit(false);
+            this.saved.emit(false);
             return of();
           })
         ).subscribe(_ => {
           this.calendarService.refreshEvents();
-          this.complete.emit(true);
+          this.saved.emit(true);
         });
       } else {
         this.calendarService.addCalendarEvent(event).pipe(
           take(1),
           catchError(err => {
             console.log(err);
-            this.complete.emit(false);
+            this.saved.emit(false);
             return of();
           })
         ).subscribe(_ => {
           this.calendarService.refreshEvents();
-          this.complete.emit(true);
+          this.saved.emit(true);
         });
       }
     } else if (this.eventForm.invalid) {

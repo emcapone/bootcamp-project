@@ -12,13 +12,10 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
   templateUrl: './new-pet.component.html',
   styleUrls: ['./new-pet.component.css']
 })
-export class NewPetComponent implements OnInit {
+export class NewPetComponent {
   @ViewChild(PetFormComponent) form!: PetFormComponent;
 
   constructor(private dialog: MatDialog, private petService: PetService, private router: Router) { }
-
-  ngOnInit(): void {
-  }
 
   submit() {
     const pet = this.form.onSubmit();
