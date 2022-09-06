@@ -1,3 +1,3 @@
 export interface FileLink {
-  dbPath: '';
+  dbPath: string | undefined;
 }

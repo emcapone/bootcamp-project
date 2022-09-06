@@ -1,20 +1,18 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, map, mergeMap, shareReplay, tap } from 'rxjs/operators';
 
 import { Pet } from './pet';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PetService {
 
-  private petsUrl = 'api/pets';
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
+  private petsUrl = environment.apiUrl + '/Pets';
 
   private _petsData$ = new BehaviorSubject<void>(undefined);
   apiRequest$ = this.http.get<Pet[]>(this.petsUrl)
@@ -55,7 +53,7 @@ export class PetService {
 
   /** PUT */
   updatePet(pet: Pet): Observable<any> {
-    return this.http.put(this.petsUrl, pet, this.httpOptions).pipe(
+    return this.http.put(`${this.petsUrl}/${pet.id}`, pet).pipe(
       tap(_ => console.log(`updated pet id=${pet.id}`)),
       catchError(this.handleError<any>('updatePet'))
     );
@@ -63,7 +61,7 @@ export class PetService {
 
   /** POST */
   addPet(pet: Pet): Observable<Pet> {
-    return this.http.post<Pet>(this.petsUrl, pet, this.httpOptions).pipe(
+    return this.http.post<Pet>(this.petsUrl, pet).pipe(
       tap((newPet: Pet) => console.log(`added pet w/ id=${newPet.id}`)),
       catchError(this.handleError<Pet>('addPet'))
     );
@@ -73,7 +71,7 @@ export class PetService {
   deletePet(id: number): Observable<Pet> {
     const url = `${this.petsUrl}/${id}`;
 
-    return this.http.delete<Pet>(url, this.httpOptions).pipe(
+    return this.http.delete<Pet>(url).pipe(
       tap(_ => console.log(`deleted pet id=${id}`)),
       catchError(this.handleError<Pet>('deletePet'))
     );

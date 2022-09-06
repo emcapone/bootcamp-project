@@ -5,6 +5,7 @@ import { take } from 'rxjs';
 
 import { PetService } from '../pet.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-view-pet',
@@ -13,6 +14,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 })
 export class ViewPetComponent implements OnInit {
 
+  apiUrl = environment.apiUrl + '/';
   pet$ = this.petService.pet$;
   displayVetRecords: boolean = false;
 

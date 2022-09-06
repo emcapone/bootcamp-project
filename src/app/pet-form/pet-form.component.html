@@ -74,10 +74,12 @@
         <mat-checkbox formControlName="fixed" id="fixed">Spayed/Neutered?</mat-checkbox>
       </p>
       <p class="form-field">
-        <app-file-upload label="Vet Records" [currentFile]="this.vetRecordsLink?.dbPath" (onUploadFinished)="this.setVetRecords($event)"></app-file-upload>
+        <app-file-upload #vet [currentFile]="this.vetRecordsLink?.dbPath" label="Vet Records"
+          (upload)="this.setVetRecords($event)" [petId]="this.pet?.id"></app-file-upload>
       </p>
       <p class="form-field">
-        <app-file-upload label="Pet Photo" [currentFile]="this.petPhotoLink?.dbPath" (onUploadFinished)="this.setPetPhoto($event)"></app-file-upload>
+        <app-file-upload #photo [currentFile]="this.petPhotoLink?.dbPath" label="Pet Photo"
+          (upload)="this.setPetPhoto($event)" [petId]="this.pet?.id"></app-file-upload>
       </p>
     </div>
     <h3 class="title-group">Prescriptions</h3>
@@ -124,8 +126,8 @@
       </div>
     </div>
     <h3 class="title-group">Vaccinations</h3>
-    <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new vaccine" class="title-group"
-      (click)="addVaccine()" type="button">
+    <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new vaccine"
+      class="title-group" (click)="addVaccine()" type="button">
       <mat-icon>add_icon</mat-icon>
     </button>
     <div formArrayName="vaccines" class="form-group">

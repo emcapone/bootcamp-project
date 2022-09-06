@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { catchError, EMPTY } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 import { PetService } from '../pet.service';
 
@@ -9,6 +10,8 @@ import { PetService } from '../pet.service';
   styleUrls: ['./account-pets.component.css']
 })
 export class AccountPetsComponent {
+
+  apiUrl = environment.apiUrl + '/';
 
   pets$ = this.petService.pets$
     .pipe(

@@ -1,12 +1,9 @@
 <div class="upload-field">
   <mat-label>{{this.label}}</mat-label>
-  <button type="button" mat-mini-fab color="primary" (click)="input.click()" *ngIf="!this.isLoading">
+  <button type="button" mat-mini-fab color="primary" (click)="input.click()">
     <mat-icon *ngIf="!this.currentFile">attach_file</mat-icon>
     <mat-icon *ngIf="this.currentFile">check_circle</mat-icon>
   </button>
-  <mat-progress-spinner color="accent" diameter="40" [mode]="this.determinate ? 'determinate' : 'indeterminate'"
-    [value]="this.progress" *ngIf="this.isLoading">
-  </mat-progress-spinner>
   <mat-label class="file-label" *ngIf="this.currentFile">{{removePath(this.currentFile)}}</mat-label>
   <input (change)="this.uploadFile($event)" hidden #input type="file" accept=".pdf, image/*">
 </div>

@@ -1,6 +1,7 @@
-import { HttpClient, HttpEventType } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { take } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { catchError, Observable, of } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { FileLink } from './file-upload-response';
 
 @Component({
@@ -8,19 +9,23 @@ import { FileLink } from './file-upload-response';
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.css']
 })
-export class FileUploadComponent implements OnInit {
-  message!: string;
-  progress!: number;
-  determinate: boolean = true;
+export class FileUploadComponent {
+  apiUrl: string = environment.apiUrl;
   isLoading: boolean = false;
+  formData: FormData | undefined;
+
+  private _petId: number | undefined;
+  get petId(): number | undefined {
+    return this._petId;
+  }
+  @Input() set petId(id: number | undefined){
+    this._petId = id;
+  }
   @Input() label: string = "";
   @Input() currentFile: string | undefined;
-  @Output() onUploadFinished = new EventEmitter();
+  @Output() upload = new EventEmitter<Observable<FileLink>>();
 
   constructor(private http: HttpClient) { }
-
-  ngOnInit(): void {
-  }
 
   removePath(str: string): string {
     return str.substring(str.lastIndexOf("\\") + 1, str.length);
@@ -33,35 +38,27 @@ export class FileUploadComponent implements OnInit {
       return;
     }
 
-    let fileToUpload = <File>files[0]
-    this.currentFile = fileToUpload.name;
-    console.log(fileToUpload.name);
-    const formData = new FormData();
-    formData.append('file', fileToUpload, fileToUpload.name);
+    let fileToUpload = <File>files[0];
+    this.currentFile = files[0].name;
+    this.formData = new FormData();
+    this.formData.append('file', fileToUpload, fileToUpload.name);
 
-    let user_id = 1;
-    let folder_name = this.label;
-    this.http.post<FileLink>(`https://localhost:7007/FileUpload/${user_id}/${folder_name}`, formData,
-    {
-      reportProgress: true,
-      observe: 'events'
-    })
+    this.upload.emit(this.createObservable() as Observable<FileLink>);
+  }
+
+  createObservable(): Observable<FileLink | undefined> {
+    let user_id = 1; //replace after authentication
+    let obs = this.http.post<FileLink>(`${this.apiUrl}/FileUpload/${user_id}/${this.petId}/${this.label}`, this.formData)
     .pipe(
-      take(1)
-    ).subscribe(event => {
-      if(event.type === HttpEventType.UploadProgress){
-        this.isLoading = true;
-        if(event.total){
-          this.progress = Math.round(100 * event.loaded / event.total);
-        } else {
-          this.determinate = false;
-        }
-      } else if (event.type === HttpEventType.Response){
-        this.message = 'Upload Success';
-        this.isLoading = false;
-        this.onUploadFinished.emit(event.body);
-      }
-    });
+      catchError(err => {
+        console.log(err);
+        return of(undefined);
+      })
+    );
+    if(this.formData){
+      return obs;
+    }
+    return of(undefined);
   }
 
 }

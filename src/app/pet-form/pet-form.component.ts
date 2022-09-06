@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Location, formatDate } from '@angular/common';
 
 import { FileLink } from '../file-upload/file-upload-response';
 import { Pet, Vaccine, Prescription, Condition } from '../pet';
+import { Observable, of } from 'rxjs';
+import { FileUploadComponent } from '../file-upload/file-upload.component';
 
 @Component({
   selector: 'app-pet-form',
@@ -13,16 +15,19 @@ import { Pet, Vaccine, Prescription, Condition } from '../pet';
 export class PetFormComponent implements OnInit {
   @Input() pet: Pet | null | undefined;
 
-  newPetForm!: FormGroup;
-  submitted: boolean;
+  @ViewChild('vet') vetRecordComponent!: FileUploadComponent;
+  @ViewChild('photo') petPhotoComponent!: FileUploadComponent;
 
+  newPetForm!: FormGroup;
+  submitted: boolean = false;
+  uploadFiles: boolean = false;
+
+  vetRecordsObs: Observable<FileLink> = of();
+  petPhotoObs: Observable<FileLink> = of();;
   vetRecordsLink!: FileLink | undefined;
   petPhotoLink!: FileLink | undefined;
 
   constructor(private fb: FormBuilder, private location: Location) {
-    this.submitted = false;
-    this.vetRecordsLink = this.pet?.vetRecords;
-    this.petPhotoLink = this.pet?.petPhoto;
     this.newPetForm = this.fb.group({
       name: ['', Validators.required],
       breed: ['', Validators.required],
@@ -43,15 +48,17 @@ export class PetFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.pet) {
       this.setFormValues(this.pet);
+      this.vetRecordsLink = this.pet?.vetRecords;
+      this.petPhotoLink = this.pet?.petPhoto;
     }
   }
 
-  setPetPhoto(event: FileLink) {
-    this.petPhotoLink = event;
+  setPetPhoto(obs: Observable<FileLink>) {
+    this.petPhotoObs = obs;
   }
 
-  setVetRecords(event: FileLink) {
-    this.vetRecordsLink = event;
+  setVetRecords(obs: Observable<FileLink>) {
+    this.vetRecordsObs = obs;
   }
 
   setFormValues(pet: Pet): void {
@@ -171,10 +178,6 @@ export class PetFormComponent implements OnInit {
     this.submitted = true;
     this.newPetForm.markAllAsTouched();
     if (this.newPetForm.invalid) { return false; }
-
-    //save pet Photo DB Link
-    // save vet records DB Link
-
     let formValues = this.newPetForm.value;
     let prescriptions: Prescription[] = [];
     let index = 0;
@@ -214,10 +217,10 @@ export class PetFormComponent implements OnInit {
       description: formValues.description,
       microchip: formValues.microchip,
       sex: formValues.sex,
-      fixed: formValues.fixed,
+      fixed: formValues.fixed ? true : false,
       weight: formValues.weight,
-      birthday: formValues.birthday,
-      adoptionDay: formValues.adoptionDay,
+      birthday: formValues.birthday ? formValues.birthday : undefined,
+      adoptionDay: formValues.adoptionDay ? formValues.adoptionDay : undefined,
       vetRecords: this.vetRecordsLink,
       petPhoto: this.petPhotoLink,
       prescriptions: prescriptions,
