@@ -15,10 +15,10 @@ describe('InMemoryDataService', () => {
   });
 
   describe('createDb', () => {
-    it('should return an object of four arrays', () => {
+    it('should return an object of two arrays', () => {
       const database = service.createDb();
 
-      expect(Object.keys(database).length).toEqual(4);
+      expect(Object.keys(database).length).toEqual(2);
     });
   });
   describe('genId', () => {
