@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Bookmark } from 'src/app/bookmark';
 import { BookmarkService } from 'src/app/bookmark.service';
 import { PetfinderPetDetails } from '../../petfinder-service/models';
-import { catchError, EMPTY, take } from 'rxjs';
+import { catchError, EMPTY, Subscription, take, tap } from 'rxjs';
 import { formatDate } from '@angular/common';
 
 @Component({
@@ -10,16 +10,24 @@ import { formatDate } from '@angular/common';
   templateUrl: './petfinder-pet.component.html',
   styleUrls: ['./petfinder-pet.component.css']
 })
-export class PetfinderPetComponent implements OnInit {
+export class PetfinderPetComponent{
 
-  @Input() pet!: PetfinderPetDetails;
-  duplicate = false;
+  sub!: Subscription;
+  _pet!: PetfinderPetDetails;
+  get pet(): PetfinderPetDetails {
+    return this._pet;
+  }
+  @Input() set pet(p: PetfinderPetDetails) {
+    this._pet = p;
+    this.save.checkDuplicate(this._pet.id);
+    this.checkDuplicate();
+  }
+  duplicate = true;
 
   constructor(private save: BookmarkService) { }
 
-  ngOnInit(): void {
-    this.save.checkDuplicate(this.pet.id);
-    this.save.duplicate$.pipe(
+  checkDuplicate(): void {
+    this.sub = this.save.duplicate$.pipe(
       take(1)
     ).subscribe(res => this.duplicate = res);
   }

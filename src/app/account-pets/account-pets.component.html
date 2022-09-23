@@ -8,13 +8,14 @@
     <mat-card-title-group>
       <mat-card-title>{{pet.name}}</mat-card-title>
       <mat-card-subtitle>{{pet.sex}} {{pet.breed}}</mat-card-subtitle>
-      <img mat-card-lg-image *ngIf="pet.petPhoto" [src]="this.apiUrl + pet.petPhoto.dbPath">
-      <img mat-card-lg-image *ngIf="!pet.petPhoto" src="../../assets/default.png">
+      <img mat-card-lg-image *ngIf="pet.petPhoto && pet.petPhoto.dbPath" [src]="this.apiUrl + pet.petPhoto.dbPath">
+      <img mat-card-lg-image *ngIf="!pet.petPhoto || !pet.petPhoto.dbPath" src="../../assets/default.png">
     </mat-card-title-group>
     <mat-card-content>
       <p *ngIf="pet.birthday">Birthday: {{pet.birthday | date:'mediumDate'}}</p>
       <p *ngIf="pet.adoptionDay">Adoption Day: {{pet.adoptionDay | date:'mediumDate'}}</p>
       <p *ngIf="pet.microchip">Microchip: {{pet.microchip}}</p>
+      <p>
     </mat-card-content>
     <mat-card-actions align="end">
       <button mat-stroked-button color="accent" routerLink="/view-pet/{{pet.id}}">VIEW</button>

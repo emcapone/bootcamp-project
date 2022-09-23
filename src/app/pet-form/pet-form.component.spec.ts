@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FileUploadService } from '../file-upload.service';
 import { Location } from '@angular/common';
 
 import { PetFormComponent } from './pet-form.component';
@@ -45,7 +44,6 @@ describe('PetFormComponent', () => {
         MatIconModule
       ],
       providers: [
-        { provide: FileUploadService, useValue: mockFileUploadService },
         { provide: Location, useValue: mockLocation },
         { provide: FormBuilder, useValue: mockFormBuilder }
       ],

@@ -1,29 +1,32 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, ReplaySubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, mergeMap, shareReplay, tap } from 'rxjs/operators';
+import { catchError, concatMap, filter, map, mergeMap, shareReplay, tap } from 'rxjs/operators';
 
 import { Pet } from './pet';
 import { environment } from 'src/environments/environment';
+import { PetListItem } from './pet-list-item';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PetService {
 
-  private petsUrl = environment.apiUrl + '/Pets';
+  private apiUrl = environment.apiUrl
+  private petsUrl = this.apiUrl + '/api/v1/Pets';
+  private user_id = 1; //replace after auth;
 
   private _petsData$ = new BehaviorSubject<void>(undefined);
-  apiRequest$ = this.http.get<Pet[]>(this.petsUrl)
+  apiRequestListItem$ = this.http.get<PetListItem[]>(this.petsUrl + `/GetAll/${this.user_id}`)
     .pipe(
-      tap(pets => {
-        console.log('fetched ' + pets.length + ' pets');
+      tap(_ => {
+        console.log('fetched pet list items');
       })
     );
 
   pets$ = this._petsData$.pipe(
-    mergeMap(() => this.apiRequest$),
+    mergeMap(() => this.apiRequestListItem$),
     shareReplay(1)
   );
 
@@ -34,17 +37,27 @@ export class PetService {
     this.pets$,
     this.selectedPet$
   ]).pipe(
+    filter(([pets, id]) => id !== 0 || id !== null),
     map(([pets, id]) =>
-      pets.find(pet => pet.id === id)
+      pets.find(pet => pet.id === id)?.link || null
     ),
-    tap(pet => console.log('selected pet', pet?.id)),
-    catchError(this.handleError<Pet>('getPet'))
+    filter(link => link !== null),
+    concatMap(link => this.http.get<Pet>(this.apiUrl + link)
+    .pipe(
+      tap(pet => {
+        console.log('fetched pet', pet.id);
+      })
+    )),
+    catchError(this.handleError<Pet>('getPet')),
+    shareReplay(1)
   );
 
   constructor(private http: HttpClient) { }
 
   selectedPetChanged(id: number): void {
-    this.selectedPetSubject.next(id);
+    if (id !== this.selectedPetSubject.value){
+      this.selectedPetSubject.next(id);
+    }
   }
 
   refreshPets(){
@@ -61,7 +74,7 @@ export class PetService {
 
   /** POST */
   addPet(pet: Pet): Observable<Pet> {
-    return this.http.post<Pet>(this.petsUrl, pet).pipe(
+    return this.http.post<Pet>(`${this.petsUrl}/${this.user_id}`, pet).pipe(
       tap((newPet: Pet) => console.log(`added pet w/ id=${newPet.id}`)),
       catchError(this.handleError<Pet>('addPet'))
     );

@@ -9,7 +9,7 @@
 
 .cards-container {
   min-width: 350px;
-  max-width: 500px;
+  max-width: 600px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -47,6 +47,11 @@ mat-card:active {
 
 mat-card-title {
   margin-bottom: 10px;
+}
+
+mat-divider {
+  align-self: center;
+  height: 500px;
 }
 
 .spacer {

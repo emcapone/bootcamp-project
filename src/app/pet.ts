@@ -17,6 +17,7 @@ export interface Pet {
   prescriptions?: Prescription[];
   vaccines?: Vaccine[];
   conditions?: Condition[];
+  link?: string;
 }
 export interface Prescription {
   id: number;
