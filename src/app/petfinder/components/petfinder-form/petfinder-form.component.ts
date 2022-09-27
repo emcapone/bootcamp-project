@@ -74,6 +74,7 @@ export class PetfinderFormComponent implements OnInit {
       console.log('invalid form');
       return;
     }
+    this.isLoading = true;
     let parameters: Parameters = {
       type: (this.mainGroup.controls.type.value === null) ? '' : this.replaceChars(this.types[this.mainGroup.controls.type.value].name),
       breed: this.options.controls.breed.value || '',
