@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
-import { Observable, take } from 'rxjs';
+import { take } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/confirm-dialog/confirm-dialog.component';
 import { CalendarEvent } from '../../calendar-event';
 import { CalendarService } from '../../calendar.service';
@@ -12,9 +12,9 @@ import { CalendarService } from '../../calendar.service';
   styleUrls: ['./view-event.component.css']
 })
 
-export class ViewEventComponent implements OnDestroy{
+export class ViewEventComponent implements OnDestroy {
 
-  _selectedDate!: moment.Moment;
+  private _selectedDate!: moment.Moment;
   get selectedDate(): moment.Moment {
     return this._selectedDate;
   }
@@ -25,7 +25,7 @@ export class ViewEventComponent implements OnDestroy{
 
   @Output() event: EventEmitter<CalendarEvent> = new EventEmitter();
 
-  events$!: Observable<CalendarEvent[]>;
+  events!: CalendarEvent[] | null;
 
   constructor(private calendarService: CalendarService, private dialog: MatDialog) { }
 
@@ -33,20 +33,22 @@ export class ViewEventComponent implements OnDestroy{
     this.event.complete();
   }
 
-  formatMoment(x: moment.Moment): string{
+  formatMoment(x: moment.Moment): string {
     return moment(x).format("dddd, MMMM Do YYYY");
   }
 
   getEvents() {
-    this.events$ = this.calendarService.getDayEvents(this.selectedDate);
+    this.calendarService.getDayEvents(this.selectedDate).pipe(
+      take(1)
+    ).subscribe(events => this.events = events);
   }
 
-  editEvent(event: CalendarEvent){
+  editEvent(event: CalendarEvent) {
     this.event.emit(event);
   }
 
-  deleteEvent(id: number | undefined){
-    if(id){
+  deleteEvent(id: number | undefined) {
+    if (id) {
       this.calendarService.deleteCalendarEvent(id).pipe(
         take(1)
       ).subscribe(_ => this.calendarService.refreshEvents());
@@ -66,7 +68,7 @@ export class ViewEventComponent implements OnDestroy{
     dialog.afterClosed().pipe(
       take(1)
     ).subscribe(res => {
-      if(res){
+      if (res) {
         this.deleteEvent(id);
       }
     });
