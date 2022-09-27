@@ -13,7 +13,7 @@ import { formatDate } from '@angular/common';
 export class PetfinderPetComponent{
 
   sub!: Subscription;
-  _pet!: PetfinderPetDetails;
+  private _pet!: PetfinderPetDetails;
   get pet(): PetfinderPetDetails {
     return this._pet;
   }

@@ -39,7 +39,7 @@ export class EventFormComponent implements OnDestroy {
     this.fillForm();
   }
 
-  @Output() saved: EventEmitter<any> = new EventEmitter();
+  @Output() saved: EventEmitter<boolean> = new EventEmitter();
 
   fillForm(): void {
     this.event$.pipe(

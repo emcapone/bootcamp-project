@@ -47,15 +47,16 @@ export class FileUploadComponent {
   }
 
   createObservable(): Observable<FileLink | undefined> {
-    let user_id = 1; //replace after authentication
-    let obs = this.http.post<FileLink>(`${this.apiUrl}/api/v1/FileUpload/${user_id}/${this.petId}/${this.label}`, this.formData)
-    .pipe(
-      catchError(err => {
-        console.log(err);
-        return of(undefined);
-      })
-    );
-    if(this.formData){
+    if (this.formData)
+    {
+      let user_id = 1; //replace after authentication
+      let obs = this.http.post<FileLink>(`${this.apiUrl}/api/v1/FileUpload/${user_id}/${this.petId}/${this.label}`, this.formData)
+      .pipe(
+        catchError(err => {
+          console.log(err);
+          return of(undefined);
+        })
+      );
       return obs;
     }
     return of(undefined);

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, combineLatest, Observable, of, ReplaySubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { catchError, concatMap, filter, map, mergeMap, shareReplay, tap } from 'rxjs/operators';
+import { catchError, concatMap, distinctUntilChanged, filter, map, mergeMap, shareReplay, tap } from 'rxjs/operators';
 
 import { Pet } from './pet';
 import { environment } from 'src/environments/environment';
@@ -31,7 +31,8 @@ export class PetService {
   );
 
   private selectedPetSubject = new BehaviorSubject<number>(0);
-  selectedPet$ = this.selectedPetSubject.asObservable();
+  selectedPet$ = this.selectedPetSubject.asObservable()
+    .pipe(distinctUntilChanged());
 
   pet$ = combineLatest([
     this.pets$,
@@ -55,9 +56,7 @@ export class PetService {
   constructor(private http: HttpClient) { }
 
   selectedPetChanged(id: number): void {
-    if (id !== this.selectedPetSubject.value){
-      this.selectedPetSubject.next(id);
-    }
+    this.selectedPetSubject.next(id);
   }
 
   refreshPets(){
