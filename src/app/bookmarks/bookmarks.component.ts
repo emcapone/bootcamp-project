@@ -21,7 +21,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
   bookmarks!: Bookmark[];
   pet!: PetfinderPetDetails;
   selectedBookmark!: number | null;
-  isLoading: boolean = true;
+  isLoading: boolean = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   obs!: Observable<any>;
@@ -81,7 +81,16 @@ export class BookmarksComponent implements OnInit, OnDestroy {
     });
   }
 
+  clearActive(): void {
+    var els = document.getElementsByClassName('active');
+    for(let x of Array.from(els)){
+      x.classList.remove('active');
+    }
+  }
+
   select(id: number, link: string) {
+    this.isLoading = true;
+    this.clearActive();
     this.selectedBookmark = id;
     this.petfinder.getPet(link).pipe(
       take(1),

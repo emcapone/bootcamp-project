@@ -5,7 +5,7 @@ import { PasswordMatchValidatorDirective } from './directives/password-match-val
 import { PasswordValidatorDirective } from './directives/password-validator.directive';
 import { BirthdayValidatorDirective } from './directives/birthday-validator.directive';
 import { TimeFormatPipe } from './pipes/time-format.pipe';
-import { PostalCodeValidatorDirective } from './directives/postal-code-validator.directive'; //move to shared module after merge
+import { PostalCodeValidatorDirective } from './directives/postal-code-validator.directive';
 
 
 @NgModule({

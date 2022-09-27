@@ -1,39 +1,56 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { take } from 'rxjs';
+import { concatMap, Subscription, take } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 
 import { PetFormComponent } from '../pet-form/pet-form.component';
 import { PetService } from '../pet.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { Pet } from '../pet';
 
 @Component({
   selector: 'app-new-pet',
   templateUrl: './new-pet.component.html',
   styleUrls: ['./new-pet.component.css']
 })
-export class NewPetComponent implements OnInit {
+export class NewPetComponent implements OnDestroy {
   @ViewChild(PetFormComponent) form!: PetFormComponent;
+
+  sub: Subscription | undefined;
 
   constructor(private dialog: MatDialog, private petService: PetService, private router: Router) { }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    if (this.sub)
+      this.sub.unsubscribe();
   }
 
   submit() {
-    const pet = this.form.onSubmit();
+    let pet = this.form.onSubmit() as Pet;
     if (pet) {
       pet.id = undefined;
-      this.petService.addPet(pet)
-        .pipe(
-          take(1)
-        )
-        .subscribe(res => {
-          this.petService.refreshPets();
-          this.router.navigate(['view-pet', res.id]);
-        });
+
+      this.sub = this.petService.addPet(pet).pipe(
+        concatMap(resPet => {
+          pet.id = resPet.id
+          this.form.petPhotoComponent.petId = resPet.id;
+          return this.form.petPhotoComponent.createObservable();
+        }),
+        concatMap(petPhoto => {
+          pet.petPhoto = petPhoto;
+          this.form.vetRecordComponent.petId = pet.id;
+          return this.form.vetRecordComponent.createObservable();
+        }),
+        concatMap(vetRecord => {
+          pet.vetRecords = vetRecord;
+          return this.petService.updatePet(pet);
+        })
+      ).subscribe(_ => {
+        this.petService.refreshPets();
+        this.router.navigate(['view-pet', pet.id])
+      });
+
     }
-    return false;
   }
 
   cancel() {
@@ -51,7 +68,7 @@ export class NewPetComponent implements OnInit {
     dialog.afterClosed().pipe(
       take(1)
     ).subscribe(res => {
-      if(res){
+      if (res) {
         this.cancel();
       }
     });

@@ -12,7 +12,7 @@ import { PetfinderFormComponent } from './petfinder/components/petfinder-form/pe
 import { BookmarksComponent } from './bookmarks/bookmarks.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/', pathMatch: 'full' },
+  { path: '', redirectTo: 'homepage', pathMatch: 'full' },
   { path: 'homepage', component: HomepageComponent},
   { path: 'petfinder', component: PetfinderFormComponent },
   { path: 'profile', component: AccountProfileComponent },

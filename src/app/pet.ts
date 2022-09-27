@@ -1,3 +1,5 @@
+import { FileLink } from "./file-upload/file-upload-response";
+
 export interface Pet {
   id?: number;
   name: string;
@@ -10,11 +12,12 @@ export interface Pet {
   weight: number;
   birthday?: Date;
   adoptionDay?: Date;
-  vetRecords?: string;
-  petPhoto: string;
+  vetRecords?: FileLink;
+  petPhoto?: FileLink;
   prescriptions?: Prescription[];
   vaccines?: Vaccine[];
   conditions?: Condition[];
+  link?: string;
 }
 export interface Prescription {
   id: number;

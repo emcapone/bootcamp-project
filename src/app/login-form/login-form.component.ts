@@ -1,25 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css']
 })
-export class LoginFormComponent implements OnInit {
+export class LoginFormComponent {
 
   loginForm!: FormGroup;
   hide: boolean = true;
   fail: boolean = false;
 
-  constructor() {
+  constructor(private router: Router) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
     })
-  }
-
-  ngOnInit(): void {
   }
 
   get email() {
@@ -32,10 +30,9 @@ export class LoginFormComponent implements OnInit {
   login(): void {
     // If valid, check credentials
     if(this.loginForm.invalid){
-      console.log('invalid');
       return;
     }
-    console.log('valid');
+    this.router.navigate(['pets']);
   }
 
 }

@@ -13,3 +13,7 @@ button {
 .buttons {
   padding-top: 10px;
 }
+
+mat-spinner {
+  margin: 10px;
+}

@@ -74,24 +74,12 @@
         <mat-checkbox formControlName="fixed" id="fixed">Spayed/Neutered?</mat-checkbox>
       </p>
       <p class="form-field">
-        <mat-label>Vet Records </mat-label>
-        <button type="button" mat-mini-fab color="primary" (click)="vetRecords.click()">
-          <mat-icon *ngIf="!this.vetRecordsFile">attach_file</mat-icon>
-          <mat-icon *ngIf="this.vetRecordsFile">check_circle</mat-icon>
-        </button>
-        <mat-label class="file-label" *ngIf="this.vetRecordsFile">{{this.vetRecordsFile.name}}</mat-label>
-        <input (change)="onChangeVetRecords($event)" hidden formControlName="vetRecords" #vetRecords type="file"
-          accept=".pdf">
+        <app-file-upload #vet [currentFile]="this.vetRecordsLink?.dbPath" label="Vet Records"
+          (upload)="this.setVetRecords($event)" [petId]="this.pet?.id"></app-file-upload>
       </p>
-      <p>
-        <mat-label>Pet Photo</mat-label>
-        <button type="button" mat-mini-fab color="primary" (click)="petPhoto.click()">
-          <mat-icon *ngIf="!this.petPhotoFile">attach_file</mat-icon>
-          <mat-icon *ngIf="this.petPhotoFile">check_circle</mat-icon>
-        </button>
-        <mat-label class="file-label" *ngIf="this.petPhotoFile">{{this.petPhotoFile.name}}</mat-label>
-        <input (change)="onChangePetPhoto($event)" hidden formControlName="petPhoto" #petPhoto type="file"
-          accept="image/*">
+      <p class="form-field">
+        <app-file-upload #photo [currentFile]="this.petPhotoLink?.dbPath" label="Pet Photo"
+          (upload)="this.setPetPhoto($event)" [petId]="this.pet?.id"></app-file-upload>
       </p>
     </div>
     <h3 class="title-group">Prescriptions</h3>
@@ -138,8 +126,8 @@
       </div>
     </div>
     <h3 class="title-group">Vaccinations</h3>
-    <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new vaccine" class="title-group"
-      (click)="addVaccine()" type="button">
+    <button mat-mini-fab color="primary" aria-label="icon button with a plus sign to add new vaccine"
+      class="title-group" (click)="addVaccine()" type="button">
       <mat-icon>add_icon</mat-icon>
     </button>
     <div formArrayName="vaccines" class="form-group">

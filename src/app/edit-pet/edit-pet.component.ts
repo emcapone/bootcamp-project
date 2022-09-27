@@ -1,41 +1,68 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take } from 'rxjs';
+import { concat, last, Observable, skipWhile, Subscription, take, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 
 import { PetFormComponent } from '../pet-form/pet-form.component';
 import { PetService } from '../pet.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { Pet } from '../pet';
 
 @Component({
   selector: 'app-edit-pet',
   templateUrl: './edit-pet.component.html',
   styleUrls: ['./edit-pet.component.css']
 })
-export class EditPetComponent implements OnInit {
+export class EditPetComponent implements OnInit, OnDestroy {
   @ViewChild(PetFormComponent) form!: PetFormComponent;
 
-  pet$ = this.petService.pet$;
-  loaded : boolean = false;
+  init = false;
+  pet!: Pet;
+  pet$: Observable<Pet> = this.petService.pet$;
+  sub!: Subscription;
 
   constructor(private dialog: MatDialog, private petService: PetService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     this.petService.selectedPetChanged(Number(this.route.snapshot.paramMap.get('id')));
+    this.sub = this.pet$.pipe(
+      skipWhile(pet => pet.id !== Number(this.route.snapshot.paramMap.get('id')))
+    ).subscribe(res => {
+      this.pet = res;
+      this.init = true;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   submit(): void {
     const pet = this.form.onSubmit();
     if (pet) {
       pet.id = Number(this.route.snapshot.paramMap.get('id'));
-      this.petService.updatePet(pet)
-        .pipe(
-          take(1)
-        )
-        .subscribe(_ => {
-          this.petService.refreshPets();
-          this.router.navigate(['view-pet', pet.id])
-        });
+      this.sub = concat(
+        this.form.petPhotoObs.pipe(
+          tap(res => {
+            if (res)
+              pet.petPhoto = res
+          })
+        ),
+        this.form.vetRecordsObs.pipe(
+          tap(res => {
+            if (res)
+              pet.vetRecords = res
+          })
+        ),
+        this.petService.updatePet(pet)
+      ).pipe(
+        last()
+      ).subscribe(_ => {
+        this.petService.refreshPets();
+        this.router.navigate(['view-pet', pet.id])
+      });
     }
   }
 
@@ -54,7 +81,7 @@ export class EditPetComponent implements OnInit {
     dialog.afterClosed().pipe(
       take(1)
     ).subscribe(res => {
-      if(res){
+      if (res) {
         this.cancel();
       }
     });

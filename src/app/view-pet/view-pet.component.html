@@ -10,7 +10,8 @@
       </h3>
     </div>
     <span class="spacer"></span>
-    <img src="{{pet.petPhoto}}" />
+    <img *ngIf="pet.petPhoto" [src]="this.apiUrl + pet.petPhoto.dbPath" />
+    <img *ngIf="!pet.petPhoto" src="../../assets/default.png" />
   </div>
   <mat-tab-group dynamicHeight>
     <mat-tab label="General Info">
@@ -30,8 +31,8 @@
         <h4>Microchip</h4>
         <p>{{pet.microchip}}</p>
       </div>
-      <a mat-raised-button color="accent" *ngIf='pet.vetRecords' href="{{pet.vetRecords}}" target="_blank"
-        matTooltip="Opens the PDF Records in a new window">View Vet Records</a>
+      <a mat-raised-button color="accent" *ngIf='pet.vetRecords' [href]="this.apiUrl + pet.vetRecords.dbPath"
+        target="_blank" matTooltip="Opens the PDF Records in a new window">View Vet Records</a>
     </mat-tab>
     <mat-tab label="Prescriptions">
       <div *ngFor="let prescription of pet.prescriptions">
