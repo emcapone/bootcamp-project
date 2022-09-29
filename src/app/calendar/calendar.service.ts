@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
-import { take, BehaviorSubject, tap, mergeMap, shareReplay, combineLatest, map, catchError, Observable, of } from 'rxjs';
+import { take, BehaviorSubject, tap, mergeMap, shareReplay, combineLatest, map, catchError, Observable, of, concatMap, distinctUntilChanged, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { CalendarEvent } from './calendar-event';
 
 @Injectable({
@@ -9,47 +10,31 @@ import { CalendarEvent } from './calendar-event';
 })
 export class CalendarService {
 
-  private eventsUrl = 'api/events';
+  private apiUrl = environment.apiUrl
+  private eventsUrl = this.apiUrl + '/api/v1/CalendarEvents';
+  private user_id = 1; //replace after auth;
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
   private now = moment();
 
-  //fetch all user events
-  private eventsData$ = new BehaviorSubject<void>(undefined);
-  private apiRequest$ = this.http.get<CalendarEvent[]>(this.eventsUrl)
-    .pipe(
-      tap(_ => {
-        console.log('fetch events');
-      }),
-      catchError(this.handleError<CalendarEvent[]>('fetchEvents'))
-    );
-  //cache events
-  private events$ = this.eventsData$.pipe(
-    mergeMap(() => this.apiRequest$),
-    shareReplay(1)
-  );
+  private refresh = new BehaviorSubject<void>(undefined);
+  private refresh$ = this.refresh.asObservable();
 
-  //get events in month
   private MonthYearSubject = new BehaviorSubject<[number, number]>([parseInt(this.now.format('M')), parseInt(this.now.format('YYYY'))]);
   private MonthYear$ = this.MonthYearSubject.asObservable();
-  monthEvents$ = combineLatest([
-    this.events$,
-    this.MonthYear$
-  ]).pipe(
-    tap(res => console.log(`month: ${res[1][0]}, year: ${res[1][1]}`)),
-    map(([events, date]) => {
-      let match: CalendarEvent[] = [];
-      for (let x of events) {
-        let temp = moment(x.date);
-        if (parseInt(temp.format('M')) === date[0] && parseInt(temp.format('YYYY')) === date[1]) {
-          match.push(x);
-        }
-      }
-      return match;
-    }),
-    tap(res => console.log(`events: ${res.length}`)),
-    catchError(this.handleError<CalendarEvent>('selectMonth')),
+  private apiRequest$ = this.MonthYear$.pipe(
+    concatMap(date => {
+      return this.http.get<CalendarEvent[]>(`${this.eventsUrl}/GetAll/${this.user_id}?month=${date[0]}&year=${date[1]}`, this.httpOptions)
+        .pipe(
+          catchError(this.handleError<CalendarEvent[]>('fetchMonthEvents'))
+        )
+    })
+  );
+
+  private events$ = this.refresh$.pipe(
+    mergeMap(() => this.apiRequest$),
+    tap(res => console.log("cache refresh")),
     shareReplay(1)
   );
 
@@ -70,7 +55,7 @@ export class CalendarService {
   constructor(private http: HttpClient) { }
 
   refreshEvents() {
-    this.eventsData$.next();
+    this.refresh.next();
   }
 
   selectMonth(month: number, year: number) {
@@ -82,7 +67,7 @@ export class CalendarService {
   }
 
   getDayEvents(day: moment.Moment): Observable<CalendarEvent[]> {
-    return this.monthEvents$.pipe(
+    return this.events$.pipe(
       map(res => {
         let events: CalendarEvent[] = [];
         for (let event of (res as CalendarEvent[])) {
@@ -96,7 +81,7 @@ export class CalendarService {
   }
 
   getStringEvents(): Observable<string[]> {
-    return this.monthEvents$.pipe(
+    return this.events$.pipe(
       map(res => {
         let stringified: string[] = [];
         for (let event of (res as CalendarEvent[])) {
@@ -112,7 +97,7 @@ export class CalendarService {
 * @param event - new CalendarEvent to POST
 */
   addCalendarEvent(event: CalendarEvent): Observable<CalendarEvent> {
-    return this.http.post<CalendarEvent>(this.eventsUrl, event, this.httpOptions).pipe(
+    return this.http.post<CalendarEvent>(`${this.eventsUrl}/${this.user_id}`, event).pipe(
       tap((newEvent: CalendarEvent) => console.log('added event', newEvent.id))
     );
   }
@@ -122,8 +107,8 @@ export class CalendarService {
 * @param event - edited CalendarEvent to PUT
 */
   editCalendarEvent(event: CalendarEvent): Observable<any> {
-    return this.http.put(this.eventsUrl, event, this.httpOptions).pipe(
-      tap(_ => console.log(`updated event id=${event.id}`))
+    return this.http.put(`${this.eventsUrl}/${event.id}`, event, this.httpOptions).pipe(
+      tap(_ => console.log(`updated event`, event.id))
     );
   }
 
@@ -131,7 +116,7 @@ export class CalendarService {
     const url = `${this.eventsUrl}/${id}`;
 
     return this.http.delete<CalendarEvent>(url, this.httpOptions).pipe(
-      tap(_ => console.log(`deleted event id=${id}`)),
+      tap(_ => console.log(`deleted event`, id)),
       catchError(this.handleError<CalendarEvent>('deleteCalendarEvent'))
     );
   }
