@@ -11,7 +11,7 @@
     </div>
     <span class="spacer"></span>
     <img *ngIf="pet.petPhoto" [src]="this.apiUrl + pet.petPhoto.dbPath" />
-    <img *ngIf="!pet.petPhoto" src="../../assets/default.png" />
+    <img *ngIf="!pet.petPhoto" src="/assets/default.png" />
   </div>
   <mat-tab-group dynamicHeight>
     <mat-tab label="General Info">

@@ -19,7 +19,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 
   bookmarkSubscription!: Subscription;
   bookmarks!: Bookmark[];
-  pet!: PetfinderPetDetails;
+  pet!: PetfinderPetDetails | null;
   selectedBookmark!: number | null;
   isLoading: boolean = false;
 
@@ -52,11 +52,13 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 
   deleteBookmark() {
     if (this.selectedBookmark) {
+      this.isLoading = true;
       this.bookmark.deleteBookmark(this.selectedBookmark).pipe(
         take(1)
       ).subscribe(_ => {
-        this.isLoading = true;
         this.selectedBookmark = null;
+        this.pet = null;
+        this.isLoading = false;
         this.bookmark.refreshBookmarks();
       });
     } else {

@@ -71,7 +71,7 @@ export class AccountProfileComponent implements OnInit {
     if (this.userData) {
       this.firstName?.setValue(this.userData?.firstName);
       this.lastName?.setValue(this.userData?.lastName);
-      this.birthday?.setValue(formatDate(this.userData?.birthday, 'yyyy-MM-dd', 'en-US'));
+      this.birthday?.setValue(this.userData?.birthday);
       this.email?.setValue(this.userData?.email);
       this.isLoading = false;
     }

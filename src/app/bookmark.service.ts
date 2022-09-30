@@ -59,7 +59,7 @@ export class BookmarkService {
   }
 
   deleteBookmark(id: number): Observable<Bookmark> {
-    const url = `${this.url}/${id}/${this.petfinder_version}`;
+    const url = `${this.url}/${id}`;
 
     return this.http.delete<Bookmark>(url, this.httpOptions).pipe(
       tap(_ => console.log(`deleted bookmark id=${id}`)),
