@@ -118,7 +118,7 @@ export class EventFormComponent implements OnDestroy {
         allDay: (this.allDay?.value ? true : false),
         startTime: (this.allDay?.value ? null : this.startTime?.value),
         endTime: (this.allDay?.value ? null : this.endTime?.value),
-        date: this.selectedDate,
+        date: moment(this.selectedDate).toDate(),
         name: this.name?.value,
         details: this.details?.value
       }

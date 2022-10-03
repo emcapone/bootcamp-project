@@ -2,10 +2,11 @@ import { Moment } from "moment";
 
 export interface CalendarEvent {
   id?: number,
-  date: Moment,
+  date: Moment | Date,
   allDay: boolean,
   startTime?: string,
   endTime?: string,
   name: string,
-  details: string
+  details: string,
+  link?: string
 }
