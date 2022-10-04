@@ -26,47 +26,49 @@ const routes: Routes = [
     canActivate: [NoAuthGuard]
   },
   {
-    path: 'petfinder',
-    component: PetfinderFormComponent,
-    canActivate: [AuthGuard]
+    path: '',
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'petfinder',
+        component: PetfinderFormComponent,
+      },
+      {
+        path: 'profile',
+        component: AccountProfileComponent,
+      },
+      {
+        path: 'new-pet',
+        component: NewPetComponent,
+      },
+      {
+        path: 'pets',
+        component: AccountPetsComponent,
+        resolve: {
+          pets: PetsResolverService
+        },
+      },
+      {
+        path: 'calendar',
+        component: CalendarContainerComponent,
+      },
+      {
+        path: 'bookmarks',
+        component: BookmarksComponent,
+      },
+      {
+        path: 'edit-pet/:id',
+        component: EditPetComponent,
+      },
+      {
+        path: 'view-pet/:id',
+        component: ViewPetComponent,
+      }
+    ]
   },
   {
-    path: 'profile',
-    component: AccountProfileComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'new-pet',
-    component: NewPetComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'pets',
-    component: AccountPetsComponent,
-    resolve: {
-      pets: PetsResolverService
-    },
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'calendar',
-    component: CalendarContainerComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'bookmarks',
-    component: BookmarksComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'edit-pet/:id',
-    component: EditPetComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'view-pet/:id',
-    component: ViewPetComponent,
-    canActivate: [AuthGuard]
+    path: 'contact-us',
+    component: PageNotFoundComponent
   },
   {
     path: '404',
