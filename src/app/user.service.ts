@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, of, BehaviorSubject } from 'rxjs';
+import { Observable, catchError, of, BehaviorSubject, tap, mergeMap, EMPTY } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from './user';
 import { Credentials } from './credentials';
@@ -12,58 +12,81 @@ import { Router } from '@angular/router';
 })
 export class UserService {
 
-  private loggedInSubject = new BehaviorSubject<boolean>(false);
-  public loggedIn$ = this.loggedInSubject.asObservable();
-
-  private _user_id: number | undefined;
-  get user_id(): number | undefined{
-    return this._user_id;
-  }
-  isLoggedIn(): boolean {
-    return this.user_id ? true : false;
-  }
-
   private apiUrl = environment.apiUrl;
   private userUrl = this.apiUrl + '/api/v1/User';
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  constructor(private http: HttpClient, private snackbar: MatSnackBar, private router: Router) { }
-
-  getCurrentUser(): Observable<User> {
-    return this.http.get<User>(`${this.userUrl}/${this.user_id}`, this.httpOptions).pipe(
-      catchError(this.handleError<User>('fetchUser'))
-    );
+  private _user_id: number | undefined;
+  get user_id(): number | undefined {
+    return this._user_id;
   }
-
-  login(cred: Credentials): Observable<User> {
-    return this.http.post<User>(`${this.userUrl}/Auth`, cred, this.httpOptions);
-  }
-
-  signup(user: User): Observable<User> {
-    return this.http.post<User>(this.userUrl, user, this.httpOptions);
-  }
-
-  setUser(id: number | undefined): void {
+  set user_id(id: number | undefined) {
     this._user_id = id;
-    if(id === undefined) {
-      this.loggedInSubject.next(false);
-      this.router.navigate(['homepage']);
-      this.snackbar.open('Successfully logged out', 'Close', {
-        panelClass: ['snackbar'],
-        duration: 4000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top'
-      });
+    if (id === undefined) {
+      this.logout();
     } else {
       this.loggedInSubject.next(true);
     }
   }
 
-  updateUser(user: User): Observable<any> {
-    return this.http.put(`${this.userUrl}/${user.id}`, user, this.httpOptions).pipe(
-      catchError(this.handleError<any>('updateUser'))
+  private loggedInSubject = new BehaviorSubject<boolean>(false);
+  public loggedIn$ = this.loggedInSubject.asObservable();
+
+  user$ = this.loggedIn$.pipe(
+    mergeMap(res => {
+      if (res === false) {
+        return EMPTY;
+      }
+      return this.http.get<User>(`${this.userUrl}/${this.user_id}`, this.httpOptions).pipe(
+        catchError(this.handleError<User>('fetchUser'))
+      )
+    }
+    )
+  );
+
+  constructor(private http: HttpClient, private snackbar: MatSnackBar, private router: Router) { }
+
+  isLoggedIn(): boolean {
+    return this.user_id ? true : false;
+  }
+
+  logout(): void {
+    this.user_id = undefined;
+    this.loggedInSubject.next(false);
+    this.router.navigate(['homepage']);
+    this.snackbar.open('Successfully logged out', 'Close', {
+      panelClass: ['snackbar'],
+      duration: 4000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
+    });
+  }
+
+  login(cred: Credentials): Observable<User> {
+    return this.http.post<User>(`${this.userUrl}/Auth`, cred, this.httpOptions).pipe(
+      tap(res => {
+        if (!(res instanceof HttpErrorResponse)) {
+          this.user_id = res.id;
+        }
+      })
+    );
+  }
+
+  signup(user: User): Observable<User> {
+    return this.http.post<User>(this.userUrl, user, this.httpOptions).pipe(
+      tap(res => {
+        if (!(res instanceof HttpErrorResponse)) {
+          this.user_id = res.id;
+        }
+      })
+    );
+  }
+
+  updateUser(user: User): Observable<User> {
+    return this.http.put<User>(`${this.userUrl}/${user.id}`, user, this.httpOptions).pipe(
+      catchError(this.handleError<User>('updateUser'))
     )
   }
 

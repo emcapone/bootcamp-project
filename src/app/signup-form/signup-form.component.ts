@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { catchError, EMPTY, filter, of, throwError } from 'rxjs';
 import { BirthdayValidator } from '../shared/directives/birthday-validator.directive';
 import { PasswordMatchValidator } from '../shared/directives/password-match-validator.directive';
@@ -18,9 +19,6 @@ export class SignupFormComponent {
   @Input() success = false;
   @Input() error = false;
 
-  @Output()
-  user_id: EventEmitter<number> = new EventEmitter();
-
   signupForm!: FormGroup;
   password!: FormGroup;
   hideNew: boolean = true;
@@ -28,7 +26,7 @@ export class SignupFormComponent {
   submitted: boolean = false;
   emailError: boolean = false;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private router: Router) {
     this.signupForm = new FormGroup({
       'firstName': new FormControl('', [Validators.required]),
       'lastName': new FormControl('', [Validators.required]),
@@ -90,7 +88,7 @@ export class SignupFormComponent {
       ).subscribe(res => {
         if (res) {
           this.success = true;
-          this.user_id.emit(res.id);
+          setTimeout(() => this.router.navigate(['pets']), 1000);
         }
       });
     }

@@ -59,7 +59,7 @@ export class AccountProfileComponent implements OnInit {
   }
 
   getData(): void {
-    this.userService.getCurrentUser().pipe(
+    this.userService.user$.pipe(
       take(1)
     ).subscribe(user => {
       if (user !== null) {

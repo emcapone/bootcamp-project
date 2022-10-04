@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { catchError, EMPTY } from 'rxjs';
 import { Credentials } from '../credentials';
 import { UserService } from '../user.service';
@@ -22,7 +23,7 @@ export class LoginFormComponent {
   hide: boolean = true;
   submitted: boolean = false;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private router: Router) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
@@ -66,7 +67,7 @@ export class LoginFormComponent {
       ).subscribe(res => {
         if (res) {
           this.success = true;
-          this.user_id.emit(res.id);
+          setTimeout(() => this.router.navigate(['pets']), 1000);
         }
       });
     }
