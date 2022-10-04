@@ -63,6 +63,7 @@ export class CalendarContainerComponent implements OnInit, OnDestroy {
   cancelForm($event?: boolean) {
     if ($event === true) {
       this.snackbar.open('Saved Event', 'Close', {
+        panelClass: ['snackbar'],
         duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'bottom'

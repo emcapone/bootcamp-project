@@ -1,26 +1,22 @@
-import { Component } from '@angular/core';
-import { catchError, EMPTY } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
-
-import { PetService } from '../pet.service';
+import { PetListItem } from '../pet-list-item';
 
 @Component({
   selector: 'app-account-pets',
   templateUrl: './account-pets.component.html',
   styleUrls: ['./account-pets.component.css']
 })
-export class AccountPetsComponent {
+export class AccountPetsComponent implements OnInit{
 
   apiUrl = environment.apiUrl + '/';
+  pets!: PetListItem[];
 
-  pets$ = this.petService.pets$
-    .pipe(
-      catchError(err => {
-        console.log(err);
-        return EMPTY;
-      })
-    );
+  constructor(private activatedRoute: ActivatedRoute) { }
 
-  constructor(private petService: PetService) { }
+  ngOnInit() {
+    this.pets = this.activatedRoute.snapshot.data['pets'];
+  }
 
 }
