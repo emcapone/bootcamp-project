@@ -3,12 +3,13 @@
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
-    <mat-toolbar>Hi, Emily!</mat-toolbar>
+    <mat-toolbar>Hello!</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="/pets">My Pets</a>
       <a mat-list-item routerLink="/calendar">Calendar</a>
       <a mat-list-item routerLink="/bookmarks">Bookmarks</a>
       <a mat-list-item routerLink="/profile">Settings</a>
+      <a mat-list-item *ngIf="this.loggedIn | async" (click)="this.logout()">Log Out</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
