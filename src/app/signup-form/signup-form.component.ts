@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { catchError, EMPTY, filter, of, throwError } from 'rxjs';
 import { BirthdayValidator } from '../shared/directives/birthday-validator.directive';
 import { PasswordMatchValidator } from '../shared/directives/password-match-validator.directive';
 import { PasswordValidator } from '../shared/directives/password-validator.directive';
+import { User } from '../user';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-signup-form',
@@ -11,6 +14,13 @@ import { PasswordValidator } from '../shared/directives/password-validator.direc
 })
 export class SignupFormComponent {
 
+  @Input() isLoading = false;
+  @Input() success = false;
+  @Input() error = false;
+
+  @Output()
+  user_id: EventEmitter<number> = new EventEmitter();
+
   signupForm!: FormGroup;
   password!: FormGroup;
   hideNew: boolean = true;
@@ -18,7 +28,7 @@ export class SignupFormComponent {
   submitted: boolean = false;
   emailError: boolean = false;
 
-  constructor() {
+  constructor(private userService: UserService) {
     this.signupForm = new FormGroup({
       'firstName': new FormControl('', [Validators.required]),
       'lastName': new FormControl('', [Validators.required]),
@@ -54,13 +64,36 @@ export class SignupFormComponent {
   }
 
   signup(): void {
-    //If valid, check with API that email is available for an account then submit
     this.submitted = true;
-    if (this.signupForm.invalid) {
-      console.log('invalid');
-      return;
+    if (this.signupForm.valid) {
+      this.emailError = false;
+      this.isLoading = true;
+      let user: User = {
+        firstName: this.firstName?.value,
+        lastName: this.lastName?.value,
+        birthday: this.birthday?.value,
+        email: this.email?.value,
+        password: this.password?.value
+      }
+      this.userService.signup(user).pipe(
+        catchError(err => {
+          if (err.status === 409) {
+            this.isLoading = false;
+            this.emailError = true;
+            this.email?.setValue(undefined);
+          } else {
+            this.error = true;
+            console.log(err);
+          }
+          return EMPTY;
+        })
+      ).subscribe(res => {
+        if (res) {
+          this.success = true;
+          this.user_id.emit(res.id);
+        }
+      });
     }
-    console.log('valid');
   }
 
 }

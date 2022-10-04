@@ -33,7 +33,7 @@ export class AccountProfileComponent implements OnInit {
 
   errorMatcher = new CrossFieldErrorMatcher();
   isLoading: boolean = true;
-  userData!: User;
+  userData!: User | null;
   settingsForm!: FormGroup;
   passwordForm!: FormGroup;
   hideCurrent: boolean = true;
@@ -59,11 +59,15 @@ export class AccountProfileComponent implements OnInit {
   }
 
   getData(): void {
-    this.userService.getUser(1).pipe(
-      take(1),
-      tap(user => this.userData = user)
-    ).subscribe(_ => {
-      this.fillData();
+    this.userService.getCurrentUser().pipe(
+      take(1)
+    ).subscribe(user => {
+      if (user !== null) {
+        this.userData = user;
+        this.fillData();
+      } else {
+        console.log("Error fetching user data");
+      }
     });
   }
 
@@ -137,7 +141,7 @@ export class AccountProfileComponent implements OnInit {
           lastName: formValues.lastName,
           email: formValues.email,
           birthday: formValues.birthday,
-          password: ((this.newPassword?.value !== "" && this.newPassword?.value !== null) ? this.newPassword?.value as string : this.userData.password)
+          password: ((this.newPassword?.value !== "" && this.newPassword?.value !== null) ? this.newPassword?.value as string : this.userData?.password || '')
         }
         this.userService.updateUser(user).pipe(
           take(1)
@@ -145,6 +149,7 @@ export class AccountProfileComponent implements OnInit {
           this.reset();
           this.getData();
           this.snackbar.open('Changes Saved', 'Close', {
+            panelClass: ['snackbar'],
             duration: 3000,
             horizontalPosition: 'start',
             verticalPosition: 'bottom'

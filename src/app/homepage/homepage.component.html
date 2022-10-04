@@ -9,10 +9,10 @@
     <mat-card-content>
       <mat-tab-group mat-align-tabs="center" dynamicHeight>
         <mat-tab label="Log In">
-          <app-login-form></app-login-form>
+          <app-login-form (user_id)="this.setUser($event)"></app-login-form>
         </mat-tab>
         <mat-tab label="Sign Up">
-          <app-signup-form></app-signup-form>
+          <app-signup-form (user_id)="this.setUser($event)"></app-signup-form>
         </mat-tab>
       </mat-tab-group>
     </mat-card-content>

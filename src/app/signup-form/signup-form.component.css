@@ -12,3 +12,17 @@ mat-form-field {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+#check {
+  font-size: 70px;
+  height: 70px;
+  width: 70px;
+}
+
+.loading-message {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
