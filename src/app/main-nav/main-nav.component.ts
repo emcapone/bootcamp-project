@@ -17,12 +17,21 @@ export class MainNavComponent {
       shareReplay()
     );
 
-  loggedIn = this.userService.loggedIn$;
+  loggedIn$ = this.userService.loggedIn$;
+
+  firstName$ = this.userService.user$.pipe(
+    map(res => {
+      if(res) {
+        return res.firstName;
+      }
+      return null;
+    })
+  );
 
   constructor(private breakpointObserver: BreakpointObserver, private userService: UserService) { }
 
   logout() {
-    this.userService.setUser(undefined);
+    this.userService.logout();
   }
 
 }
