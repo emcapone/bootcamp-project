@@ -42,8 +42,7 @@ export class LoginFormComponent {
     this.error = false;
     this.isLoading = false;
     this.success = false;
-    this.email?.value(null);
-    this.password?.value(null);
+    this.loginForm.reset();
   }
 
   login(): void {
