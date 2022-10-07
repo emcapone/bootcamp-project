@@ -1,0 +1,82 @@
+<div class="header-container">
+  <h1>Need to reach out to us?</h1>
+</div>
+<div class="content-container">
+  <mat-card>
+    <mat-card-title>Contact Us</mat-card-title>
+    <mat-card-content *ngIf="!this.isLoading">
+      <form [formGroup]="contactForm" (ngSubmit)="this.submit()" autocomplete="off">
+
+        <mat-error class="form-error" *ngIf="this.contactForm.invalid && this.submitted">
+          Complete all fields before submitting.
+        </mat-error>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Your Email</mat-label>
+          <input matInput formControlName="email" required>
+          <mat-error *ngIf="email?.hasError('required') || email?.hasError('email')">
+            Enter a valid email.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category" required>
+            <mat-option value="general">General Questions</mat-option>
+            <mat-option value="bug">Bug Report</mat-option>
+            <mat-option value="deletion">Account Deletion Request</mat-option>
+            <mat-option value="other">Other</mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="body?.hasError('required')">
+            Select a category.
+          </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="fill">
+          <mat-label>Subject</mat-label>
+          <input matInput formControlName="subject" maxlength="100" required>
+          <mat-hint align="end">Max 100 characters</mat-hint>
+          <mat-error *ngIf="subject?.hasError('required')">
+            Enter a subject for your message.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Body</mat-label>
+          <textarea rows="3" matInput formControlName="body" required></textarea>
+
+          <mat-error *ngIf="body?.hasError('required')">
+            Enter your message.
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+      </form>
+    </mat-card-content>
+    <mat-card-content class="status-details" *ngIf="this.isLoading && !this.success && !this.error">
+      <h2>Releasing the messenger pigeon...</h2>
+      <mat-spinner diameter="200"></mat-spinner>
+    </mat-card-content>
+    <mat-card-content class="status-details" *ngIf="this.isLoading && this.success && !this.error">
+      <h2>We got your message!</h2>
+      <p>We will respond within 5-10 business days.</p>
+      <p id="joke">(By email, not pigeon.)</p>
+    </mat-card-content>
+    <mat-card-content class="status-details" *ngIf="this.error">
+      <h2>An error occurred. Please try again.</h2>
+      <p id="joke">Where did that pesky bird go?</p>
+      <button mat-fab color="accent" (click)="this.reset()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </mat-card-content>
+  </mat-card>
+  <span class="spacer"></span>
+  <div class="text-container">
+    <h2>Fill out the form to contact our team.</h2>
+    <h2>Thank you for your support!</h2>
+    <p>The Pawssier team will never ask for your password or other private information.</p>
+    <p>Please forward any suspicious emails to phishing@pawssier.com</p>
+  </div>
+</div>

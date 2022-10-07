@@ -18,9 +18,9 @@ If you think you're ready to expand your family, you can start your adoption sea
 ## Pages
 ### :heavy_check_mark: indicates a functional page
 
-* Homepage
+* Homepage :heavy_check_mark:
 * Dashboard
-* Contact Us
+* Contact Us :heavy_check_mark:
 * Adoption Search :heavy_check_mark:
 * Bookmarks :heavy_check_mark:
 * Calendar :heavy_check_mark:
@@ -76,8 +76,4 @@ If you think you're ready to expand your family, you can start your adoption sea
 
 ## Remaining Goals
 - Homepage
-- Contact Us
 - Dashboard
-- Authentication
-    - Route guards
-- Error messages
