@@ -34,9 +34,17 @@
       <img mat-card-lg-image *ngIf="!pet.petPhoto || !pet.petPhoto.dbPath" src="/assets/default.png">
     </mat-card-title-group>
     <mat-card-content>
-      <p *ngIf="pet.birthday">Birthday: {{pet.birthday | date:'mediumDate'}}</p>
-      <p *ngIf="pet.adoptionDay">Adoption Day: {{pet.adoptionDay | date:'mediumDate'}}</p>
-      <p *ngIf="pet.microchip">Microchip: {{pet.microchip}}</p>
+      <div>
+        <p *ngIf="pet.birthday">Birthday: {{pet.birthday | date:'mediumDate'}}</p>
+        <p *ngIf="pet.adoptionDay">Adoption Day: {{pet.adoptionDay | date:'mediumDate'}}</p>
+        <p *ngIf="pet.microchip">Microchip: {{pet.microchip}}</p>
+      </div>
+      <mat-divider vertical="true" *ngIf="pet.vaccinesCount || pet.prescriptionsCount || pet.conditionsCount"></mat-divider>
+      <div>
+        <p *ngIf="pet.vaccinesCount">Vaccines: {{pet.vaccinesCount}}</p>
+        <p *ngIf="pet.prescriptionsCount">Prescriptions: {{pet.prescriptionsCount}}</p>
+        <p *ngIf="pet.conditionsCount">Conditions: {{pet.conditionsCount}}</p>
+      </div>
     </mat-card-content>
     <mat-card-actions align="end">
       <button mat-stroked-button color="accent" routerLink="/view-pet/{{pet.id}}">VIEW</button>
