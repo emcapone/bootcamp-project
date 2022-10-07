@@ -24,11 +24,8 @@ export class UserService {
   }
   set user_id(id: number | undefined) {
     this._user_id = id;
-    if (id === undefined) {
-      this.logout();
-    } else {
+    if (id)
       this.loggedInSubject.next(true);
-    }
   }
 
   private loggedInSubject = new BehaviorSubject<boolean>(false);
