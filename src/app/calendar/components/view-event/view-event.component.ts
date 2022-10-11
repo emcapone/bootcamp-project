@@ -23,6 +23,8 @@ export class ViewEventComponent implements OnDestroy {
     this.getEvents();
   }
 
+  @Input() showButtons = true;
+
   @Output() event: EventEmitter<CalendarEvent> = new EventEmitter();
 
   events$!: Observable<CalendarEvent[]>;

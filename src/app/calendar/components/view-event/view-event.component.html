@@ -14,10 +14,10 @@
         {{event.startTime | timeFormat}} - {{event.endTime | timeFormat}}
       </mat-card-subtitle>
       <span class="spacer"></span>
-      <button mat-mini-fab color="primary" matTooltip="Edit Event" (click)="this.editEvent(event)">
+      <button mat-mini-fab color="primary" matTooltip="Edit Event" (click)="this.editEvent(event)" *ngIf="this.showButtons">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-mini-fab color="warn" matTooltip="Delete Event" (click)="this.openDialog(event.id, event.name)">
+      <button mat-mini-fab color="warn" matTooltip="Delete Event" (click)="this.openDialog(event.id, event.name)" *ngIf="this.showButtons">
         <mat-icon>close</mat-icon>
       </button>
     </mat-card-header>
