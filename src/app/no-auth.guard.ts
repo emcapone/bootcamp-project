@@ -20,7 +20,7 @@ export class NoAuthGuard implements CanActivate {
     if(!this.userService.isLoggedIn()) {
       return true;
     }
-    this.router.navigate(['/pets']);
+    this.router.navigate(['/dashboard']);
     return false;
   }
 

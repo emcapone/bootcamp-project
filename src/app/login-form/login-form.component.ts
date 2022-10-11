@@ -66,7 +66,7 @@ export class LoginFormComponent {
       ).subscribe(res => {
         if (res) {
           this.success = true;
-          setTimeout(() => this.router.navigate(['pets']), 1000);
+          setTimeout(() => this.router.navigate(['dashboard']), 1000);
         }
       });
     }
