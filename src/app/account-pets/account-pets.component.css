@@ -28,3 +28,10 @@ mat-icon {
   width: 70px;
   height: 70px;
 }
+
+mat-card-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 20px;
+}

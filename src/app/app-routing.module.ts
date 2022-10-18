@@ -13,6 +13,7 @@ import { BookmarksComponent } from './bookmarks/bookmarks.component';
 import { PetsResolverService } from './account-pets/pets-resolver.service';
 import { AuthGuard } from './auth.guard';
 import { NoAuthGuard } from './no-auth.guard';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 const routes: Routes = [
   {
@@ -68,7 +69,7 @@ const routes: Routes = [
   },
   {
     path: 'contact-us',
-    component: PageNotFoundComponent
+    component: ContactUsComponent
   },
   {
     path: '404',

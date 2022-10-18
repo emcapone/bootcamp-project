@@ -27,6 +27,7 @@ import { PetfinderFormComponent } from './petfinder/components/petfinder-form/pe
 import { PetfinderPetComponent } from './petfinder/components/petfinder-pet/petfinder-pet.component';
 import { BookmarksComponent } from './bookmarks/bookmarks.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     PetfinderFormComponent,
     PetfinderPetComponent,
     BookmarksComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    ContactUsComponent
   ],
   imports: [
     BrowserModule,

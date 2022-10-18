@@ -11,6 +11,6 @@ export interface PetListItem {
   petPhoto?: FileLink;
   prescriptionsCount: number;
   vaccinesCount: number;
-  conditions: number;
+  conditionsCount: number;
   link: string;
 }
