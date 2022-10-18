@@ -5,6 +5,10 @@
 </div>
 <div class="content-container" *ngIf="this.bookmarks && this.bookmarks.length === 0">
   <h2>No bookmarks saved yet.</h2>
+  <div class="row">
+    <h2>Search PetFinder to create one!</h2>
+    <button mat-fab routerLink="/petfinder"><mat-icon>search</mat-icon></button>
+  </div>
 </div>
 <div class="content-container" *ngIf="this.bookmarks && this.bookmarks.length > 0">
   <div class="cards-container">

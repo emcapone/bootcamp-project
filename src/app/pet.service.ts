@@ -7,6 +7,7 @@ import { catchError, concatMap, distinctUntilChanged, filter, map, mergeMap, sha
 import { Pet } from './pet';
 import { environment } from 'src/environments/environment';
 import { PetListItem } from './pet-list-item';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class PetService {
 
   private apiUrl = environment.apiUrl
   private petsUrl = this.apiUrl + '/api/v1/Pets';
-  private user_id = 1; //replace after auth;
+  private user_id = this.userService.user_id;
 
   private _petsData$ = new BehaviorSubject<void>(undefined);
   apiRequestListItem$ = this.http.get<PetListItem[]>(this.petsUrl + `/GetAll/${this.user_id}`)
@@ -53,7 +54,7 @@ export class PetService {
     shareReplay(1)
   );
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   selectedPetChanged(id: number): void {
     this.selectedPetSubject.next(id);

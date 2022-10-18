@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Bookmark } from './bookmark';
 import { BehaviorSubject, catchError, combineLatest, map, Observable, of, shareReplay, tap, mergeMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { environment } from 'src/environments/environment';
 export class BookmarkService {
 
   private url = environment.apiUrl + '/api/v1/Bookmarks';
-  private user_id = 1; //replace after auth
+  private user_id = this.userService.user_id;
   private petfinder_version = 'Petfinder/v' + environment.petfinderVersion;
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -46,7 +47,7 @@ export class BookmarkService {
     })
   );
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   /**
   * Errors must be handled by subscriber.

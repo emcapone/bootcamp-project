@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { take, BehaviorSubject, tap, mergeMap, shareReplay, combineLatest, map, catchError, Observable, of, concatMap, distinctUntilChanged, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { UserService } from '../user.service';
 import { CalendarEvent } from './calendar-event';
 
 @Injectable({
@@ -12,7 +13,7 @@ export class CalendarService {
 
   private apiUrl = environment.apiUrl
   private eventsUrl = this.apiUrl + '/api/v1/CalendarEvents';
-  private user_id = 1; //replace after auth;
+  private user_id = this.userService.user_id;
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
@@ -52,7 +53,7 @@ export class CalendarService {
     catchError(this.handleError<CalendarEvent>('getEvent'))
   );
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   refreshEvents() {
     this.refresh.next();

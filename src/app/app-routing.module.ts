@@ -10,20 +10,74 @@ import { CalendarContainerComponent } from './calendar/components/calendar-conta
 import { HomepageComponent } from './homepage/homepage.component';
 import { PetfinderFormComponent } from './petfinder/components/petfinder-form/petfinder-form.component';
 import { BookmarksComponent } from './bookmarks/bookmarks.component';
+import { PetsResolverService } from './account-pets/pets-resolver.service';
+import { AuthGuard } from './auth.guard';
+import { NoAuthGuard } from './no-auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'homepage', pathMatch: 'full' },
-  { path: 'homepage', component: HomepageComponent},
-  { path: 'petfinder', component: PetfinderFormComponent },
-  { path: 'profile', component: AccountProfileComponent },
-  { path: 'new-pet', component: NewPetComponent },
-  { path: 'pets', component: AccountPetsComponent },
-  { path: 'calendar', component: CalendarContainerComponent },
-  { path: 'bookmarks', component: BookmarksComponent},
-  { path: 'edit-pet/:id', component: EditPetComponent },
-  { path: 'view-pet/:id', component: ViewPetComponent },
-  { path: '404', component: PageNotFoundComponent },
-  { path: '**', redirectTo: '/404' }
+  {
+    path: '',
+    redirectTo: 'homepage',
+    pathMatch: 'full'
+  },
+  {
+    path: 'homepage',
+    component: HomepageComponent,
+    canActivate: [NoAuthGuard]
+  },
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'petfinder',
+        component: PetfinderFormComponent,
+      },
+      {
+        path: 'profile',
+        component: AccountProfileComponent,
+      },
+      {
+        path: 'new-pet',
+        component: NewPetComponent,
+      },
+      {
+        path: 'pets',
+        component: AccountPetsComponent,
+        resolve: {
+          pets: PetsResolverService
+        },
+      },
+      {
+        path: 'calendar',
+        component: CalendarContainerComponent,
+      },
+      {
+        path: 'bookmarks',
+        component: BookmarksComponent,
+      },
+      {
+        path: 'edit-pet/:id',
+        component: EditPetComponent,
+      },
+      {
+        path: 'view-pet/:id',
+        component: ViewPetComponent,
+      }
+    ]
+  },
+  {
+    path: 'contact-us',
+    component: PageNotFoundComponent
+  },
+  {
+    path: '404',
+    component: PageNotFoundComponent
+  },
+  {
+    path: '**',
+    redirectTo: '/404'
+  }
 
 ];
 
