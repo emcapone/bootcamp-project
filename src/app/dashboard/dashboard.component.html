@@ -1,0 +1,46 @@
+<h1>Dashboard</h1>
+<div class="page-container">
+  <div class="date-container">
+    <mat-card class="component-container">
+      <mat-card-title class="title">{{this.getDate() | date:'fullDate'}}</mat-card-title>
+      <app-view-event [selectedDate]="this.now" [showButtons]="false"></app-view-event>
+    </mat-card>
+    <mat-card class="component-container">
+      <span *ngIf="!this.pets || this.pets.length <= 0">
+        <mat-card-title class="title">Fun Fact:</mat-card-title>
+        <mat-card-content>
+          <p id="funFact">{{this.getRandomFunFact()}}</p>
+        </mat-card-content>
+      </span>
+      <span *ngIf="this.pets && this.pets.length > 0">
+        <mat-card-title class="title">Celebrating {{this.now.format('MMMM')}} Birthdays/ Gotcha Days!</mat-card-title>
+        <mat-card class="button-card" *ngFor="let pet of pets" routerLink="/view-pet/{{pet.id}}">
+          <mat-card-title-group>
+            <mat-card-title>{{pet.name}}</mat-card-title>
+            <img mat-card-lg-image *ngIf="pet.petPhoto && pet.petPhoto.dbPath"
+              [src]="this.apiUrl + pet.petPhoto.dbPath">
+            <img mat-card-lg-image *ngIf="!pet.petPhoto || !pet.petPhoto.dbPath" src="/assets/default.png">
+          </mat-card-title-group>
+        </mat-card>
+      </span>
+    </mat-card>
+  </div>
+
+  <mat-card class="petfinder">
+    <mat-card-title class="title">Recent Petfinder Bookmark</mat-card-title>
+    <span *ngIf="this.bookmarkPet">
+      <app-petfinder-pet [pet]="this.bookmarkPet"></app-petfinder-pet>
+    </span>
+    <span *ngIf="this.petfinderError">
+      <h3>Something went wrong...</h3>
+      <p>Want to revisit your bookmarks?</p>
+      <button mat-raised-button color="primary" routerLink="/bookmarks">Bookmarks  <mat-icon>arrow_forward</mat-icon> </button>
+    </span>
+    <span *ngIf="!this.bookmarkPet && !this.petfinderError" class="bookmark-message">
+      <h3>Hmm...</h3>
+      <p>You haven't saved any bookmarks yet!</p>
+      <p>Want to start looking for your newest furry friend?</p>
+      <button mat-raised-button color="primary" routerLink="/petfinder">Petfinder Search</button>
+    </span>
+  </mat-card>
+</div>

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, take, of, tap, Subject, combineLatest, throwError, BehaviorSubject, mergeMap } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, shareReplay } from 'rxjs/operators';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Token, Types, Breeds, Parameters, PetfinderPets, PetfinderPet } from './models';
 import { environment } from 'src/environments/environment';
@@ -19,29 +19,28 @@ export class PetfinderService implements OnDestroy {
   };
 
   private refreshTokenSubject = new BehaviorSubject<void>(undefined);
-  private refreshToken$ = this.refreshTokenSubject.asObservable();
 
   private getToken$ = this.http.post<Token>(this.baseUrl + '/v2/oauth2/token',
-    `grant_type=client_credentials&client_id=${this.apiKey}&client_secret=${this.apiSecret}`, this.tokenHeader);
+    `grant_type=client_credentials&client_id=${this.apiKey}&client_secret=${this.apiSecret}`, this.tokenHeader).pipe(
+      tap(_ => console.log('refresh token')),
+      catchError(this.handleError<Token>('getToken')),
+      tap(res => {
+        setTimeout(() => this.refreshToken(), (res.expires_in * 1000));
+        this.httpOptions = {
+          headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `${res?.token_type} ${res?.access_token}` })
+        }
+      })
+    );
 
-  token$ = combineLatest([
-    this.getToken$,
-    this.refreshToken$
-  ]).pipe(
-    mergeMap(() => this.getToken$)
+  token$ = this.refreshTokenSubject.pipe(
+    mergeMap(() => this.getToken$),
+    shareReplay(1)
   );
 
   httpOptions!: Object;
 
   constructor(private http: HttpClient) {
-    this.token$.pipe(
-      catchError(this.handleError<Token>('getToken'))
-    ).subscribe(res => {
-      setTimeout(() => this.refreshToken(), (res.expires_in * 1000));
-      this.httpOptions = {
-        headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `${res?.token_type} ${res?.access_token}` })
-      }
-    });
+    this.token$.subscribe();
   }
 
   ngOnDestroy(): void {

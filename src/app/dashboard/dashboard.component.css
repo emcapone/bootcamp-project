@@ -1,0 +1,44 @@
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: top;
+  gap: 1em;
+}
+
+.date-container {
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.date-component-container {
+  width: 100%;
+  height: min-content;
+  display: block;
+  text-align: center;
+}
+
+.petfinder {
+  width: auto;
+}
+
+.title {
+  border-bottom: 1px solid white;
+  padding-bottom: 5px;
+}
+
+.button-card:hover {
+  background-color: #525252;
+}
+
+.bookmark-message {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#funFact {
+  font-size: larger;
+}

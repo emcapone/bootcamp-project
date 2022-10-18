@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, EMPTY } from 'rxjs';
+import { catchError, EMPTY, Subscription } from 'rxjs';
 import { Credentials } from '../credentials';
 import { UserService } from '../user.service';
 
@@ -10,7 +10,7 @@ import { UserService } from '../user.service';
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css']
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements OnDestroy{
 
   @Input() isLoading = false;
   @Input() success = false;
@@ -22,12 +22,17 @@ export class LoginFormComponent {
   loginForm!: FormGroup;
   hide: boolean = true;
   submitted: boolean = false;
+  sub!: Subscription;
 
   constructor(private userService: UserService, private router: Router) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
     })
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
   get email() {
@@ -53,7 +58,7 @@ export class LoginFormComponent {
         email: this.email?.value,
         password: this.password?.value
       }
-      this.userService.login(credentials).pipe(
+      this.sub = this.userService.login(credentials).pipe(
         catchError(err => {
           if (err.status === 404) {
             this.isLoading = false;
@@ -66,7 +71,7 @@ export class LoginFormComponent {
       ).subscribe(res => {
         if (res) {
           this.success = true;
-          setTimeout(() => this.router.navigate(['pets']), 1000);
+          setTimeout(() => this.router.navigate(['dashboard']), 1000);
         }
       });
     }

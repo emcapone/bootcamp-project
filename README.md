@@ -16,20 +16,19 @@ Pawssier is _the all-in-one tool_ for pet parents. Our pet profiles can store ve
 If you think you're ready to expand your family, you can start your adoption search with us too! You can find adoptable animals from [Petfinder](https://www.petfinder.com) with a simple search. Bookmark your favorites to return to them later!
 
 ## Pages
-### :heavy_check_mark: indicates a functional page
 
-* Homepage :heavy_check_mark:
+* Homepage
 * Dashboard
-* Contact Us :heavy_check_mark:
-* Adoption Search :heavy_check_mark:
-* Bookmarks :heavy_check_mark:
-* Calendar :heavy_check_mark:
-* Account Profile :heavy_check_mark:
-* Account Pets :heavy_check_mark:
-* Create Pet Profile :heavy_check_mark:
-* Edit Pet Profile :heavy_check_mark:
-* View Pet Profile :heavy_check_mark:
-* 404 :heavy_check_mark:
+* Contact Us
+* Adoption Search
+* Bookmarks
+* Calendar
+* Account Profile
+* Account Pets
+* Create Pet Profile
+* Edit Pet Profile
+* View Pet Profile
+* 404
 
 ## Layout
 
@@ -71,9 +70,4 @@ If you think you're ready to expand your family, you can start your adoption sea
 * Petfinder API
 
 ## Current Goals
-- Best Practice RxJS implementation
-- Unit testing
-
-## Remaining Goals
-- Homepage
-- Dashboard
+* Deploy to Azure

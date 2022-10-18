@@ -28,6 +28,7 @@ import { PetfinderPetComponent } from './petfinder/components/petfinder-pet/petf
 import { BookmarksComponent } from './bookmarks/bookmarks.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
     PetfinderPetComponent,
     BookmarksComponent,
     FileUploadComponent,
-    ContactUsComponent
+    ContactUsComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

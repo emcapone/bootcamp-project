@@ -14,6 +14,8 @@ import { PetsResolverService } from './account-pets/pets-resolver.service';
 import { AuthGuard } from './auth.guard';
 import { NoAuthGuard } from './no-auth.guard';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardResolver } from './dashboard/services/dashboard.resolver';
 
 const routes: Routes = [
   {
@@ -31,8 +33,15 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
+        path: 'dashboard',
+        component: DashboardComponent,
+        resolve: {
+          data: DashboardResolver
+        },
+      },
+      {
         path: 'petfinder',
-        component: PetfinderFormComponent,
+        component: PetfinderFormComponent
       },
       {
         path: 'profile',
