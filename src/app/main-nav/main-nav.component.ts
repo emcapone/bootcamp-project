@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { UserService } from '../user.service';
 
 @Component({
@@ -19,14 +19,7 @@ export class MainNavComponent {
 
   loggedIn$ = this.userService.loggedIn$;
 
-  firstName$ = this.userService.user$.pipe(
-    map(res => {
-      if(res) {
-        return res.firstName;
-      }
-      return null;
-    })
-  );
+  firstName$ = this.userService.firstName$;
 
   constructor(private breakpointObserver: BreakpointObserver, private userService: UserService) { }
 
