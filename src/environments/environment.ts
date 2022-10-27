@@ -8,7 +8,7 @@ export const environment = {
   petfinderApiSecret: 'ykUUhf6okEPpaIGZBLB4BgsXXfkfQTQxL6iJzu4O',
   petfinderVersion: 2,
   petfinderBaseUrl: 'https://api.petfinder.com',
-  apiUrl: 'https://localhost:7007'
+  apiUrl: 'https://app-pawssierapi.azurewebsites.net'
 };
 
 /*
