@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, EMPTY, Subscription } from 'rxjs';
+import { catchError, EMPTY, Subscription, take } from 'rxjs';
 import { Credentials } from '../credentials';
 import { UserService } from '../user.service';
 
@@ -10,7 +10,7 @@ import { UserService } from '../user.service';
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css']
 })
-export class LoginFormComponent implements OnDestroy{
+export class LoginFormComponent {
 
   @Input() isLoading = false;
   @Input() success = false;
@@ -22,17 +22,12 @@ export class LoginFormComponent implements OnDestroy{
   loginForm!: FormGroup;
   hide: boolean = true;
   submitted: boolean = false;
-  sub!: Subscription;
 
   constructor(private userService: UserService, private router: Router) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
     })
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
   }
 
   get email() {
@@ -58,7 +53,7 @@ export class LoginFormComponent implements OnDestroy{
         email: this.email?.value,
         password: this.password?.value
       }
-      this.sub = this.userService.login(credentials).pipe(
+      this.userService.login(credentials).pipe(
         catchError(err => {
           if (err.status === 404) {
             this.isLoading = false;
@@ -67,7 +62,8 @@ export class LoginFormComponent implements OnDestroy{
             console.log(err);
           }
           return EMPTY;
-        })
+        }),
+        take(1)
       ).subscribe(res => {
         if (res) {
           this.success = true;
