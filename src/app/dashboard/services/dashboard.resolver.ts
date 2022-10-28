@@ -4,7 +4,7 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
-import { Observable, map, combineLatest, catchError, EMPTY, mergeMap } from 'rxjs';
+import { Observable, map, combineLatest, catchError, mergeMap, of } from 'rxjs';
 import { CalendarService } from 'src/app/calendar/calendar.service';
 import { PetfinderService } from 'src/app/petfinder/petfinder-service/petfinder.service';
 import { DashboardDetails } from './dashboard-details';
@@ -25,16 +25,20 @@ export class DashboardResolver implements Resolve<DashboardDetails> {
           this._dashboardService.monthlyBirthdays$,
           this._calendarService.getDayEvents(this._dashboardService.today)
         ]).pipe(
-          catchError(_ => {
-            return EMPTY;
-          }),
           map(([bookmark, pets]) => {
             let details: DashboardDetails = {
-              bookmarkedPet: bookmark.animal,
+              bookmarkedPet: bookmark?.animal,
               pets: pets
             }
             return details;
-          })
+          }),
+          catchError(_ => {
+            let details: DashboardDetails = {
+              bookmarkedPet: null,
+              pets: []
+            }
+            return of(details);
+          }),
         );
       })
     );

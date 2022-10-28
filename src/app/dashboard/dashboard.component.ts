@@ -37,10 +37,13 @@ export class DashboardComponent {
     this.randomNumber = Math.floor(Math.random() * 10);
     this.now = this.dashboardService.getDate();
     const routeData = this.activatedRoute.snapshot.data['data'];
-    if(routeData.bookmarkedPet)
-      this.bookmarkPet = routeData.bookmarkedPet;
-    else
+    if (routeData.bookmarkedPet === null) {
       this.petfinderError = true;
+    } else if (routeData.bookmarkedPet === undefined) {
+      this.bookmarkPet = null;
+    } else if (routeData.bookmarkedPet) {
+      this.bookmarkPet = routeData.bookmarkedPet;
+    }
     this.pets = routeData.pets;
   }
 
