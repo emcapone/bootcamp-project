@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, EMPTY, filter, of, throwError } from 'rxjs';
+import { catchError, EMPTY, filter, of, take, throwError } from 'rxjs';
 import { BirthdayValidator } from '../shared/directives/birthday-validator.directive';
 import { PasswordMatchValidator } from '../shared/directives/password-match-validator.directive';
 import { PasswordValidator } from '../shared/directives/password-validator.directive';
@@ -71,7 +71,7 @@ export class SignupFormComponent {
         lastName: this.lastName?.value,
         birthday: this.birthday?.value,
         email: this.email?.value,
-        password: this.password?.value
+        password: this.confirmNewPassword?.value
       }
       this.userService.signup(user).pipe(
         catchError(err => {
@@ -84,7 +84,8 @@ export class SignupFormComponent {
             console.log(err);
           }
           return EMPTY;
-        })
+        }),
+        take(1)
       ).subscribe(res => {
         if (res) {
           this.success = true;

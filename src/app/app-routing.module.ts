@@ -10,7 +10,6 @@ import { CalendarContainerComponent } from './calendar/components/calendar-conta
 import { HomepageComponent } from './homepage/homepage.component';
 import { PetfinderFormComponent } from './petfinder/components/petfinder-form/petfinder-form.component';
 import { BookmarksComponent } from './bookmarks/bookmarks.component';
-import { PetsResolverService } from './account-pets/pets-resolver.service';
 import { AuthGuard } from './auth.guard';
 import { NoAuthGuard } from './no-auth.guard';
 import { ContactUsComponent } from './contact-us/contact-us.component';
@@ -53,10 +52,7 @@ const routes: Routes = [
       },
       {
         path: 'pets',
-        component: AccountPetsComponent,
-        resolve: {
-          pets: PetsResolverService
-        },
+        component: AccountPetsComponent
       },
       {
         path: 'calendar',

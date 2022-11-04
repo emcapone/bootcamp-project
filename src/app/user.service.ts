@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, of, BehaviorSubject, tap, mergeMap, EMPTY } from 'rxjs';
+import { Observable, catchError, of, BehaviorSubject, tap, mergeMap, EMPTY, map, combineLatest } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from './user';
 import { Credentials } from './credentials';
@@ -41,6 +41,19 @@ export class UserService {
       )
     }
     )
+  );
+
+  firstName$ = combineLatest([
+    this.user$,
+    this.loggedIn$
+  ]).pipe(
+    map(([user, loggedIn]) => {
+      if(loggedIn && user){
+        return user.firstName;
+      } else {
+        return "";
+      }
+    })
   );
 
   constructor(private http: HttpClient, private snackbar: MatSnackBar, private router: Router) { }

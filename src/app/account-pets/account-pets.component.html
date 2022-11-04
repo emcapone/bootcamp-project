@@ -17,9 +17,17 @@
       <img mat-card-lg-image src="/assets/cat.jpg">
     </mat-card-title-group>
     <mat-card-content>
-      <p>Birthday: November 12, 2021</p>
-      <p>Adoption Day: January 20, 2022</p>
-      <p>Microchip: 11563ASD123SC2</p>
+      <div>
+        <p>Birthday: November 12, 2021</p>
+        <p>Adoption Day: January 20, 2022</p>
+        <p>Microchip: 11563ASD123SC2</p>
+      </div>
+      <mat-divider vertical="true"></mat-divider>
+      <div>
+        <p>Vaccines: 3</p>
+        <p>Prescriptions: 1</p>
+        <p>Conditions: 1</p>
+      </div>
     </mat-card-content>
     <mat-card-actions align="end">
       <button mat-stroked-button color="accent">VIEW</button>
@@ -39,7 +47,8 @@
         <p *ngIf="pet.adoptionDay">Adoption Day: {{pet.adoptionDay | date:'mediumDate'}}</p>
         <p *ngIf="pet.microchip">Microchip: {{pet.microchip}}</p>
       </div>
-      <mat-divider vertical="true" *ngIf="pet.vaccinesCount || pet.prescriptionsCount || pet.conditionsCount"></mat-divider>
+      <mat-divider vertical="true" *ngIf="pet.vaccinesCount || pet.prescriptionsCount || pet.conditionsCount">
+      </mat-divider>
       <div>
         <p *ngIf="pet.vaccinesCount">Vaccines: {{pet.vaccinesCount}}</p>
         <p *ngIf="pet.prescriptionsCount">Prescriptions: {{pet.prescriptionsCount}}</p>
