@@ -38,7 +38,7 @@
     <mat-card-title-group>
       <mat-card-title>{{pet.name}}</mat-card-title>
       <mat-card-subtitle>{{pet.sex}} {{pet.breed}}</mat-card-subtitle>
-      <img mat-card-lg-image *ngIf="pet.petPhoto && pet.petPhoto.dbPath" [src]="this.apiUrl + pet.petPhoto.dbPath">
+      <img mat-card-lg-image *ngIf="pet.petPhoto && pet.petPhoto.dbPath" [src]="pet.petPhoto.dbPath">
       <img mat-card-lg-image *ngIf="!pet.petPhoto || !pet.petPhoto.dbPath" src="/assets/default.png">
     </mat-card-title-group>
     <mat-card-content>
