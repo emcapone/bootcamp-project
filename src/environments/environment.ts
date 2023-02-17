@@ -1,11 +1,12 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import { secrets } from 'secrets.json';
 
 export const environment = {
   production: false,
-  petfinderApiKey: 'BMftsF57yG0s4ZSeDgOqp67N63b5KBZpWSJXOyx6MhTs7l4Ik8',
-  petfinderApiSecret: 'ykUUhf6okEPpaIGZBLB4BgsXXfkfQTQxL6iJzu4O',
+  petfinderApiKey: secrets.petfinderApiKey,
+  petfinderApiSecret: secrets.petfinderApiSecret,
   petfinderVersion: 2,
   petfinderBaseUrl: 'https://api.petfinder.com',
   apiUrl: 'https://app-pawssierapi.azurewebsites.net'
