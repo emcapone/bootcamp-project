@@ -71,7 +71,7 @@ const isIE = window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigato
         auth: {
           clientId: 'b3471f4b-bb28-4df5-9d75-2c8823d47d32',
           authority: 'https://login.microsoftonline.com/common',
-          redirectUri: 'http://localhost:4200/'
+          redirectUri: 'https://pawssier.azurewebsites.net/'
         },
         cache: {
           cacheLocation: 'localStorage',
@@ -89,7 +89,7 @@ const isIE = window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigato
         interactionType: InteractionType.Redirect,
         protectedResourceMap: new Map([
           ['https://graph.microsoft.com/v1.0/me', ['user.Read']],
-          ['https://localhost:7007', ['api://c18d76c3-3121-420a-acdf-b31e13ab2952/access_as_user']]
+          ['https://app-pawssierapi.azurewebsites.net/', ['api://c18d76c3-3121-420a-acdf-b31e13ab2952/access_as_user']]
         ])
       }
     )
