@@ -24,7 +24,6 @@
     "@angular/router": "^15.2.1",
     "@azure/msal-angular": "^2.5.3",
     "@azure/msal-browser": "^2.33.0",
-    "angular-in-memory-web-api": "^0.14.0",
     "moment": "^2.29.4",
     "rxjs": "~7.5.0",
     "ts-node": "^10.9.1",
