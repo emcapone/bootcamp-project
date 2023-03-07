@@ -22,6 +22,8 @@
     "@angular/platform-browser": "^14.0.0",
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
+    "@azure/msal-angular": "^2.5.3",
+    "@azure/msal-browser": "^2.33.0",
     "angular-in-memory-web-api": "^0.14.0",
     "moment": "^2.29.4",
     "rxjs": "~7.5.0",

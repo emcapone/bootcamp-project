@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, take, of, tap, Subject, combineLatest, throwError, BehaviorSubject, mergeMap } from 'rxjs';
-import { catchError, map, shareReplay } from 'rxjs/operators';
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { HttpBackend, HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of, tap, BehaviorSubject, mergeMap } from 'rxjs';
+import { catchError, shareReplay } from 'rxjs/operators';
+import { Injectable, OnDestroy, } from '@angular/core';
 import { Token, Types, Breeds, Parameters, PetfinderPets, PetfinderPet } from './models';
 import { environment } from 'src/environments/environment';
 
@@ -22,7 +22,6 @@ export class PetfinderService implements OnDestroy {
 
   private getToken$ = this.http.post<Token>(this.baseUrl + '/v2/oauth2/token',
     `grant_type=client_credentials&client_id=${this.apiKey}&client_secret=${this.apiSecret}`, this.tokenHeader).pipe(
-      tap(_ => console.log('refresh token')),
       catchError(this.handleError<Token>('getToken')),
       tap(res => {
         setTimeout(() => this.refreshToken(), (res.expires_in * 1000));
@@ -39,7 +38,8 @@ export class PetfinderService implements OnDestroy {
 
   httpOptions!: Object;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private httpBackend: HttpBackend) {
+    this.http = new HttpClient(httpBackend);
     this.token$.subscribe();
   }
 
@@ -100,19 +100,16 @@ export class PetfinderService implements OnDestroy {
     query += 'page=' + params.page;
 
     return this.http.get<PetfinderPets>(this.baseUrl + '/v2/animals' + query, this.httpOptions).pipe(
-      tap(_ => console.log('fetch pets by query')),
       catchError(this.handleError<PetfinderPets>('getPets')));
   }
 
   getPetsLink(link: string): Observable<PetfinderPets> {
     return this.http.get<PetfinderPets>(this.baseUrl + link, this.httpOptions).pipe(
-      tap(_ => console.log('fetch pets by link')),
       catchError(this.handleError<PetfinderPets>('getPetsLink')));
   }
 
   getPet(link: string): Observable<PetfinderPet>{
     return this.http.get<PetfinderPet>(this.baseUrl + link, this.httpOptions).pipe(
-      tap(res => console.log('fetch pet by link')),
       catchError(this.handleError<PetfinderPet>('getPetsLink')));
   }
 

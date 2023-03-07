@@ -1,45 +1,48 @@
-form {
+.page-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  align-content: flex-start;
+  gap: 20px;
 }
 
-.account-details {
-  width: 80%;
+h1 {
+  border-bottom: 1px solid white;
+  margin-bottom: 50px;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 0px;
+}
+
+.settings-card {
+  margin-top: 40px;
+  width: 400px;
+}
+
+mat-card-title {
+  margin-bottom: 25px;
+}
+
+mat-card-content {
   display: flex;
+  align-content: center;
+  justify-content: center;
   flex-direction: column;
-  border-bottom: 2px solid white;
+}
+
+form {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.button-group {
+  align-self: center;
 }
 
 button {
-  margin-left: 10px;
-  margin-bottom: 10px;
-}
-
-.account-details mat-form-field {
-  width: 100%;
-  align-self: center;
-  margin-bottom: 10px;
-}
-
-.save-group {
-  padding-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 80%;
-  margin-top: 2rem;
-  border-radius: 10px;
-  flex-wrap: wrap;
-}
-
-.save-group mat-form-field {
-  width: 60%;
-}
-
-.password-group {
-  border-top: 2px solid white;
-  align-items: flex-start;
+  margin-right: 5px;
+  width: 75px;
 }

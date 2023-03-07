@@ -1,7 +1,7 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-import { secrets } from 'secrets.json';
+import secrets from 'secrets.json';
 
 export const environment = {
   production: false,
@@ -9,7 +9,9 @@ export const environment = {
   petfinderApiSecret: secrets.petfinderApiSecret,
   petfinderVersion: 2,
   petfinderBaseUrl: 'https://api.petfinder.com',
-  apiUrl: 'https://app-pawssierapi.azurewebsites.net'
+  apiUrl: 'https://localhost:7007',
+  graphUrl: 'https://graph.microsoft.com/v1.0/me',
+  postLogoutUrl: 'http://localhost:4200/homepage'
 };
 
 /*

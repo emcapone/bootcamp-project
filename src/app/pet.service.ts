@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, combineLatest, Observable, of, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { catchError, concatMap, distinctUntilChanged, filter, map, mergeMap, shareReplay, tap } from 'rxjs/operators';
+import { catchError, concatMap, distinctUntilChanged, filter, map, mergeMap, shareReplay } from 'rxjs/operators';
 
 import { Pet } from './pet';
 import { environment } from 'src/environments/environment';
 import { PetListItem } from './pet-list-item';
-import { UserService } from './user.service';
+import { AzureAdService } from './azure-ad.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +16,15 @@ export class PetService {
 
   private apiUrl = environment.apiUrl
   private petsUrl = this.apiUrl + '/api/v1/Pets';
-  private user_id = this.userService.user_id;
+
+  private userId$ = this.azureAdService.userId$;
 
   private _petsData$ = new BehaviorSubject<void>(undefined);
-  apiRequestListItem$ = this.http.get<PetListItem[]>(this.petsUrl + `/GetAll/${this.user_id}`)
-    .pipe(
-      tap(_ => {
-        console.log('fetched pet list items');
-      })
-    );
+  apiRequestListItem$ = this.userId$.pipe(
+    mergeMap(user_id => {
+      return this.http.get<PetListItem[]>(this.petsUrl + `/GetAll/${user_id}`);
+    })
+  );
 
   pets$ = this._petsData$.pipe(
     mergeMap(() => this.apiRequestListItem$),
@@ -44,39 +44,36 @@ export class PetService {
       pets.find(pet => pet.id === id)?.link || null
     ),
     filter(link => link !== null),
-    concatMap(link => this.http.get<Pet>(this.apiUrl + link)
-    .pipe(
-      tap(pet => {
-        console.log('fetched pet', pet.id);
-      })
-    )),
+    concatMap(link => this.http.get<Pet>(this.apiUrl + link)),
     catchError(this.handleError<Pet>('getPet')),
     shareReplay(1)
   );
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private azureAdService: AzureAdService) { }
 
   selectedPetChanged(id: number): void {
     this.selectedPetSubject.next(id);
   }
 
-  refreshPets(){
+  refreshPets() {
     this._petsData$.next();
   }
 
   /** PUT */
   updatePet(pet: Pet): Observable<any> {
     return this.http.put(`${this.petsUrl}/${pet.id}`, pet).pipe(
-      tap(_ => console.log(`updated pet id=${pet.id}`)),
       catchError(this.handleError<any>('updatePet'))
     );
   }
 
   /** POST */
   addPet(pet: Pet): Observable<Pet> {
-    return this.http.post<Pet>(`${this.petsUrl}/${this.user_id}`, pet).pipe(
-      tap((newPet: Pet) => console.log(`added pet w/ id=${newPet.id}`)),
-      catchError(this.handleError<Pet>('addPet'))
+    return this.userId$.pipe(
+      mergeMap(user_id => {
+        return this.http.post<Pet>(`${this.petsUrl}/${user_id}`, pet).pipe(
+          catchError(this.handleError<Pet>('addPet'))
+        );
+      })
     );
   }
 
@@ -85,7 +82,6 @@ export class PetService {
     const url = `${this.petsUrl}/${id}`;
 
     return this.http.delete<Pet>(url).pipe(
-      tap(_ => console.log(`deleted pet id=${id}`)),
       catchError(this.handleError<Pet>('deletePet'))
     );
   }

@@ -3,61 +3,63 @@
   <span class="spacer"></span>
   <button class="header-button" mat-raised-button color="accent" routerLink='/new-pet'>New Pet</button>
 </div>
-<div class="message-container" *ngIf="this.pets.length === 0">
-  <h1>Preview all of your pets here!</h1>
-  <span class="spacer"></span>
-  <h3>Add your first profile!</h3>
-  <mat-icon>arrow_upward</mat-icon>
-</div>
-<div class="card-container" *ngIf="this.pets">
-  <mat-card *ngIf="this.pets.length === 0">
-    <mat-card-title-group>
-      <mat-card-title>Example Pet</mat-card-title>
-      <mat-card-subtitle>Female Shorthair Cat</mat-card-subtitle>
-      <img mat-card-lg-image src="/assets/cat.jpg">
-    </mat-card-title-group>
-    <mat-card-content>
-      <div>
-        <p>Birthday: November 12, 2021</p>
-        <p>Adoption Day: January 20, 2022</p>
-        <p>Microchip: 11563ASD123SC2</p>
-      </div>
-      <mat-divider vertical="true"></mat-divider>
-      <div>
-        <p>Vaccines: 3</p>
-        <p>Prescriptions: 1</p>
-        <p>Conditions: 1</p>
-      </div>
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-stroked-button color="accent">VIEW</button>
-      <button mat-stroked-button color="accent">EDIT</button>
-    </mat-card-actions>
-  </mat-card>
-  <mat-card *ngFor="let pet of pets">
-    <mat-card-title-group>
-      <mat-card-title>{{pet.name}}</mat-card-title>
-      <mat-card-subtitle>{{pet.sex}} {{pet.breed}}</mat-card-subtitle>
-      <img mat-card-lg-image *ngIf="pet.petPhoto && pet.petPhoto.dbPath" [src]="pet.petPhoto.dbPath">
-      <img mat-card-lg-image *ngIf="!pet.petPhoto || !pet.petPhoto.dbPath" src="/assets/default.png">
-    </mat-card-title-group>
-    <mat-card-content>
-      <div>
-        <p *ngIf="pet.birthday">Birthday: {{pet.birthday | date:'mediumDate'}}</p>
-        <p *ngIf="pet.adoptionDay">Adoption Day: {{pet.adoptionDay | date:'mediumDate'}}</p>
-        <p *ngIf="pet.microchip">Microchip: {{pet.microchip}}</p>
-      </div>
-      <mat-divider vertical="true" *ngIf="pet.vaccinesCount || pet.prescriptionsCount || pet.conditionsCount">
-      </mat-divider>
-      <div>
-        <p *ngIf="pet.vaccinesCount">Vaccines: {{pet.vaccinesCount}}</p>
-        <p *ngIf="pet.prescriptionsCount">Prescriptions: {{pet.prescriptionsCount}}</p>
-        <p *ngIf="pet.conditionsCount">Conditions: {{pet.conditionsCount}}</p>
-      </div>
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-stroked-button color="accent" routerLink="/view-pet/{{pet.id}}">VIEW</button>
-      <button mat-stroked-button color="accent" routerLink="/edit-pet/{{pet.id}}">EDIT</button>
-    </mat-card-actions>
-  </mat-card>
+<div *ngIf="this.pets$ | async as pets">
+  <div class="message-container" *ngIf="pets.length === 0">
+    <h1>Preview all of your pets here!</h1>
+    <span class="spacer"></span>
+    <h3>Add your first profile!</h3>
+    <mat-icon>arrow_upward</mat-icon>
+  </div>
+  <div class="card-container" *ngIf="pets">
+    <mat-card *ngIf="pets.length === 0">
+      <mat-card-title-group>
+        <mat-card-title>Example Pet</mat-card-title>
+        <mat-card-subtitle>Female Shorthair Cat</mat-card-subtitle>
+        <img mat-card-lg-image src="/assets/cat.jpg">
+      </mat-card-title-group>
+      <mat-card-content>
+        <div>
+          <p>Birthday: November 12, 2021</p>
+          <p>Adoption Day: January 20, 2022</p>
+          <p>Microchip: 11563ASD123SC2</p>
+        </div>
+        <mat-divider vertical="true"></mat-divider>
+        <div>
+          <p>Vaccines: 3</p>
+          <p>Prescriptions: 1</p>
+          <p>Conditions: 1</p>
+        </div>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-stroked-button color="accent">VIEW</button>
+        <button mat-stroked-button color="accent">EDIT</button>
+      </mat-card-actions>
+    </mat-card>
+    <mat-card *ngFor="let pet of pets">
+      <mat-card-title-group>
+        <mat-card-title>{{pet.name}}</mat-card-title>
+        <mat-card-subtitle>{{pet.sex}} {{pet.breed}}</mat-card-subtitle>
+        <img mat-card-lg-image *ngIf="pet.petPhoto && pet.petPhoto.dbPath" [src]="pet.petPhoto.dbPath">
+        <img mat-card-lg-image *ngIf="!pet.petPhoto || !pet.petPhoto.dbPath" src="/assets/default.png">
+      </mat-card-title-group>
+      <mat-card-content>
+        <div>
+          <p *ngIf="pet.birthday">Birthday: {{pet.birthday | date:'mediumDate'}}</p>
+          <p *ngIf="pet.adoptionDay">Adoption Day: {{pet.adoptionDay | date:'mediumDate'}}</p>
+          <p *ngIf="pet.microchip">Microchip: {{pet.microchip}}</p>
+        </div>
+        <mat-divider vertical="true" *ngIf="pet.vaccinesCount || pet.prescriptionsCount || pet.conditionsCount">
+        </mat-divider>
+        <div>
+          <p *ngIf="pet.vaccinesCount">Vaccines: {{pet.vaccinesCount}}</p>
+          <p *ngIf="pet.prescriptionsCount">Prescriptions: {{pet.prescriptionsCount}}</p>
+          <p *ngIf="pet.conditionsCount">Conditions: {{pet.conditionsCount}}</p>
+        </div>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-stroked-button color="accent" routerLink="/view-pet/{{pet.id}}">VIEW</button>
+        <button mat-stroked-button color="accent" routerLink="/edit-pet/{{pet.id}}">EDIT</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 </div>

@@ -1,11 +1,8 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, of, BehaviorSubject, tap, mergeMap, EMPTY, map, combineLatest } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from './user';
-import { Credentials } from './credentials';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -18,81 +15,9 @@ export class UserService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  private _user_id: number | undefined;
-  get user_id(): number | undefined {
-    return this._user_id;
-  }
-  set user_id(id: number | undefined) {
-    this._user_id = id;
-    if (id)
-      this.loggedInSubject.next(true);
-  }
+  //TO-DO: repurpose for pawssier-user
 
-  private loggedInSubject = new BehaviorSubject<boolean>(false);
-  public loggedIn$ = this.loggedInSubject.asObservable();
-
-  user$ = this.loggedIn$.pipe(
-    mergeMap(res => {
-      if (res === false) {
-        return EMPTY;
-      }
-      return this.http.get<User>(`${this.userUrl}/${this.user_id}`, this.httpOptions).pipe(
-        catchError(this.handleError<User>('fetchUser'))
-      )
-    }
-    )
-  );
-
-  firstName$ = combineLatest([
-    this.user$,
-    this.loggedIn$
-  ]).pipe(
-    map(([user, loggedIn]) => {
-      if(loggedIn && user){
-        return user.firstName;
-      } else {
-        return "";
-      }
-    })
-  );
-
-  constructor(private http: HttpClient, private snackbar: MatSnackBar, private router: Router) { }
-
-  isLoggedIn(): boolean {
-    return this.user_id ? true : false;
-  }
-
-  logout(): void {
-    this.user_id = undefined;
-    this.loggedInSubject.next(false);
-    this.router.navigate(['homepage']);
-    this.snackbar.open('Successfully logged out', 'Close', {
-      panelClass: ['snackbar'],
-      duration: 4000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top'
-    });
-  }
-
-  login(cred: Credentials): Observable<User> {
-    return this.http.post<User>(`${this.userUrl}/Auth`, cred, this.httpOptions).pipe(
-      tap(res => {
-        if (!(res instanceof HttpErrorResponse)) {
-          this.user_id = res.id;
-        }
-      })
-    );
-  }
-
-  signup(user: User): Observable<User> {
-    return this.http.post<User>(this.userUrl, user, this.httpOptions).pipe(
-      tap(res => {
-        if (!(res instanceof HttpErrorResponse)) {
-          this.user_id = res.id;
-        }
-      })
-    );
-  }
+  constructor(private http: HttpClient) { }
 
   updateUser(user: User): Observable<User> {
     return this.http.put<User>(`${this.userUrl}/${user.id}`, user, this.httpOptions).pipe(

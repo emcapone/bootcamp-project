@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
-import { take, BehaviorSubject, tap, mergeMap, shareReplay, combineLatest, map, catchError, Observable, of, concatMap, distinctUntilChanged, Subject } from 'rxjs';
+import { BehaviorSubject, mergeMap, shareReplay, combineLatest, map, catchError, Observable, of, concatMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { UserService } from '../user.service';
+import { AzureAdService } from '../azure-ad.service';
 import { CalendarEvent } from './calendar-event';
 
 @Injectable({
@@ -13,29 +13,33 @@ export class CalendarService {
 
   private apiUrl = environment.apiUrl
   private eventsUrl = this.apiUrl + '/api/v1/CalendarEvents';
-  private user_id = this.userService.user_id;
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
   private now = moment();
+
+  userId$ = this.azureAdService.userId$;
 
   private refresh = new BehaviorSubject<void>(undefined);
   private refresh$ = this.refresh.asObservable();
 
   private MonthYearSubject = new BehaviorSubject<[number, number]>([parseInt(this.now.format('M')), parseInt(this.now.format('YYYY'))]);
   private MonthYear$ = this.MonthYearSubject.asObservable();
-  private apiRequest$ = this.MonthYear$.pipe(
-    concatMap(date => {
-      return this.http.get<CalendarEvent[]>(`${this.eventsUrl}/GetAll/${this.user_id}?month=${date[0]}&year=${date[1]}`, this.httpOptions)
-        .pipe(
-          catchError(this.handleError<CalendarEvent[]>('fetchMonthEvents'))
-        )
+  private apiRequest$ = this.userId$.pipe(
+    mergeMap(user_id => {
+      return this.MonthYear$.pipe(
+        concatMap(date => {
+          return this.http.get<CalendarEvent[]>(`${this.eventsUrl}/GetAll/${user_id}?month=${date[0]}&year=${date[1]}`, this.httpOptions)
+            .pipe(
+              catchError(this.handleError<CalendarEvent[]>('fetchMonthEvents'))
+            )
+        })
+      )
     })
   );
 
   private events$ = this.refresh$.pipe(
     mergeMap(() => this.apiRequest$),
-    tap(res => console.log("cache refresh")),
     shareReplay(1)
   );
 
@@ -49,11 +53,10 @@ export class CalendarService {
     map(([events, id]) =>
       events.find(event => event.id === id)
     ),
-    tap(event => console.log('selected event', event?.id)),
     catchError(this.handleError<CalendarEvent>('getEvent'))
   );
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private azureAdService: AzureAdService) { }
 
   refreshEvents() {
     this.refresh.next();
@@ -98,8 +101,10 @@ export class CalendarService {
 * @param event - new CalendarEvent to POST
 */
   addCalendarEvent(event: CalendarEvent): Observable<CalendarEvent> {
-    return this.http.post<CalendarEvent>(`${this.eventsUrl}/${this.user_id}`, event).pipe(
-      tap((newEvent: CalendarEvent) => console.log('added event', newEvent.id))
+    return this.userId$.pipe(
+      mergeMap(user_id => {
+        return this.http.post<CalendarEvent>(`${this.eventsUrl}/${user_id}`, event)
+      })
     );
   }
 
@@ -108,16 +113,13 @@ export class CalendarService {
 * @param event - edited CalendarEvent to PUT
 */
   editCalendarEvent(event: CalendarEvent): Observable<any> {
-    return this.http.put(`${this.eventsUrl}/${event.id}`, event, this.httpOptions).pipe(
-      tap(_ => console.log(`updated event`, event.id))
-    );
+    return this.http.put(`${this.eventsUrl}/${event.id}`, event, this.httpOptions);
   }
 
   deleteCalendarEvent(id: number): Observable<CalendarEvent> {
     const url = `${this.eventsUrl}/${id}`;
 
     return this.http.delete<CalendarEvent>(url, this.httpOptions).pipe(
-      tap(_ => console.log(`deleted event`, id)),
       catchError(this.handleError<CalendarEvent>('deleteCalendarEvent'))
     );
   }

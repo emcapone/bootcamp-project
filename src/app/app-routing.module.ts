@@ -10,11 +10,11 @@ import { CalendarContainerComponent } from './calendar/components/calendar-conta
 import { HomepageComponent } from './homepage/homepage.component';
 import { PetfinderFormComponent } from './petfinder/components/petfinder-form/petfinder-form.component';
 import { BookmarksComponent } from './bookmarks/bookmarks.component';
-import { AuthGuard } from './auth.guard';
-import { NoAuthGuard } from './no-auth.guard';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardResolver } from './dashboard/services/dashboard.resolver';
+import { MsalGuard } from '@azure/msal-angular';
+import { BrowserUtils } from '@azure/msal-browser';
 
 const routes: Routes = [
   {
@@ -24,12 +24,11 @@ const routes: Routes = [
   },
   {
     path: 'homepage',
-    component: HomepageComponent,
-    canActivate: [NoAuthGuard]
+    component: HomepageComponent
   },
   {
     path: '',
-    canActivate: [AuthGuard],
+    canActivate: [MsalGuard],
     children: [
       {
         path: 'dashboard',
@@ -86,9 +85,11 @@ const routes: Routes = [
   }
 
 ];
-
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    // Don't perform initial navigation in iframes or popups
+   initialNavigation: !BrowserUtils.isInIframe() && !BrowserUtils.isInPopup() ? 'enabledNonBlocking' : 'disabled'
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
