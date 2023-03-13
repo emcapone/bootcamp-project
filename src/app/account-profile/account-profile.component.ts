@@ -1,106 +1,30 @@
-import { formatDate } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { tap, take } from 'rxjs';
+import { take } from 'rxjs';
+import { AzureAdService } from '../azure-ad.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { BirthdayValidator } from '../shared/directives/birthday-validator.directive';
-import { PasswordMatchValidator } from '../shared/directives/password-match-validator.directive';
-import { PasswordValidator } from '../shared/directives/password-validator.directive';
-import { User } from '../user';
-import { UserService } from '../user.service';
-
-class CrossFieldErrorMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    if (control?.dirty && form?.invalid && form?.dirty) {
-      return true;
-    }
-    return false;
-  }
-}
+import { PawssierUser } from '../pawssier-user';
 
 @Component({
   selector: 'app-account-profile',
   templateUrl: './account-profile.component.html',
   styleUrls: ['./account-profile.component.css']
 })
-export class AccountProfileComponent implements OnInit {
+export class AccountProfileComponent {
+  userProfile$ = this.azureAdService.user$;
 
-  @ViewChild('settingsFormDirective') settingsFormDirective!: FormGroupDirective;
-  @ViewChild('passwordFormDirective') passwordFormDirective!: FormGroupDirective;
-
-  errorMatcher = new CrossFieldErrorMatcher();
+  //TO-DO: Use isLoading with future back-end observable
   isLoading: boolean = true;
-  userData!: User | null;
-  settingsForm!: FormGroup;
-  passwordForm!: FormGroup;
-  hideCurrent: boolean = true;
-  hideNew: boolean = true;
-  hideConfirm: boolean = true;
+  userID: string | null = null;
+  profileForm!: FormGroup;
 
-  constructor(private snackbar: MatSnackBar, private dialog: MatDialog, private userService: UserService) {
-    this.settingsForm = new FormGroup({
-      'firstName': new FormControl('', Validators.required),
-      'lastName': new FormControl('', Validators.required),
-      'birthday': new FormControl('', [Validators.required, BirthdayValidator]),
-      'email': new FormControl('', [Validators.required, Validators.email]),
-      'currentPassword': new FormControl('', [Validators.required]),
+  constructor(private azureAdService: AzureAdService, private snackbar: MatSnackBar, private dialog: MatDialog) {
+    this.profileForm = new FormGroup({
+      'preferredFirstName': new FormControl(''),
+      'username': new FormControl('')
     });
-    this.passwordForm = new FormGroup({
-      'newPassword': new FormControl('', [PasswordValidator]),
-      'confirmNewPassword': new FormControl()
-    }, { validators: PasswordMatchValidator });
-  }
-
-  ngOnInit(): void {
-    this.getData();
-  }
-
-  getData(): void {
-    this.userService.user$.pipe(
-      take(1)
-    ).subscribe(user => {
-      if (user !== null) {
-        this.userData = user;
-        this.fillData();
-      } else {
-        console.log("Error fetching user data");
-      }
-    });
-  }
-
-  fillData(): void {
-    if (this.userData) {
-      this.firstName?.setValue(this.userData?.firstName);
-      this.lastName?.setValue(this.userData?.lastName);
-      this.birthday?.setValue(this.userData?.birthday);
-      this.email?.setValue(this.userData?.email);
-      this.isLoading = false;
-    }
-  }
-
-  get firstName() {
-    return this.settingsForm.get('firstName');
-  }
-  get lastName() {
-    return this.settingsForm.get('lastName');
-  }
-  get birthday() {
-    return this.settingsForm.get('birthday');
-  }
-  get email() {
-    return this.settingsForm.get('email');
-  }
-  get newPassword() {
-    return this.passwordForm.get('newPassword');
-  }
-  get confirmNewPassword() {
-    return this.passwordForm.get('confirmNewPassword');
-  }
-  get currentPassword() {
-    return this.settingsForm.get('currentPassword');
   }
 
   openDialog() {
@@ -116,49 +40,44 @@ export class AccountProfileComponent implements OnInit {
     ).subscribe(res => {
       if (res) {
         this.reset();
-        this.fillData();
       }
     });
   }
 
   reset(): void {
-    this.settingsFormDirective.resetForm();
-    this.passwordFormDirective.resetForm();
+    this.profileForm.reset();
     this.isLoading = true;
   }
 
-  onSubmit() {
-    if (this.settingsForm.invalid) {
-      console.log("invalid");
+  getData(): void {
+    if(this.userID === null) {
+      this.reset();
     } else {
-      console.log('valid');
-      if (this.userData?.password === this.currentPassword?.value) {
-        console.log('authenticated');
-        let formValues = this.settingsForm.value;
-        let user: User = {
-          id: this.userData?.id,
-          firstName: formValues.firstName,
-          lastName: formValues.lastName,
-          email: formValues.email,
-          birthday: formValues.birthday,
-          password: ((this.newPassword?.value !== "" && this.newPassword?.value !== null) ? this.newPassword?.value as string : this.userData?.password || '')
-        }
-        this.userService.updateUser(user).pipe(
-          take(1)
-        ).subscribe(_ => {
-          this.reset();
-          this.getData();
-          this.snackbar.open('Changes Saved', 'Close', {
-            panelClass: ['snackbar'],
-            duration: 3000,
-            horizontalPosition: 'start',
-            verticalPosition: 'bottom'
-          });
-        });
-      } else {
-        console.log('wrong password');
-      }
+      // TO-DO: Fill with current values
+      this.profileForm.controls['preferredFirstName'].setValue("Em");
+      this.profileForm.controls['username'].setValue("catluvr12");
     }
   }
 
+  onSubmit() {
+    if (this.profileForm.valid) {
+      if (this.profileForm.controls['displayName'].dirty || this.profileForm.controls['preferredFirstName'].dirty) {
+        if (this.userID) {
+          let formValues = this.profileForm.value;
+          let user: PawssierUser = {
+            id: "1",
+            preferredFirstName: formValues.preferredFirstName,
+            username: formValues.displayName
+          }
+          /*TO-DO: send changes to back-end*/
+        } else {
+          alert("no user id");
+        }
+      } else {
+        alert("no changes were made to save");
+      }
+    } else {
+      alert("invalid");
+    }
+  }
 }

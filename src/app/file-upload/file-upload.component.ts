@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, mergeMap, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AzureAdService } from '../azure-ad.service';
 import { FileLink } from './file-upload-response';
 
 @Component({
@@ -13,6 +14,7 @@ export class FileUploadComponent {
   apiUrl: string = environment.apiUrl;
   isLoading: boolean = false;
   formData: FormData | undefined;
+  user_id$ = this.azureAdService.userId$;
 
   private _petId: number | undefined;
   get petId(): number | undefined {
@@ -25,7 +27,7 @@ export class FileUploadComponent {
   @Input() currentFile: string | undefined;
   @Output() upload = new EventEmitter<Observable<FileLink>>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private azureAdService: AzureAdService) { }
 
   removePath(str: string): string {
     return str.substring(str.lastIndexOf("/") + 1, str.length);
@@ -49,15 +51,17 @@ export class FileUploadComponent {
   createObservable(): Observable<FileLink | undefined> {
     if (this.formData)
     {
-      let user_id = 1; //replace after authentication
-      let obs = this.http.post<FileLink>(`${this.apiUrl}/api/v1/FileUpload/${user_id}/${this.petId}/${this.label}`, this.formData)
-      .pipe(
-        catchError(err => {
-          console.log(err);
-          return of(undefined);
+      return this.user_id$.pipe(
+        mergeMap(user_id => {
+          return this.http.post<FileLink>(`${this.apiUrl}/api/v1/FileUpload/${user_id}/${this.petId}/${this.label}`, this.formData)
+          .pipe(
+            catchError(err => {
+              console.log(err);
+              return of(undefined);
+            })
+          );
         })
-      );
-      return obs;
+      )
     }
     return of(undefined);
   }

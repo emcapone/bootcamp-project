@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Bookmark } from './bookmark';
-import { BehaviorSubject, catchError, combineLatest, map, Observable, of, shareReplay, tap, mergeMap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, map, Observable, of, shareReplay, mergeMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { UserService } from './user.service';
+import { AzureAdService } from './azure-ad.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,19 +11,19 @@ import { UserService } from './user.service';
 export class BookmarkService {
 
   private url = environment.apiUrl + '/api/v1/Bookmarks';
-  private user_id = this.userService.user_id;
   private petfinder_version = 'Petfinder/v' + environment.petfinderVersion;
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
+  private userId$ = this.azureAdService.userId$;
+
   private _bookmarkData$ = new BehaviorSubject<void>(undefined);
-  apiRequest$ = this.http.get<Bookmark[]>(`${this.url}/GetAll/${this.user_id}/${this.petfinder_version}`)
-    .pipe(
-      tap(marks => {
-        console.log('fetched ' + marks.length + ' bookmarks');
-      })
-    );
+  apiRequest$ = this.userId$.pipe(
+    mergeMap(user_id => {
+      return this.http.get<Bookmark[]>(`${this.url}/GetAll/${user_id}/${this.petfinder_version}`);
+    })
+  );
 
   bookmarks$ = this._bookmarkData$.pipe(
     mergeMap(() => this.apiRequest$),
@@ -47,15 +47,17 @@ export class BookmarkService {
     })
   );
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private azureAdService: AzureAdService) { }
 
   /**
   * Errors must be handled by subscriber.
   * @param bookmark - new Bookmark to POST
   */
   addBookmark(bookmark: Bookmark) {
-    return this.http.post<Bookmark>(`${this.url}/${this.user_id}/${this.petfinder_version}`, bookmark, this.httpOptions).pipe(
-      tap((res: Bookmark) => console.log(`added bookmark w/ id=${res.id}`))
+    return this.userId$.pipe(
+      mergeMap(user_id => {
+        return this.http.post<Bookmark>(`${this.url}/${user_id}/${this.petfinder_version}`, bookmark, this.httpOptions);
+      })
     );
   }
 
@@ -63,7 +65,6 @@ export class BookmarkService {
     const url = `${this.url}/${id}`;
 
     return this.http.delete<Bookmark>(url, this.httpOptions).pipe(
-      tap(_ => console.log(`deleted bookmark id=${id}`)),
       catchError(err => {
         console.log(err);
         return of();
